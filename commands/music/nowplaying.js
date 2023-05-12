@@ -14,9 +14,7 @@ module.exports = class NowPlaying extends Command {
 		});
 	}
 	async run(client, interaction) {   
-
-        const distube = client.distube;
-        const queue = distube.getQueue(interaction);
+        
         const part = Math.floor((queue.currentTime / queue.songs[0].duration) * 30);
 
         if(!queue){

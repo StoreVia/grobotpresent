@@ -16,7 +16,6 @@ module.exports = class Join extends Command {
 
 		const clientVoice = interaction.guild.members.me.voice.channel;
         const memberVoice = interaction.member.voice.channel;
-        const distube = client.distube;
 
 		if(clientVoice){
 			if(clientVoice != memberVoice){
@@ -29,11 +28,9 @@ module.exports = class Join extends Command {
 		} else if(!memberVoice){
             await interaction.deferReply({ ephemeral: true });
 			interaction.followUp({ content: `> Please Join A Voice Channel.` })
-        } else if(!clientVoice){
-            await interaction.deferReply();
-            distube.voices.join(memberVoice).then(async() => {
-                await interaction.followUp({ content: `> Joined ${memberVoice} Channel.` })
-            })      
+        } else if(!clientVoice){//code
+			await interaction.deferReply({ ephemeral: true });
+			interaction.followUp({ content: `> I Was Already In Your Voice Channel.` })   
         }
 	}
 };

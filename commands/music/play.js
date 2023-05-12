@@ -1,6 +1,5 @@
 const Command = require('../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const { DisTube, DisTubeError } = require('distube');
 
 module.exports = class Play extends Command {
 	constructor(client) {
@@ -19,10 +18,9 @@ module.exports = class Play extends Command {
 	}
 	async run(client, interaction) {   
 
-        const args = interaction.options.getString(`search`);
+        const query = interaction.options.getString(`search`);
 		const clientVoice = interaction.guild.members.me.voice.channel;
         const memberVoice = interaction.member.voice.channel;
-		const distube = client.distube;
 
 		if(clientVoice){
 			if(clientVoice != memberVoice){
@@ -31,12 +29,10 @@ module.exports = class Play extends Command {
 			} else if(clientVoice === memberVoice){
 				await interaction.deferReply();
 				interaction.followUp({ content: `🔍Searching...` })
-				.then(() => {
-					distube.play(interaction.member.voice.channel, args, {
-						member: interaction.member,
-						textChannel: interaction.channel,
-						interaction
-					})
+				const { track } = await client.player.play(memberVoice, query, {
+					nodeOptions: {
+						metadata: interaction
+					}
 				})
 			}
 		} else if(!memberVoice){
@@ -45,12 +41,10 @@ module.exports = class Play extends Command {
 		} else if(memberVoice){
 			await interaction.deferReply();
 			interaction.followUp({ content: `🔍Searching...` })
-			.then(() => {
-				distube.play(interaction.member.voice.channel, args, {
-					member: interaction.member,
-					textChannel: interaction.channel,
-					interaction
-				})
+			const { track } = await client.player.play(memberVoice, query, {
+				nodeOptions: {
+					metadata: interaction
+				}
 			})
 		}
 	}
