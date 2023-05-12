@@ -116,18 +116,18 @@ client.player.events.on('audioTrackAdd', (queue, track) => {
       iconURL: process.env.music_iconurl
     })
     .setThumbnail(`${track.thumbnail}`)
-    .setDescription(`[${track.name}](${track.url})`)
+    .setDescription(`[${track.title}](${track.url})`)
     .addFields(
       { name: '**Author: **', value: `${track.author}`,inline: true },
       { name: '**Duration: **', value: `\`${track.duration}\``,inline: true },
-      { name: '**Requested By: **', value: `${track.requestedBy}`,inline: true },
+      { name: '**RequestedBy: **', value: `${track.requestedBy}`,inline: true },
     )
     .setColor(`${process.env.ec}`)
     .setFooter({
       text: `${client.user.username} - ${process.env.year} ©`,
       iconURL: process.env.iconurl
     })
-  queue.metadata.send({ embeds: [embed] });
+  queue.metadata.channel.send({ embeds: [embed] });
 });
 client.player.events.on('playerStart', (queue, track) => {
     queue.metadata.channel.send({ content: `Started playing **${track.url}**!`});

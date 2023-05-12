@@ -25,7 +25,7 @@ module.exports = class ReadyEvent extends Event {
 		}, 15000);
 
 		
-		await client.player.extractors.register(SoundCloudExtractor, {});
+		await client.player.extractors.register(SpotifyExtractor, {});
 		console.log(colors.red(`Discord Bot Is Now Online With ${client.users.cache.size} Users And ${client.guilds.cache.size} Servers.`));
 	}
 };
