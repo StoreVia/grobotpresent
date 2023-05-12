@@ -207,19 +207,88 @@ client.distube
   })
   .on('error', (channel, e) => {
     switch (e.code) {
+      case DisTubeError.VOICE_FULL:
+        channel.send('> The Voice Channe Is Full.');
+        break;
+      case DisTubeError.VOICE_CONNECT_FAILED:
+        channel.send(`> Cannot Connect To This Voice Channel.`);
+        break;
+      case DisTubeError.VOICE_MISSING_PERMS:
+        channel.send('> I Don\'t Have Permission To Join This Voice Channel.');
+        break;
+      case DisTubeError.VOICE_RECONNECT_FAILED:
+        channel.send('> Cannot Reconnect To The Voice Channel.');
+        break;
+      case DisTubeError.VOICE_DIFFERENT_GUILD:
+        channel.send('> Cannot Join Voice Channel In Different Guild.');
+        break;
+      case DisTubeError.VOICE_DIFFERENT_CLIENT:
+        channel.send('> Cannot Join Voice Channel Created By Different Client.');
+        break;
+      case DisTubeError.NO_QUEUE:
+        channel.send('> No Queue Found.');
+        break;
+      case DisTubeError.QUEUE_EXIST:
+        channel.send('> This Guild Has Queue Already.');
+        break;
+      case DisTubeError.PAUSED:
+        channel.send('> The Queue Has Been Already Paused.');
+        break;
+      case DisTubeError.RESUMED:
+        channel.send('> The Queue Has Been Already Playing.');
+        break;
+      case DisTubeError.NO_PREVIOUS:
+        channel.send('> There Is No Previous Song In Queue.');
+        break;
+      case DisTubeError.NO_UP_NEXT:
+        channel.send('> There Is No Song Up Next.');
+        break;
+      case DisTubeError.NO_SONG_POSITION:
+        channel.send('> There Is No Song At This Position.');
+        break;
+      case DisTubeError.NO_PLAYING:
+        channel.send('> There Is No Song Playing In Queue.');
+        break;
+      case DisTubeError.NO_RESULT:
+        channel.send('> No Result Found For Your Query.');
+        break;
+      case DisTubeError.NO_RELATED:
+        channel.send('> Cannot Find Related Songs.');
+        break;
+      case DisTubeError.CANNOT_PLAY_RELATED:
+        channel.send('> Cannot Play Related Songs.');
+        break;
+      case DisTubeError.UNAVAILABLE_VIDEO:
+        channel.send('> This Video Is Unavailable.');
+        break;
+      case DisTubeError.UNPLAYABLE_FORMATS:
+        channel.send('> No Playable Format Found.');
+        break;
       case DisTubeError.NON_NSFW:
-        channel.send('You need to be in a voice channel to use this command!');
+        channel.send('> Cannot Play Nsfw-Songs.');
         break;
-      case DisTube.ErrorCodes.CANNOT_PLAY:
-        channel.send('There was an error playing the song. Please try again later.');
+      case DisTubeError.NOT_SUPPORTED_URL:
+        channel.send('> This Url Is Not Supported.');
         break;
-      case DisTube.ErrorCodes.NO_RESULT:
-        channel.send('No results were found for that search query.');
+      case DisTubeError.CANNOT_RESOLVE_SONG:
+        channel.send('> Cannot Resolve Song.');
+        break;
+      case DisTubeError.NO_VALID_SONG:
+        channel.send('> No Valid Song Found.');
+        break;
+      case DisTubeError.EMPTY_FILTERED_PLAYLIST:
+        channel.send('> This Playlist Is Empty (or) Nsfw-Songs Were Found In Playlist.');
+        break;
+      case DisTubeError.EMPTY_PLAYLIST:
+        channel.send('> This Playlist Is Empty.');
         break;
       default:
-        channel.send('An error occurred while processing your request.');
+        channel.send('> An Error Occured. If You Think This Is An Error Please Try To Report By Using "/report" Command.');
         break;
     }
+    setTimeout(async() => {
+      await client.distube.stop(channel)
+    }, 10000); 
   })
   .on('empty', (message, channel) => {
     let embed = new Discord.EmbedBuilder()

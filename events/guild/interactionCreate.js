@@ -5,6 +5,7 @@ const Discord = require(`discord.js`)
 const discordTranscripts = require('discord-html-transcripts');
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');
 const ms = require("parse-ms-2");
+var rand = require("random-key");
 
 module.exports = class InteractionCreate extends Event {
 	constructor(client) {
@@ -41,14 +42,40 @@ module.exports = class InteractionCreate extends Event {
 							await interaction.deferReply({ ephemeral: true })
 							interaction.followUp({ content: `> Your Premium Was Expired.` })
 						} else {
-							command.run(client, interaction);
+							let update = db.fetch(`update`)
+							let updateid = db.fetch(`updateid`)
+							let updatecheck = db.fetch(`update_${interaction.user.id}_${updateid}`)
+							if(!updateid){
+								command.run(client, interaction);
+							} else if(updateid){
+								if(!updatecheck){
+									interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
+									command.run(client, interaction);
+									db.set(`update_${interaction.user.id}_${updateid}`, true)
+								} else if(updatecheck){
+									command.run(client, interaction);
+								}
+							}
 						}
 					} else {
 						await interaction.deferReply({ ephemeral: true })
 						interaction.followUp({ content: `> This Command Is For Only Premium Users.` })
 					}
 				} else {
-					command.run(client, interaction);
+					let update = db.fetch(`update`)
+					let updateid = db.fetch(`updateid`)
+					let updatecheck = db.fetch(`update_${interaction.user.id}_${updateid}`)
+					if(!updateid){
+						command.run(client, interaction);
+					} else if(updateid){
+						if(!updatecheck){
+							interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
+							command.run(client, interaction);
+							db.set(`update_${interaction.user.id}_${updateid}`, true)
+						} else if(updatecheck){
+							command.run(client, interaction);
+						}
+					}
 				}
 			} catch (e) {
 				console.log(e);
@@ -120,10 +147,12 @@ module.exports = class InteractionCreate extends Event {
 
 //privateslashstart
 		if(interaction.customId === "myUpdate"){
+			let id = rand.generate(10)
 			await interaction.reply({ content: `> Done✅. Update Text To Database.`, ephemeral: true })
 			.then(() => {
 				const text = interaction.fields.getTextInputValue('text');
 				db.set(`update`, text)
+				db.set(`updateid`, id)
 			})
 		}
 //privateslashend
