@@ -2,7 +2,7 @@ const Event = require('../../structures/EventClass');
 const colors = require(`colors`)
 const { ActivityType } = require('discord.js');
 const db = require(`quick.db`);
-const { SpotifyExtractor, SoundCloudExtractor } = require('@discord-player/extractor');
+const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor, YouTubeExtractor } = require('@discord-player/extractor');
 
 module.exports = class ReadyEvent extends Event {
 	constructor(client) {
@@ -25,7 +25,10 @@ module.exports = class ReadyEvent extends Event {
 		}, 15000);
 
 		
-		await client.player.extractors.register(SpotifyExtractor, {});
+		await client.player.extractors.register(SpotifyExtractor);
+		await client.player.extractors.register(SoundCloudExtractor);
+		await client.player.extractors.register(AppleMusicExtractor);
+		await client.player.extractors.register(YouTubeExtractor);
 		console.log(colors.red(`Discord Bot Is Now Online With ${client.users.cache.size} Users And ${client.guilds.cache.size} Servers.`));
 	}
 };

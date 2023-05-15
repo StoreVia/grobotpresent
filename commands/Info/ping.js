@@ -29,7 +29,7 @@ module.exports = class Ping extends Command {
 					{ name: '**🟢 Api: **', value: `> \`${Math.floor(client.ws.ping)} ms\``,inline: true },  
 					{ name: '**🏓 Latency: **', value: `> \`${msg.createdTimestamp - interaction.createdTimestamp} ms\``, inline: true },
 				)
-			interaction.editReply({ embeds: [embed] });
+				msg.edit({ embeds: [embed] });
 		})
 	}
 };

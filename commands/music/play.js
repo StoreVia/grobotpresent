@@ -29,7 +29,7 @@ module.exports = class Play extends Command {
 			} else if(clientVoice === memberVoice){
 				await interaction.deferReply();
 				interaction.followUp({ content: `🔍Searching...` })
-				const { track } = await client.player.play(memberVoice, query, {
+				await client.player.play(memberVoice, query, {
 					nodeOptions: {
 						metadata: interaction
 					}
@@ -41,9 +41,10 @@ module.exports = class Play extends Command {
 		} else if(memberVoice){
 			await interaction.deferReply();
 			interaction.followUp({ content: `🔍Searching...` })
-			const { track } = await client.player.play(memberVoice, query, {
+			await client.player.play(memberVoice, query, {
 				nodeOptions: {
-					metadata: interaction
+					metadata: interaction,
+					volume: 100
 				}
 			})
 		}

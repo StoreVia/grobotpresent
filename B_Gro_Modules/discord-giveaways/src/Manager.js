@@ -74,6 +74,7 @@ class GiveawaysManager extends EventEmitter {
     generateMainEmbed(giveaway, lastChanceEnabled = false) {
         const embed = new Discord.EmbedBuilder()
             .setTitle(typeof giveaway.messages.title === 'string' ? giveaway.messages.title : giveaway.prize)
+            .setThumbnail(`https://i.imgur.com/Ni5hAMW.png`)
             .setColor(
                 giveaway.isDrop
                     ? giveaway.embedColor
@@ -102,10 +103,9 @@ class GiveawaysManager extends EventEmitter {
             )
             .addFields(
                 { name: `Ends:`, value: giveaway.endAt === Infinity? giveaway.pauseOptions.infiniteDurationText: `<t:${Math.round(giveaway.endAt / 1000)}:R>`, inline: true  },
-                { name: `\u200b`, value: `\u200b` , inline:true },
+                { name: `WinnerCount`, value: `${giveaway.winnerCount}`, inline:true },
                 { name: `HostedBy:`, value: giveaway.hostedBy, inline: true },
             )
-            .setThumbnail(giveaway.thumbnail)
             .setImage(giveaway.image);
         if (giveaway.endAt !== Infinity) embed.setTimestamp(giveaway.endAt);
         return giveaway.fillInEmbed(embed);

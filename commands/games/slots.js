@@ -22,6 +22,6 @@ module.exports = class SlotsGame extends Command {
               title: 'Slots',
               color: `${process.env.ec}`,
             },
-          }).startGame();
+        }).startGame();
 	}
 };

@@ -3,9 +3,6 @@ const { Collection } = require('@discordjs/collection');
 const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
 const Util = require('./Util');
-const Express = require("express");
-const { Server } = require("socket.io");
-const http = require("http");
 
 module.exports = class BotClient extends Client {
 	constructor(...opt) {

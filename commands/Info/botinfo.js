@@ -37,9 +37,9 @@ module.exports = class Botinfo extends Command {
             .setTitle(`🤖 Bot Info - \`${client.user.username}\``)
             .setThumbnail(`${process.env.iconurl}`)
             .addFields(
-                { name: '**👨‍💻 Developer: **', value: `> <@${process.env.developer_id}>`,inline: true },
                 { name: '**✉️ InviteMe : **', value: `> [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
-                { name: '**:ping_pong: Ping: **', value: `> ┕\`${Math.round(client.ws.ping)}ms\``, inline: true },
+                { name: '**🟢 Api: **', value: `> ┕\`${Math.round(client.ws.ping)}ms\``, inline: true },
+				{ name: '**🏓 Latency: **', value: `> ┕\`0ms\``, inline: true },
             	{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
              	{ name: '**👥 Users: **', value: `> ${client.users.cache.size}`, inline: true },
             	{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
@@ -50,6 +50,25 @@ module.exports = class Botinfo extends Command {
             	text: `${client.user.username} - ${process.env.year} ©`, 
             	iconURL: process.env.iconurl
           	});
-		return await interaction.followUp({ embeds: [embed], components: [buttonRow] });
+		interaction.followUp({ embeds: [embed], components: [buttonRow] }).then((msg) =>  {
+			const embed = new EmbedBuilder()
+            	.setTitle(`🤖 Bot Info - \`${client.user.username}\``)
+            	.setThumbnail(`${process.env.iconurl}`)
+            	.addFields(
+                	{ name: '**✉️ InviteMe : **', value: `> [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
+                	{ name: '**🟢 Api: **', value: `> \`${Math.round(client.ws.ping)} ms\``, inline: true },
+					{ name: '**🏓 Latency: **', value: `> \`${msg.createdTimestamp - interaction.createdTimestamp} ms\``, inline: true },
+            		{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
+             		{ name: '**👥 Users: **', value: `> ${client.users.cache.size}`, inline: true },
+            		{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
+					{ name: '**🤖 Version: **', value: `\`\`\`> v${version}\`\`\``,inline: true },
+            	)
+            	.setColor(`${process.env.ec}`)
+            	.setFooter({
+            		text: `${client.user.username} - ${process.env.year} ©`, 
+            		iconURL: process.env.iconurl
+          		});
+			msg.edit({ embeds: [embed] })
+		})
 	}
 };

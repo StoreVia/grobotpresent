@@ -27,19 +27,16 @@ const canv = require('canvas'),
 	canvas = canv.createCanvas(1018, 468),
 	ctx = canvas.getContext('2d')
 const { loadImage } = require(`canvas`)
-const { Captcha } = require("discord.js-captcha");
 const moment = require('moment');
 const titlecase = require(`title-case`)
 const { readdirSync } = require("fs");
 const colors = require("colors");
-const { DiscordTogether } = require('discord-together');
 const fetch = require(`node-fetch`);
 const { Player } = require('discord-player');
 //packagesend
 
 //clientextensionsstart
 client.player = new Player(client);
-client.discordTogether = new DiscordTogether(client);
 client.commands = new Discord.Collection();
 client.categories = require("fs").readdirSync(`./commands`);
 ["Command", "Event", "RegisterSlash"]
@@ -120,6 +117,23 @@ client.player.events.on('audioTrackAdd', (queue, track) => {
       { name: '**Author: **', value: `${track.author}`,inline: true },
       { name: `\u200b`, value: `\u200b`, inline: true },
       { name: '**Duration: **', value: `\`${track.duration}\``,inline: true },
+    )
+    .setColor(`${process.env.ec}`)
+    .setFooter({
+      text: `${client.user.username} - ${process.env.year} ©`,
+      iconURL: process.env.iconurl
+    })
+  queue.metadata.channel.send({ embeds: [embed] });
+});
+client.player.events.on('audioTracksAdd', (queue) => {
+  let embed = new Discord.EmbedBuilder()
+    .setAuthor({
+      name: `Added PlayList To Queue!`,
+      iconURL: process.env.music_iconurl
+    })
+    
+    .addFields(
+      { name: '**No.OfSongs: **', value: `${queue.getSize()}`,inline: true },
     )
     .setColor(`${process.env.ec}`)
     .setFooter({

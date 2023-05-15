@@ -1,6 +1,21 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const events = require('events');
 const cu = `${process.env.botname}`;
+const buttonRow = new ActionRowBuilder()
+	.addComponents(
+		new ButtonBuilder()
+		  .setLabel('Spin')
+		  .setCustomId('spin')
+		  .setStyle(ButtonStyle.Secondary),
+		  )
+const buttonRow1 = new ActionRowBuilder()
+		.addComponents(
+      new ButtonBuilder()
+		    .setLabel('Spin')
+		    .setCustomId('spin1')
+		    .setDisabled(true)
+		    .setStyle(ButtonStyle.Secondary),
+    )
 
 module.exports = class Slots extends events {
   constructor(options = {}) {
@@ -32,13 +47,13 @@ module.exports = class Slots extends events {
 
 
   getBoardContent(showResult) {
-    let board = '```\n-------------------\n';
+    let board = '```\n━━━━━━━━━━━━━━━━━━\n';
     board += `${this.wrap(this.slot1, false)}  :  ${this.wrap(this.slot2, false)}  :  ${this.wrap(this.slot3, false)}\n\n`;
     board += `${this.slots[this.slot1]}  :  ${this.slots[this.slot2]}  :  ${this.slots[this.slot3]} <\n\n`;
     board += `${this.wrap(this.slot1, true)}  :  ${this.wrap(this.slot2, true)}  :  ${this.wrap(this.slot3, true)}\n`;
-    board += '-------------------\n';
+    board += '━━━━━━━━━━━━━━━━━━\n';
 
-    if (showResult) board += `| : :   ${(this.hasWon() ? 'WON ' : 'LOST')}   : : |`;
+    if (showResult) board += `> ${(this.hasWon() ? 'Won ' : 'Lost')}`;
     return (board + '```');
   }
 
@@ -63,7 +78,7 @@ module.exports = class Slots extends events {
     .setDescription(this.getBoardContent())
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
-    const msg = await this.sendMessage({ embeds: [embed] });
+    const msg = await this.sendMessage({ embeds: [embed], components: [buttonRow1] });
     
 
     setTimeout(async () => {
@@ -89,7 +104,7 @@ module.exports = class Slots extends events {
     .setDescription(this.getBoardContent(true))
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 
-    return msg.edit({ embeds: [embed] });
+    return msg.edit({ embeds: [embed], components: [buttonRow] });
   }
 
 

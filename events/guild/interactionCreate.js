@@ -2,7 +2,6 @@ const Event = require('../../structures/EventClass');
 const { InteractionType, EmbedBuilder } = require('discord.js');
 const db = require(`quick.db`)
 const Discord = require(`discord.js`)
-const discordTranscripts = require('discord-html-transcripts');
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');
 const ms = require("parse-ms-2");
 var rand = require("random-key");
