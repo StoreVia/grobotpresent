@@ -45,8 +45,8 @@ module.exports = class Giveaway extends Command {
                         .setName('end')
                         .setDescription('End A Giveaway.')
                         .addStringOption(option =>
-                            option.setName('message_id')
-                                .setDescription('Enter Giveaway Message Id.')
+                            option.setName('query')
+                                .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true)))
                .addSubcommand(subcommand =>
                     subcommand
@@ -133,12 +133,20 @@ module.exports = class Giveaway extends Command {
         }
 
         if (interaction.options.getSubcommand() === 'end') {
-            const messageId = interaction.options.getString('message_id');
-            client.giveawaysManager.end(messageId).then(() => {
-                interaction.reply({content: `Done✅. Giveaway Ended.`, ephemeral: true})
-              }).catch((err) => {
-                interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
-            });
+            const query = interaction.options.getString(`query`);
+            const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
+            if(!giveaway){
+                await interaction.deferReply({ ephemeral: true })
+                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else if(giveaway.ended){
+                await interaction.deferReply({ ephemeral: true })
+                interaction.followUp({ content: `> This Giveaway Has Been Already Ended.` })
+            } else {
+                await interaction.deferReply()
+                client.giveawaysManager.end(giveaway.messageId).then(() => {
+                    interaction.followUp({content: `Done✅. Giveaway Ended.` })
+                })
+            }
         }
 
         if (interaction.options.getSubcommand() === 'pause') {
