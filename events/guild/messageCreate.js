@@ -1,5 +1,5 @@
 const Event = require('../../structures/EventClass');
-const { InteractionType, EmbedBuilder } = require('discord.js');
+const { InteractionType, EmbedBuilder, ChannelType } = require('discord.js');
 const db = require(`quick.db`)
 const Discord = require(`discord.js`)
 const titlecase = require(`titlecase`)
@@ -25,9 +25,12 @@ module.exports = class MessageCreate extends Event {
 //clientmentionend
 
 //chatbotstart  
-        if (message.author.bot){
+        if(message.author.bot){
             return;
-        } 
+        }
+        if(ChannelType.DM){
+            return;
+        }
         message.content = message.content
             .replace(/@(everyone)/gi, "everyone")
             .replace(/@(here)/gi, "here")
