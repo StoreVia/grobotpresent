@@ -17,9 +17,18 @@ module.exports = class MemberCount extends Command {
 
 		await interaction.deferReply();
 
+		const guild = interaction.guild;
+		const members = await guild.members.fetch();
+		const botMembers = members.filter(member => member.user.bot);
+		const realMembers = members.filter(member => !member.user.bot);
+
 		let embed = new EmbedBuilder()
   			.setTitle(`Member Count - \`${interaction.guild.name}\``)
-  			.setDescription(`**Total Members: **\`${interaction.guild.memberCount}\``)
+			.addFields(
+				{ name: `**Total: **`, value: `\`${members.size.toLocaleString()}\``, inline: true },
+				{ name: `**Bots: **`, value: `\`${botMembers.size.toLocaleString()}\``, inline: true },
+				{ name: `**Members: **`, value: `\`${realMembers.size.toLocaleString()}\``, inline: true },
+			)
   			.setColor(`${process.env.ec}`)
   			.setFooter({
       			text: `${client.user.username} - ${process.env.year} ©`, 

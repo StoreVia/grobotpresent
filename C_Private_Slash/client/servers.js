@@ -26,7 +26,7 @@ module.exports = class Update extends Command {
                         .addFields(
                             { name: `**Name: **`, value: `${x.name}`, inline: true },
                             { name: `\u200b`, value: `\u200b`, inline: true },
-                            { name: `**Members: **`, value: `${x.memberCount}`, inline: true },
+                            { name: `**Members: **`, value: `${x.memberCount.toLocaleString()}`, inline: true },
                         )
                         .setColor(`${process.env.ec}`)
                     interaction.user.send({embeds: [embed]})

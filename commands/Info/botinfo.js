@@ -35,6 +35,7 @@ module.exports = class Botinfo extends Command {
 
         const embed = new EmbedBuilder()
             .setTitle(`🤖 Bot Info - \`${client.user.username}\``)
+			.setDescription(`**Please Support Us By Voting On Top.gg**`)
             .setThumbnail(`${process.env.iconurl}`)
             .addFields(
                 { name: '**✉️ InviteMe : **', value: `> [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
@@ -53,6 +54,7 @@ module.exports = class Botinfo extends Command {
 		interaction.followUp({ embeds: [embed], components: [buttonRow] }).then((msg) =>  {
 			const embed = new EmbedBuilder()
             	.setTitle(`🤖 Bot Info - \`${client.user.username}\``)
+				.setDescription(`**Please Support Us By Voting On Top.gg**`)
             	.setThumbnail(`${process.env.iconurl}`)
             	.addFields(
                 	{ name: '**✉️ InviteMe : **', value: `> [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
