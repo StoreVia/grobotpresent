@@ -79,7 +79,7 @@ module.exports = class Flood extends events {
       if (!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
     }
-    this.maxTurns = Math.floor((30 * (this.length * 2.3)) / 31);
+    this.maxTurns = Math.floor((25 * (this.length * 2)) / 26);
 
 
     const embed = new EmbedBuilder()
