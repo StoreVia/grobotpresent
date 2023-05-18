@@ -17,51 +17,62 @@ module.exports = class Truth extends Command {
 	}
 	async run(client, interaction) {
 
+		await interaction.deferReply();
+
         const buttonRow = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('Truth')
-					.setCustomId('nxttruth')
-					.setStyle(ButtonStyle.Success),
+					.setCustomId('truth')
+					.setStyle(ButtonStyle.Secondary),
+				new ButtonBuilder()
+					.setLabel('Stop')
+					.setCustomId('trstop')
+					.setStyle(ButtonStyle.Danger),
             )
 
-            const buttonRow1 = new ActionRowBuilder()
-				.addComponents(
-					new ButtonBuilder()
-                		.setLabel('Truth')
-                		.setCustomId('nxttruth1')
-                		.setDisabled(true)
-						.setStyle(ButtonStyle.Success),
+        const buttonRow1 = new ActionRowBuilder()
+			.addComponents(
+				new ButtonBuilder()
+					.setLabel('Truth')
+					.setCustomId('truth1')
+					.setDisabled(true)
+					.setStyle(ButtonStyle.Secondary),
+				new ButtonBuilder()
+					.setLabel('Stop')
+					.setCustomId('trstop1')
+					.setDisabled(true)
+					.setStyle(ButtonStyle.Danger),
             )
-
-		await interaction.deferReply();
 
 		let embed = new EmbedBuilder()
   			.setTitle('Truth')
-  			.setDescription(truth[Math.floor(Math.random() * truth.length)])
+			.setDescription(`${truth[Math.floor(Math.random() * truth.length)]}`)
   			.setFooter({
       			text: `${client.user.username} - ${process.env.year} ©`, 
       			iconURL: process.env.iconurl
     		})
         	.setColor(`${process.env.ec}`);
-		await interaction.followUp({ embeds: [embed], components: [buttonRow] });
+		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
 
-        const filter = i => i.customId === 'nxttruth';
-		const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
+        const filter = i => i.customId;
+		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} else {
+			} else if(i.customId === "truth") {
                 let embed = new EmbedBuilder()
                     .setTitle('Truth')
-                    .setDescription(truth[Math.floor(Math.random() * truth.length)])
+                    .setDescription(`${truth[Math.floor(Math.random() * truth.length)]}`)
   					.setFooter({
       					text: `${client.user.username} - ${process.env.year} ©`, 
       					iconURL: process.env.iconurl
     				})
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
+			} else if(i.customId === "trstop"){
+				await i.update({ components: [buttonRow1] });
 			}
 		})
 

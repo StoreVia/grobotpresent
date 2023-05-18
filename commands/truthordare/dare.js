@@ -1,6 +1,5 @@
 const Command = require('../../structures/CommandClass');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
 const dare = require(`../../A_Gro_db/dare.json`);
 
 module.exports = class Dare extends Command {
@@ -16,52 +15,63 @@ module.exports = class Dare extends Command {
 		});
 	}
 	async run(client, interaction) {
+		
+		await interaction.deferReply();
 
         const buttonRow = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('Dare')
-					.setCustomId('nxtdare')
-					.setStyle(ButtonStyle.Success),
+					.setCustomId('dare')
+					.setStyle(ButtonStyle.Secondary),
+				new ButtonBuilder()
+					.setLabel('Stop')
+					.setCustomId('dastop')
+					.setStyle(ButtonStyle.Danger),
             )
 
-            const buttonRow1 = new ActionRowBuilder()
-				.addComponents(
-					new ButtonBuilder()
-                		.setLabel('Dare')
-                		.setCustomId('nxtdare1')
-                		.setDisabled(true)
-						.setStyle(ButtonStyle.Success),
+        const buttonRow1 = new ActionRowBuilder()
+			.addComponents(
+				new ButtonBuilder()
+					.setLabel('Dare')
+					.setCustomId('dare')
+					.setDisabled(true)
+					.setStyle(ButtonStyle.Secondary),
+				new ButtonBuilder()
+					.setLabel('Stop')
+					.setCustomId('dastop1')
+					.setDisabled(true)
+					.setStyle(ButtonStyle.Danger),
             )
-
-		await interaction.deferReply();
 
 		let embed = new EmbedBuilder()
   			.setTitle('Dare')
-  			.setDescription(dare[Math.floor(Math.random() * dare.length)])
+  			.setDescription(`${dare[Math.floor(Math.random() * dare.length)]}`)
   			.setFooter({
       			text: `${client.user.username} - ${process.env.year} ©`, 
       			iconURL: process.env.iconurl
     		})
         	.setColor(`${process.env.ec}`);
-		await interaction.followUp({ embeds: [embed], components: [buttonRow] });
+		const message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
 
-        const filter = i => i.customId === 'nxtdare';
-		const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
+        const filter = i => i.customId;
+		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} else {
+			} else if(i.customId === "dare"){
                 let embed = new EmbedBuilder()
                     .setTitle('Dare')
-                    .setDescription(dare[Math.floor(Math.random() * dare.length)])
+					.setDescription(`${dare[Math.floor(Math.random() * dare.length)]}`)
   					.setFooter({
       					text: `${client.user.username} - ${process.env.year} ©`, 
       					iconURL: process.env.iconurl
     				})
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
+			} else if(i.customId === "dastop"){
+				await i.update({ components: [buttonRow1] });
 			}
 		})
 

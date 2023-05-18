@@ -61,7 +61,7 @@ module.exports = class Fact extends Command {
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} if(i.customId === "fact") {
+			} else if(i.customId === "fact") {
                 let embed = new EmbedBuilder()
   					.setTitle('Facts')
     				.setThumbnail(`https://i.imgur.com/ryyJgAK.png`)
