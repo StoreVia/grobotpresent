@@ -78,11 +78,9 @@ module.exports = class CatchTheFish extends Command {
     await interaction.deferReply();
     let msg = await interaction.followUp({ content: `Catch ${count} Fishes To Win!\n\n${randomPos}`, components: [componentsArray] })
 
-    const filter = (button => {
-       return button.user.id === interaction.user.id; 
-    });
+    const filter = i => i.customId;
 
-    const collector = interaction.channel.createMessageComponentCollector({ filter });
+    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
 
     function update(button) {
       randomized = Math.floor(Math.random() * 2);
@@ -124,6 +122,9 @@ module.exports = class CatchTheFish extends Command {
     }, 1000);
       
     collector.on('collect', async (button) => {
+      if(button.user.id != interaction.user.id){
+        await button.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+      }
       if(button.customId === "e"){
         gameEnded = true;
         msg.edit({ content: `${positions.left}`, components: [componentsArray1]});
@@ -141,5 +142,11 @@ module.exports = class CatchTheFish extends Command {
         update(button);
       }
     });
+    collector.on('end', async (_, reason) => {
+			if (reason === 'idle' || reason === 'user') {
+        gameEnded = true;
+				return await interaction.editReply({ components: [componentsArray1] });
+			}
+		});
 	}
 }
