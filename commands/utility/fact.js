@@ -22,22 +22,24 @@ module.exports = class Fact extends Command {
 				new ButtonBuilder()
 					.setLabel('Next')
 					.setCustomId('fact')
-					.setStyle(ButtonStyle.Success),
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
 					.setCustomId('ftstop')
-					.setStyle(ButtonStyle.Success),
+					.setStyle(ButtonStyle.Danger),
             )
             const buttonRow1 = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('Next')
 					.setCustomId('fact1')
-					.setStyle(ButtonStyle.Success),
+					.setDisabled(true)
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
 					.setCustomId('ftstop1')
-					.setStyle(ButtonStyle.Success),
+					.setDisabled(true)
+					.setStyle(ButtonStyle.Danger),
             )
 
 		await interaction.deferReply();
@@ -53,13 +55,13 @@ module.exports = class Fact extends Command {
         	.setColor(`${process.env.ec}`);
 		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
 
-        const filter = i => i.customId === 'nxtfact';
+        const filter = i => i.customId;
 		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} else {
+			} if(i.customId === "fact") {
                 let embed = new EmbedBuilder()
   					.setTitle('Facts')
     				.setThumbnail(`https://i.imgur.com/ryyJgAK.png`)
@@ -70,6 +72,8 @@ module.exports = class Fact extends Command {
     				})
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
+			} else if(i.customId === "ftstop"){
+				await i.update({ components: [buttonRow1] });
 			}
 		})
 

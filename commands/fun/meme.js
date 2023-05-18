@@ -35,11 +35,11 @@ module.exports = class Ping extends Command {
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('NextMeme')
-					.setCustomId('nxtmeme')
-					.setStyle(ButtonStyle.Success),
+					.setCustomId('meme')
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
-					.setCustomId('stop')
+					.setCustomId('mestop')
                 	.setDisabled(false)
 					.setStyle(ButtonStyle.Danger),
             )
@@ -47,12 +47,12 @@ module.exports = class Ping extends Command {
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('NextMeme')
-					.setCustomId('nxtmeme1')
+					.setCustomId('meme1')
                 	.setDisabled(true)
-					.setStyle(ButtonStyle.Success),
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
-					.setCustomId('stop')
+					.setCustomId('mestop1')
                 	.setDisabled(true)
 					.setStyle(ButtonStyle.Danger),
             )
@@ -93,7 +93,7 @@ module.exports = class Ping extends Command {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} 
-			if(i.customId === "nxtmeme") {
+			if(i.customId === "meme") {
 				await i.update({ content: `Searching...`, components: [buttonRow1] })
 				let sub1 = [
 					'meme',
@@ -135,7 +135,7 @@ module.exports = class Ping extends Command {
 					i.editReply({ content: ``, embeds: [embed], components: [buttonRow] });
         		})
 			}
-			if(i.customId === "stop"){
+			if(i.customId === "mestop"){
 				return await i.update({ components: [buttonRow1] });
 			}
 		})

@@ -21,11 +21,11 @@ module.exports = class Dice extends Command {
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('Roll Again')
-					.setCustomId('rlag')
-					.setStyle(ButtonStyle.Success),
+					.setCustomId('dice')
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
-					.setCustomId('stop')
+					.setCustomId('distop')
                 	.setDisabled(false)
 					.setStyle(ButtonStyle.Danger),
             )
@@ -33,12 +33,12 @@ module.exports = class Dice extends Command {
 			.addComponents(
 				new ButtonBuilder()
 					.setLabel('Roll Again')
-					.setCustomId('rlag')
+					.setCustomId('dice1')
 					.setDisabled(true)
-					.setStyle(ButtonStyle.Success),
+					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
-					.setCustomId('stop')
+					.setCustomId('distop1')
                 	.setDisabled(true)
 					.setStyle(ButtonStyle.Danger),
             )
@@ -54,28 +54,25 @@ module.exports = class Dice extends Command {
         const rolleddice = numbers[Math.floor(Math.random() * numbers.length)];
 
 		const embed = new EmbedBuilder()
-		.setDescription(`🎲 You Got \`${rolleddice}\``)
-		.setColor(`${process.env.ec}`)
-
-		interaction.followUp({ embeds: [embed], components: [buttonRow] })
+			.setDescription(`🎲 You Got \`${rolleddice}\``)
+			.setColor(`${process.env.ec}`)
+		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] })
 
 		const filter = i => i.customId;
-		const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 300000 });
+		const collector = message.createMessageComponentCollector({ filter, idle: 300000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} 
-			if(i.customId === "rlag") {
+			if(i.customId === "dice") {
 				const rolleddice1 = numbers[Math.floor(Math.random() * numbers.length)];
-
 				const embed = new EmbedBuilder()
 					.setDescription(`🎲 You Got \`${rolleddice1}\``)
 					.setColor(`${process.env.ec}`)
-
 				i.update({ embeds: [embed], components: [buttonRow] })
 			}
-			if(i.customId === "stop"){
+			if(i.customId === "distop"){
 				return await i.update({ components: [buttonRow1] });
 			}
 		})
