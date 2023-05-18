@@ -27,21 +27,15 @@ module.exports = class Reminder extends Command {
     let user = interaction.user;
     let time = interaction.options.getString("time")
     let reason = interaction.options.getString("reason");
-    let title = null;
     let description = null;
 
-    if(!reason) title = `Reminder`, description =  `**Reminder ${user}**`;
-    if(reason) title = `Reminder :- ${reason}`, description =  `**Reminder ${user} : ${reason}**`;
+    if(!reason) description =  `**Reminder ${user}**`;
+    if(reason) description =  `**Reminder ${user} : ${reason}**`;
 
     setTimeout(function(){
 			const reminder = new EmbedBuilder()
-        .setTitle(title)
 		    .setColor(`${process.env.ec}`)
 			  .setDescription(description)
-        .setFooter({
-          text: `${client.user.username} - ${process.env.year} ©`, 
-          iconURL: process.env.iconurl
-        });
 			user.send({ content:`${user}`, embeds: [reminder]})
 
     }, ms(time));
