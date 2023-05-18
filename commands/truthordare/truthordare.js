@@ -37,6 +37,7 @@ module.exports = class TruthOrDare extends Command {
 				new ButtonBuilder()
 					.setLabel('TOD')
 					.setCustomId('tod1')
+					.setDisabled(true)
 					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
@@ -48,7 +49,7 @@ module.exports = class TruthOrDare extends Command {
 
 		function readFileLines(filename) {
   			const content = fs.readFileSync(filename, 'utf-8');
-  			const lines = content.split('\n').map(line => line.trim()).filter(line => line !== '');
+			const lines = content.split('\n').map(line => line.trim().replace(/,+$/, '')).filter(line => line !== '');
   			return lines;
 		}
 		function pickRandomLine(lines) {
@@ -66,11 +67,14 @@ module.exports = class TruthOrDare extends Command {
 		}
 
 		const randomLine = Math.random() < 0.5 ? pickRandomLineFromFile(truthFilePath) : pickRandomLineFromFile(dareFilePath);
-
+		
+		let fileName = null;
+		if(randomLine.file.includes(`dare`)) fileName = "Dare";
+		if(randomLine.file.includes(`truth`)) fileName = "Truth";
 
 		let embed = new EmbedBuilder()
-  			.setTitle(`${randomLine.file}`)
-  			.setDescription(`${randomLine.line}`)
+  			.setTitle(`${fileName}`)
+  			.setDescription(`${randomLine.line.replace(/"/g, "").trim()}`)
   			.setFooter({
       			text: `${client.user.username} - ${process.env.year} ©`, 
       			iconURL: process.env.iconurl
@@ -78,21 +82,25 @@ module.exports = class TruthOrDare extends Command {
         	.setColor(`${process.env.ec}`);
 		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
 
-        const filter = i => i.customId === 'nxttod';
+        const filter = i => i.customId;
 		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} else if(i.customId === "tod"){
+				const randomLine1 = Math.random() < 0.5 ? pickRandomLineFromFile(truthFilePath) : pickRandomLineFromFile(dareFilePath);
+				let fileName1 = null;
+				if(randomLine1.file.includes(`dare`)) fileName1 = "Dare";
+				if(randomLine1.file.includes(`truth`)) fileName1 = "Truth";
                 let embed = new EmbedBuilder()
-                    .setTitle('Truth Or Dare')
-                    .setDescription(tod[Math.floor(Math.random() * tod.length)])
+  					.setTitle(`${fileName1}`)
+  					.setDescription(`${randomLine1.line.replace(/"/g, "").trim()}`)
   					.setFooter({
-      					text: `${client.user.username} - ${process.env.year} ©`, 
-      					iconURL: process.env.iconurl
-    				})
-        			.setColor(`${process.env.ec}`);
+						text: `${client.user.username} - ${process.env.year} ©`, 
+						iconURL: process.env.iconurl
+					})
+					.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
 			} else if(i.customId === "todstop"){
 				await i.update({ embeds: [embed], components: [buttonRow1] });
