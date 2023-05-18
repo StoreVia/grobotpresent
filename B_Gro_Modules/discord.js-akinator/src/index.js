@@ -11,9 +11,9 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`);
 function getButtonReply(interaction) {
     interaction = interaction.customId;
     if (interaction === "✅") return "y"; // yes
-    else if (interaction === "❌") return "n"; //no
-    else if (interaction === "🤷") return "i"; // don't know
+    else if (interaction === "❌") return "n"; //no 
     else if (interaction === "⏪") return "b"; // back
+    else if (interaction === "🤷") return "i"; // don't know
     else if (interaction === "🛑") return "s"; // stop game
     else return null;
 };
@@ -101,22 +101,23 @@ module.exports = async function (input, options = {}) {
 					            .setStyle(ButtonStyle.Secondary),
                         )
                         .addComponents(
-				            new ButtonBuilder()
-                                .setLabel(`${translations.dontKnow}`)
-                                .setEmoji(`🤷`)
+                            new ButtonBuilder()
+                                .setLabel(`${translations.back}`)
+                                .setCustomId('back')
+                                .setEmoji(`⏪`)
                                 .setDisabled(true)
-					            .setCustomId('dk')
-					            .setStyle(ButtonStyle.Primary),
+                                .setStyle(ButtonStyle.Secondary),
                         );
                     const buttonRow1 = new ActionRowBuilder()
-			        .addComponents(
+                    .addComponents(
                         new ButtonBuilder()
-                            .setLabel(`${translations.back}`)
-                            .setCustomId('back')
-                            .setEmoji(`⏪`)
+                            .setLabel(`${translations.dontKnow}`)
+                            .setEmoji(`🤷`)
                             .setDisabled(true)
-                            .setStyle(ButtonStyle.Secondary),
-                    ).addComponents(
+                            .setCustomId('dk')
+                            .setStyle(ButtonStyle.Primary),
+                    )
+			        .addComponents(
                         new ButtonBuilder()
                             .setLabel(`${translations.stop}`)
                             .setCustomId('stop')
@@ -367,29 +368,30 @@ module.exports = async function (input, options = {}) {
 					            .setStyle(ButtonStyle.Secondary),
                         )
                         .addComponents(
-				            new ButtonBuilder()
-                                .setLabel(`${translations.dontKnow}`)
-                                .setEmoji(`🤷`)
-					            .setCustomId('dk')
+                            new ButtonBuilder()
+                                .setLabel(`${translations.back}`)
+                                .setCustomId('back')
                                 .setDisabled(true)
-					            .setStyle(ButtonStyle.Primary),
+                                .setEmoji(`⏪`)
+                                .setStyle(ButtonStyle.Secondary),
                         );
                     const buttonRow1 = new ActionRowBuilder()
-			        .addComponents(
-                        new ButtonBuilder()
-                            .setLabel(`${translations.back}`)
-                            .setCustomId('back')
-                            .setDisabled(true)
-                            .setEmoji(`⏪`)
-                            .setStyle(ButtonStyle.Secondary),
-                    ).addComponents(
-                        new ButtonBuilder()
-                            .setLabel(`${translations.stop}`)
-                            .setCustomId('stop')
-                            .setDisabled(true)
-                            .setEmoji(`🛑`)
-                            .setStyle(ButtonStyle.Danger),
-                    );
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setLabel(`${translations.dontKnow}`)
+                                .setEmoji(`🤷`)
+                                .setCustomId('dk')
+                                .setDisabled(true)
+                                .setStyle(ButtonStyle.Primary),
+                        )
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setLabel(`${translations.stop}`)
+                                .setCustomId('stop')
+                                .setDisabled(true)
+                                .setEmoji(`🛑`)
+                                .setStyle(ButtonStyle.Danger),
+                        );
 
                     if (options.useButtons) await response.editReply({ embeds: [thinkingEmbed], components: [buttonRow, buttonRow1] })
                     else await akiMessage.edit({ embeds: [thinkingEmbed], components: [buttonRow, buttonRow1] })

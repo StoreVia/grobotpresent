@@ -17,8 +17,8 @@ module.exports = async function awaitInput(useButtons, input, botMessage, isGues
     if (useButtons) {
         let yes = { type: 2, label: translations.yes, style: 3, custom_id: "✅", emoji: { name: "✅" } }
         let no = { type: 2, label: translations.no, style: 2, custom_id: "❌", emoji: { name: "❌" } }
-        let idk = { type: 2, label: translations.dontKnow, style: 1, custom_id: "🤷", emoji: { name: "🤷" } }
         let back = { type: 2, label: translations.back, style: 2, custom_id: "⏪", emoji: { name: "⏪" } }
+        let idk = { type: 2, label: translations.dontKnow, style: 1, custom_id: "🤷", emoji: { name: "🤷" } }
         let stop = { type: 2, label: translations.stop, style: 4, custom_id: "🛑", emoji: { name: "🛑" } }
 
         let answerTypes = [];
@@ -27,7 +27,7 @@ module.exports = async function awaitInput(useButtons, input, botMessage, isGues
             answerTypes = [yes, no]
         }
         else {
-            answerTypes = [yes, no, idk, back, stop]
+            answerTypes = [yes, no, back, idk, stop]
         }
 
         let choice = await buttonMenu(input.client, input, botMessage, answerTypes, 60000);
