@@ -1,7 +1,5 @@
 const Command = require('../../structures/CommandClass');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
-const tod = require(`../../A_Gro_db/tod.json`);
 const fs = require('fs');
 
 module.exports = class TruthOrDare extends Command {
