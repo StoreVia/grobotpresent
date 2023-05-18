@@ -158,8 +158,9 @@ module.exports = class SnakeGame extends events {
 
     const dis1 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis1').setDisabled(true);
     const dis2 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis2').setDisabled(true);
-    const row1 = new ActionRowBuilder().addComponents(dis1, up, dis2, stop);
-    const row2 = new ActionRowBuilder().addComponents(left, down, right);
+    const dis3 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis3').setDisabled(true);
+    const row1 = new ActionRowBuilder().addComponents(dis1, up, dis2, dis3);
+    const row2 = new ActionRowBuilder().addComponents(left, down, right, stop);
 
     const msg = await this.sendMessage({ embeds: [embed], components: [row1, row2] });
     return this.handleButtons(msg);

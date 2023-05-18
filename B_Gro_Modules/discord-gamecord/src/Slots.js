@@ -1,21 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const events = require('events');
 const cu = `${process.env.botname}`;
-const buttonRow = new ActionRowBuilder()
-	.addComponents(
-		new ButtonBuilder()
-		  .setLabel('Spin')
-		  .setCustomId('spin')
-		  .setStyle(ButtonStyle.Secondary),
-		  )
-const buttonRow1 = new ActionRowBuilder()
-		.addComponents(
-      new ButtonBuilder()
-		    .setLabel('Spin')
-		    .setCustomId('spin1')
-		    .setDisabled(true)
-		    .setStyle(ButtonStyle.Secondary),
-    )
 
 module.exports = class Slots extends events {
   constructor(options = {}) {
@@ -78,7 +63,7 @@ module.exports = class Slots extends events {
     .setDescription(this.getBoardContent())
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
-    const msg = await this.sendMessage({ embeds: [embed], components: [buttonRow1] });
+    const msg = await this.sendMessage({ embeds: [embed] });
     
 
     setTimeout(async () => {
@@ -104,7 +89,7 @@ module.exports = class Slots extends events {
     .setDescription(this.getBoardContent(true))
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 
-    return msg.edit({ embeds: [embed], components: [buttonRow] });
+    return msg.edit({ embeds: [embed] });
   }
 
 

@@ -20,16 +20,23 @@ module.exports = class Fact extends Command {
         const buttonRow = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setLabel('NextFact')
-					.setCustomId('nxtfact')
+					.setLabel('Next')
+					.setCustomId('fact')
+					.setStyle(ButtonStyle.Success),
+				new ButtonBuilder()
+					.setLabel('Stop')
+					.setCustomId('ftstop')
 					.setStyle(ButtonStyle.Success),
             )
             const buttonRow1 = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setLabel('NextFact')
-					.setCustomId('nxtfact1')
-                    .setDisabled(true)
+					.setLabel('Next')
+					.setCustomId('fact1')
+					.setStyle(ButtonStyle.Success),
+				new ButtonBuilder()
+					.setLabel('Stop')
+					.setCustomId('ftstop1')
 					.setStyle(ButtonStyle.Success),
             )
 
@@ -44,10 +51,10 @@ module.exports = class Fact extends Command {
       			iconURL: process.env.iconurl
     		})
         	.setColor(`${process.env.ec}`);
-		await interaction.followUp({ embeds: [embed], components: [buttonRow] });
+		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
 
         const filter = i => i.customId === 'nxtfact';
-		const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
+		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {

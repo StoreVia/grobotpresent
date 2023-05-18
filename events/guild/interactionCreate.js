@@ -231,10 +231,10 @@ module.exports = class InteractionCreate extends Event {
 						.setCustomId('cancel')
 						.setStyle(Discord.ButtonStyle.Danger),
 				)
-   			let msg = await interaction.reply({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
+   			let message = await interaction.reply({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   
    			const filter = i => i.customId;
-   			const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
+   			const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
   
    			collector.on('collect', async (i) => {
 				const role = db.fetch(`ticketrole_${interaction.guild.id}`)
