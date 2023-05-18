@@ -25,7 +25,7 @@ module.exports = class Fact extends Command {
 					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
-					.setCustomId('ftstop')
+					.setCustomId('fastop')
 					.setStyle(ButtonStyle.Danger),
             )
             const buttonRow1 = new ActionRowBuilder()
@@ -37,7 +37,7 @@ module.exports = class Fact extends Command {
 					.setStyle(ButtonStyle.Secondary),
 				new ButtonBuilder()
 					.setLabel('Stop')
-					.setCustomId('ftstop1')
+					.setCustomId('fastop1')
 					.setDisabled(true)
 					.setStyle(ButtonStyle.Danger),
             )
@@ -72,7 +72,7 @@ module.exports = class Fact extends Command {
     				})
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
-			} else if(i.customId === "ftstop"){
+			} else if(i.customId === "fastop"){
 				await i.update({ components: [buttonRow1] });
 			}
 		})
