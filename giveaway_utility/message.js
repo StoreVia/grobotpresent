@@ -12,7 +12,7 @@ module.exports = {
   inviteToParticipate: `> **React With 🎉 To Participate.**\n`,
   winMessage: "> Congratulations🎉, {winners}. You won **{this.prize}**.",
   embedFooter: `GroBot - ${process.env.year} ©`,
-  noWinner: "Giveaway Cancelled Due To No Valid Participations.",
+  noWinner: "> Giveaway Cancelled Due To No Valid Participations.",
   hostedBy: "Hosted by: {this.hostedBy}",
   winners: "Winner's",
   endedAt: `GroBot - ${process.env.year} ©`
