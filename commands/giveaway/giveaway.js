@@ -215,7 +215,7 @@ module.exports = class Giveaway extends Command {
                 }).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
+                    interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.', ephemeral:true});
                 });
             } else if(newprize){
                 client.giveawaysManager.edit(giveaway.messageId, {
@@ -224,7 +224,7 @@ module.exports = class Giveaway extends Command {
                 }).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.followUp({ content: '> No Giveaway Found. Please Try By Entering MessageId.', ephemeral:true});
+                    interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.', ephemeral:true});
                 });
             } else if(newwinnercount){
                 client.giveawaysManager.edit(giveaway.messageId, {
@@ -233,10 +233,10 @@ module.exports = class Giveaway extends Command {
                 }).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.reply({ content: '> No Giveaway Found. Please Try By Entering MessageId.', ephemeral:true});
+                    interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.', ephemeral:true});
                 });
             } else {
-                interaction.followUp({ content: `> Choose Any Option, No Changes Were Made.` })
+                interaction.followUp({ content: `> You Need To Select Atleast One Option To Run This Command.` })
             }
         }
 
@@ -246,7 +246,7 @@ module.exports = class Giveaway extends Command {
             const query = string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
-                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct Query (or) Try By Entering MessageId.` })
             } else if(!giveaway.ended){
                 interaction.followUp({ content: `> The Giveaway isn't Ended To Reroll.` })
             }else {
