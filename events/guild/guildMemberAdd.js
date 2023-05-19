@@ -26,7 +26,6 @@ module.exports = class GuildMemberAdd extends Event {
         let color = db.fetch(`welcometextcolor_${member.guild.id}`) || "FFFFFF";
         let avatarcolor = color;
         let backgroundurl = db.fetch(`welcomebg_${member.guild.id}`) || "https://images5.alphacoders.com/112/1123013.jpg";
-        let imagetype = db.fetch(`welcometemplate_${member.guild.id}`) || "two"
 
         if(welcomedmuser === "off"){
             return;
@@ -48,30 +47,8 @@ module.exports = class GuildMemberAdd extends Event {
                 .replace('<UserTag>', `${member.user.discriminator}`)
                 .replace('<ServerName>', `${member.guild.name}`)
                 .replace('<ServerId>', `${member.guild.id}`);
-          
-            const welcomer = new canvacord.Welcomer()
-		        .setUsername(`${member.user.username}`)
-                .setDiscriminator(`${member.user.discriminator}`)
-		        .setMemberCount(member.guild.memberCount)
-		        .setBackground(`${backgroundurl}`)
-		        .setGuildName(`${member.guild.name}`)
-		        .setAvatar(`${member.user.displayAvatarURL({ extension: "png", size: 1024, dynamic: true })}`)
-		        .setColor("border", "#4D5E94")
-		        .setColor("username-box", "#4D5E94")
-		        .setColor("discriminator-box", "#4D5E94")
-		        .setColor("message-box", "#4D5E94")
-		        .setColor("title", `#${color}`)
-		        .setColor("avatar", `#${avatarcolor}`)
-	
-            if(imagetype === "one"){
-                welcomer.build().then(data => {
-                    const attachment = new Discord.AttachmentBuilder(data, { name: "Welcomer.png" });
-                    member.send({ content: `${text1}`, files: [attachment], components: [row]});
-                });
-            } else if(imagetype === "two"){
-                member.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th Member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}], components: [row]})
-            }
-
+            
+            member.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th Member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}], components: [row]})
         }
 
         if (!server) {
@@ -87,30 +64,7 @@ module.exports = class GuildMemberAdd extends Event {
                 .replace('<ServerName>', `${member.guild.name}`)
                 .replace('<ServerId>', `${member.guild.id}`);
     
-            const welcomer = new canvacord.Welcomer()
-                .setUsername(`${member.user.username}`)
-                .setDiscriminator(`${member.user.discriminator}`)
-                .setMemberCount(member.guild.memberCount)
-                .setBackground(`${backgroundurl}`)
-                .setGuildName(`${member.guild.name}`)
-                .setAvatar(`${member.user.displayAvatarURL({ extension: "png", size: 1024, dynamic: true })}`)
-                .setColor("border", "#4D5E94")
-		        .setColor("username-box", "#4D5E94")
-		        .setColor("discriminator-box", "#4D5E94")
-		        .setColor("message-box", "#4D5E94")
-		        .setColor("title", `#${color}`)
-		        .setColor("avatar", `#${avatarcolor}`)
-    
-            if(imagetype === "one"){
-                welcomer.build().then(data => {
-                    const attachment = new Discord.AttachmentBuilder(data, { name: "Welcomer.png" });
-                    guildCh.send({ content: `${text1}`, files: [attachment]});
-                });
-            } else if(imagetype === "two"){
-                guildCh.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}]})
-            }
-		    
-
+            guildCh.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}]})
         }
 	}
 };

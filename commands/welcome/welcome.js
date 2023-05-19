@@ -69,10 +69,7 @@ module.exports = class Welcome extends Command {
                                 .setDescription(`Edit User's Dm Welcome Message When That User Join's Server.`)))
                 .addSubcommand(subcommand => 
                     subcommand.setName(`guide`)
-                        .setDescription(`Get Guidence About Setting Welcome System.`))
-                .addSubcommand(subcommand => 
-                    subcommand.setName(`template`)
-                            .setDescription(`Choose Welcome Image Template.`)),
+                        .setDescription(`Get Guidence About Setting Welcome System.`)),
 			usage: 'welcome',
 			category: 'welcome',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
@@ -91,10 +88,8 @@ module.exports = class Welcome extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (subcommand === 'set') {
-
             const channel1 = channel('channel');
             const channelcheck = db.fetch(`welcome_${interaction.guild.id}`, channel1.id)
-
             if(!channelcheck){
                 const welcomenew = new ModalBuilder()
                     .setCustomId('myModalWelcomeNew')
@@ -105,7 +100,6 @@ module.exports = class Welcome extends Command {
                     .setStyle(TextInputStyle.Paragraph);
                 const welcome0 = new ActionRowBuilder().addComponents(welcomenew1);
                 welcomenew.addComponents(welcome0);
-
                 db.set(`welcome_${interaction.guild.id}`, channel1.id);
                 await interaction.showModal(welcomenew);
             } else if(channelcheck){
@@ -126,25 +120,21 @@ module.exports = class Welcome extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (subcommand === 'delete') {
-            const channel = interaction.options.getChannel('deletechannel');
-            const checkchannel = db.fetch(`welcome_${interaction.guild.id}`, channel.id);
+            const channel1 = channel('deletechannel');
+            const checkchannel = db.fetch(`welcome_${interaction.guild.id}`, channel1.id);
             if(checkchannel){
-                db.delete(`welcome_${interaction.guild.id}`, channel.id);
-                await interaction.reply({ content: `> Welcome Message System Was Now Disabled In ${channel}`, ephemeral: true})
+                db.delete(`welcome_${interaction.guild.id}`, channel1.id);
+                await interaction.reply({ content: `> Welcome Message System Was Now Disabled In ${channel1}`, ephemeral: true})
             }
             if(!checkchannel){
-                await interaction.reply({ content: `> ${channel} Was Not Bounded To Welcome System.`, ephemeral: true})
+                await interaction.reply({ content: `> ${channel1} Was Not Bounded To Welcome System.`, ephemeral: true})
             }
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if (subcommand === 'background') {
-            const background = interaction.options.getString('url');
+            const background = string('url');
             const backgoundcheck = db.fetch(`welcomebg_${interaction.guild.id}`)
             if(!backgoundcheck){
                 db.set(`welcomebg_${interaction.guild.id}`, background);
@@ -156,12 +146,9 @@ module.exports = class Welcome extends Command {
             }
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "guide"){
-
             const embed = new EmbedBuilder()
                 .setTitle(`GroBot Welcome System Guide `)
                 .setDescription(`> **Note: **Use \`:emoji_name:\` To Use Emoji In Welcome Message,Use \`<a:emoji_name:emoji_id>\` To Use Emoji Gif In Welcome Message & This Message Also Inlcudes For Dm Messages.`)
@@ -176,16 +163,9 @@ module.exports = class Welcome extends Command {
             
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if(subcommand === "edit"){
-
-            /////////////////////////////////////
-
             const welcometextedit = new ModalBuilder()
 			    .setCustomId('myModalWelcomeTextEdit')
 			    .setTitle('Welcome System Configuration.');
@@ -195,31 +175,19 @@ module.exports = class Welcome extends Command {
 			    .setStyle(TextInputStyle.Paragraph);
 		    const welcometextedit0 = new ActionRowBuilder().addComponents(welcometextedit1);
 		    welcometextedit.addComponents(welcometextedit0);
-
-            /////////////////////////////////////
-
             await interaction.showModal(welcometextedit);
-
         }
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if(subcommand === "user"){
-            const set = interaction.options.getString("set");
+            const set = string("set");
             const userdmoncheck = db.fetch(`welcomedm_${interaction.guild.id}`, "on")
             const userdmoffcheck = db.fetch(`welcomedm_${interaction.guild.id}`, "off")
             if(set === "on"){
                 if(userdmoncheck){
                     await interaction.reply({ content: `> Dm-User Was Already Enabled. If You Want To Edit Welcome Dm Message Use \`/welcome dm-user text-edit\` Command.`, ephemeral: true})
-                }
-                if(!userdmoncheck){
-
-                    /////////////////////////////////////
-
+                } else if(!userdmoncheck){
                     const welcomedmusernew = new ModalBuilder()
                         .setCustomId('myModalDmUserNew')
                         .setTitle('Welcome System Configuration.');
@@ -229,14 +197,10 @@ module.exports = class Welcome extends Command {
                         .setStyle(TextInputStyle.Paragraph);
                     const welcomedmusernew0 = new ActionRowBuilder().addComponents(welcomedmusernew1);
                     welcomedmusernew.addComponents(welcomedmusernew0);
-
-                    /////////////////////////////////////
-
                     db.set(`welcomedm_${interaction.guild.id}`, "on")
                     await interaction.showModal(welcomedmusernew)
                 }
-            }
-            if(set === "off"){
+            } else if(set === "off"){
                 if(userdmoffcheck){
                     db.delete(`welcomedm_${interaction.guild.id}`, "off")
                     await interaction.reply({ content: `> Done✅. Dm-User Was Disabled Now.`, ephemeral: true})
@@ -247,16 +211,9 @@ module.exports = class Welcome extends Command {
             }
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if(subcommand === "text-edit"){
-
-            /////////////////////////////////////
-
             const welcomedmuserold = new ModalBuilder()
 			    .setCustomId('myModalDmUserTextEdit')
 			    .setTitle('Welcome System Configuration.');
@@ -266,22 +223,12 @@ module.exports = class Welcome extends Command {
 			    .setStyle(TextInputStyle.Paragraph);
 		    const welcomedmuserold0 = new ActionRowBuilder().addComponents(welcomedmuserold1);
 		    welcomedmuserold.addComponents(welcomedmuserold0);
-
-            /////////////////////////////////////
-
             await interaction.showModal(welcomedmuserold);
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if(subcommand === "color"){
-
-            /////////////////////////////////////
-
             const selectMenuRow = new ActionRowBuilder()
                 .addComponents(
                     new StringSelectMenuBuilder()
@@ -338,7 +285,6 @@ module.exports = class Welcome extends Command {
                         ]   
                     ),
                 );
-
             const disabled = new ActionRowBuilder()
 			    .addComponents(
 				    new StringSelectMenuBuilder()
@@ -354,8 +300,6 @@ module.exports = class Welcome extends Command {
                         ]
                     )
 			    );
-
-
             const embed = new EmbedBuilder()
                 .setTitle(`Select The Color`)
                 .setColor(`${process.env.ec}`)
@@ -364,19 +308,14 @@ module.exports = class Welcome extends Command {
                     iconURL: process.env.iconurl
                 })
                 .setDescription(`Select One Of The Option Below.\n\n> Note :- **Selecting Color Changes Text Color In Welcome Image.**`)
-
             await interaction.reply({ embeds: [embed], components: [selectMenuRow], ephemeral: true })
-
-
             const filter = i => i.customId === 'colors';
             const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
-
             collector.on('collect', async i => {
 			    if (i.user.id != interaction.user.id) {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    }
 			    const selected = i.values[0];
-
 			    if (i.customId === 'colors') {
                     if(selected === "000000"){
 				        const embed = new EmbedBuilder()
@@ -390,7 +329,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
                     }
-
                     if(selected === "FFFFFF"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -403,7 +341,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
 			        }
-
                     if(selected === "FFA500"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -416,7 +353,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
 			        }
-
                     if(selected === "87CEEB"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -429,7 +365,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
 			        }
-
                     if(selected === "FF0000"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -442,7 +377,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
                     }
-
                     if(selected === "964B00"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -455,7 +389,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
 			        }
-
                     if(selected === "A020F0"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -468,7 +401,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
 			        }
-
                     if(selected === "00FF00"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -481,7 +413,6 @@ module.exports = class Welcome extends Command {
                         i.update({ embeds: [embed] })
                         db.set(`welcometextcolor_${interaction.guild.id}`, selected)
 			        }
-
                     if(selected === "FFFF00"){
                         const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -496,78 +427,12 @@ module.exports = class Welcome extends Command {
 			        }
                 }
 	        })
-
 	        collector.on('end', async (_, reason) => {
                 if (reason === 'idle') {
                     await interaction.editReply({ components: [disabled] });
                 }
             });
         }
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-        if(subcommand === "template"){
-
-            const buttonRow = new ActionRowBuilder()
-			    .addComponents(
-				    new ButtonBuilder()
-					    .setEmoji(`1️⃣`)
-					    .setCustomId('one')
-					    .setStyle(ButtonStyle.Secondary),
-                    new ButtonBuilder()
-                        .setEmoji(`2️⃣`)
-					    .setCustomId('two')
-					    .setStyle(ButtonStyle.Secondary),
-                )
-
-            const disabled = new ActionRowBuilder()
-			    .addComponents(
-				    new ButtonBuilder()
-					    .setLabel(`grobot`)
-					    .setCustomId('grobot')
-					    .setStyle(ButtonStyle.Secondary),
-                )
-
-            const embed = new EmbedBuilder()
-                .setTitle(`Welcome Templates`)
-                .setDescription(`Choose One Of The Option Below.`)
-                .setColor(`${process.env.ec}`)
-                .setImage(`https://media.discordapp.net/attachments/1097119486986960968/1097191953361285201/Discord_Templates.png`)
-                .setFooter({
-                    text: `${client.user.username} - ${process.env.year} ©`, 
-                    iconURL: process.env.iconurl
-                })
-
-            await interaction.deferReply({ ephemeral: true })
-            await interaction.followUp({ embeds: [embed], components: [buttonRow], ephemeral: true })
-
-            const filter = i => i.customId;
-            const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
-
-            collector.on('collect', async i => {
-			    if (i.user.id != interaction.user.id) {
-				    await i.update({ content: "This Interaction Doesn't Belongs To You." });
-			    }
-                if(i.customId === "one"){
-                    await db.set(`welcometemplate_${interaction.guild.id}`, "one")
-                    await i.update({ content: "Done✅. Template 1 Has Been Choosen.", embeds: [], components: [] });
-                }
-                if(i.customId === "two"){
-                    await db.set(`welcometemplate_${interaction.guild.id}`, "two")
-                    await i.update({ content: "Done✅. Template 2 Has Been Choosen.", embeds: [], components: [] });
-                }
-            })
-
-            collector.on('end', async (_, reason) => {
-                if (reason === 'idle') {
-                    await interaction.editReply({ components: [] });
-                }
-            });
-        } 
         
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 
