@@ -145,6 +145,7 @@ module.exports = class Ticker extends Command {
     
         if(subcommand === "panel"){
             let check = db.fetch(`ticketchannel_${interaction.guild.id}`)
+            let channel1 = client.channels.cache.get(check)
             let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
             let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
             let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
@@ -152,7 +153,6 @@ module.exports = class Ticker extends Command {
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(check){
                 try {
-                    let channel1 = client.channels.cache.get(check)
                     const buttonRow = new ActionRowBuilder()
 			            .addComponents(
 				            new ButtonBuilder()
