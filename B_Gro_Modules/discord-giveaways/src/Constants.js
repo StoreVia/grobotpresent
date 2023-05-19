@@ -188,8 +188,8 @@ exports.GiveawaysManagerOptions = {
  */
 exports.GiveawayRerollOptions = {
     winnerCount: null,
-    messages: {
-        congrat: ':tada: New winner(s): {winners}! Congratulations, you won **{this.prize}**!\n{this.messageURL}',
+    messages: {//:tada: **NewWinner: **${winners}!
+        congrat: ':tada: New winner(s): {winners}! Congratulations🎉, {winners}. You won **{this.prize}**!\n{this.messageURL}',
         error: 'There Are No Valid Participations To Choose The Winner.',
         replyWhenNoWinner: true
     }
