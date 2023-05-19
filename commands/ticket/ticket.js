@@ -149,18 +149,18 @@ module.exports = class Ticker extends Command {
             let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
             let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
             let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
+            const buttonRow = new ActionRowBuilder()
+			    .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Open')
+                        .setEmoji(`📩`)
+                        .setCustomId('ticketopen')
+                        .setStyle(ButtonStyle.Success),
+                )
             if(!check){
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(check){
                 try {
-                    const buttonRow = new ActionRowBuilder()
-			            .addComponents(
-				            new ButtonBuilder()
-				                .setLabel('Open')
-				                .setEmoji(`📩`)
-				                .setCustomId('ticketopen')
-				                .setStyle(ButtonStyle.Success),
-				                )
 				    const embed = new EmbedBuilder()
 				        .setTitle(`${title}`)
 				        .setThumbnail(`${thumbnail}`)
