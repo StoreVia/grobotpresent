@@ -1,5 +1,5 @@
 const Command = require('../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, ButtonStyle, ButtonBuilder, PermissionFlagsBits, ActionRowBuilder, ChannelType } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, ButtonStyle, ButtonBuilder, PermissionsBitField, ActionRowBuilder, ChannelType, PermissionFlagsBits } = require('discord.js');
 const db = require(`quick.db`);
 
 module.exports = class Ticker extends Command {
@@ -86,6 +86,13 @@ module.exports = class Ticker extends Command {
                             .addUserOption(option => 
                                 option.setName(`user`)
                                     .setDescription(`Select User You Want To Block.`)
+                                    .setRequired(true)))
+                    .addSubcommand(subcommand =>
+                        subcommand.setName(`unblock`)
+                            .setDescription(`UnBlock Blocked User From Creating Ticket.`)
+                            .addUserOption(option => 
+                                option.setName(`user`)
+                                    .setDescription(`Select User You Want To UnBlock.`)
                                     .setRequired(true))),
 			usage: 'ticket',
 			category: 'ticket',
@@ -122,6 +129,7 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
+            let title = db.fetch(`ticketblock_${interaction.guild.id}_${user1.id}`) || "Ticket"
             let check = db.fetch(`ticketchannel_${interaction.guild.id}`)
             if(!check){
                 await interaction.deferReply({ ephemeral: true });
@@ -138,7 +146,7 @@ module.exports = class Ticker extends Command {
 				        .setStyle(ButtonStyle.Success),
                 )
                 const embed = new EmbedBuilder()
-                .setTitle(`Ticket`)
+                .setTitle(`${title}`)
                 .setDescription(`> Open Ticket By Clicking Below Button.`)
                 .setColor(`${process.env.ec}`)
                 .setFooter({
@@ -191,6 +199,19 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "title"){
             const title = string(`text`)
+            let titlecheck = db.fetch(`ticketpaneltitle_${interaction.guild.id}`)
+            if(title.length > 256){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
+            } else if(!titlecheck) {
+                db.set(`ticketpaneltitle_${interaction.guild.id}`, `${title}`)
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+            } else if(titlecheck){
+                db.set(`ticketpaneltitle_${interaction.guild.id}`, `${title}`)
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Title Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,6 +230,21 @@ module.exports = class Ticker extends Command {
             }
         }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if(subcommand === "unblock"){
+            let user1 = user(`user`);
+            let usercheck = db.fetch(`ticketblock_${interaction.guild.id}_${user1.id}`)
+            if(usercheck){
+                await interaction.deferReply({ ephemeral: true })
+                db.delete(`ticketblock_${interaction.guild.id}_${user1.id}`)
+                return await interaction.followUp({ content: `> Done✅. UnBlocked User From Creating Ticket.` })
+            }
+            if(!usercheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> This User Was Not Blocked To UnBlock.` })
+            }
+        }
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 

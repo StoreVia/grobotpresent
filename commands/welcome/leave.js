@@ -51,16 +51,16 @@ module.exports = class Leave extends Command {
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+        if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
+            await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
+        }
+        
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'set') {
             const channel = interaction.options.getChannel('channel');
             const channelcheck = db.fetch(`leave_${interaction.guild.id}`, channel.id)
-
             if(!channelcheck){
-
-                /////////////////////////////////////
-
                 const leavenew = new ModalBuilder()
                     .setCustomId('myModalLeaveNew')
                     .setTitle('Leaving Message Configuration.');
@@ -71,17 +71,9 @@ module.exports = class Leave extends Command {
                 const leavenew0 = new ActionRowBuilder().addComponents(leavenew1);
                 leavenew.addComponents(leavenew0);
 
-                /////////////////////////////////////
-
                 db.set(`leave_${interaction.guild.id}`, channel.id);
                 await interaction.showModal(leavenew);
-
-            }
-
-            if(channelcheck){
-
-                /////////////////////////////////////
-
+            } else if(channelcheck){
                 const leaveold = new ModalBuilder()
                     .setCustomId('myModalLeaveOld')
                     .setTitle('Welcome System Configuration.');
@@ -91,24 +83,13 @@ module.exports = class Leave extends Command {
                     .setStyle(TextInputStyle.Paragraph);
                 const leaveold0 = new ActionRowBuilder().addComponents(leaveold1);
                 leaveold.addComponents(leaveold0);
-    
-                /////////////////////////////////////
-                
                 await interaction.showModal(leaveold);
-
             }
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if(subcommand === "edit"){
-
-            /////////////////////////////////////
-
             const leavetextedit = new ModalBuilder()
                 .setCustomId('myModalLeaveEditText')
                 .setTitle('Leaving Message Configuration.');
@@ -118,17 +99,10 @@ module.exports = class Leave extends Command {
                 .setStyle(TextInputStyle.Paragraph);
             const leavetextedit0 = new ActionRowBuilder().addComponents(leavetextedit1);
             leavetextedit.addComponents(leavetextedit0);
-
-            /////////////////////////////////////
-
             await interaction.showModal(leavetextedit);
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         if(subcommand === "delete"){
             const channel = interaction.options.getChannel('deletechannel');
@@ -142,14 +116,9 @@ module.exports = class Leave extends Command {
             }
         }
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if(subcommand === "guide"){
-
             const embed = new EmbedBuilder()
                 .setTitle(`GroBot Leave System Guide `)
                 .setDescription(`> **Note: **Use \`:emoji_name:\` To Use Emoji In Leave Message,Use \`<a:emoji_name:emoji_id>\` To Use Emoji Gif In Leave Message.`)
@@ -162,5 +131,34 @@ module.exports = class Leave extends Command {
             await interaction.deferReply({ ephemeral: true })
             await interaction.followUp({ embeds: [embed] })
         }
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+
+        function string(text){
+            let stringInput = interaction.options.getString(text);
+            return stringInput;
+        }
+        function user(usr){
+            let usrInput = interaction.options.getUser(usr);
+            return usrInput;
+        }
+        function channel(chl){
+            let chlInput = interaction.options.getChannel(chl);
+            return chlInput;
+        }
+        function integer(int){
+            let intInput = interaction.options.getInteger(int);
+            return intInput;
+        }
+        function number(num){
+            let numInput = interaction.options.getNumber(num);
+            return numInput;
+        }
+        function role(rle){
+            let rleInput = interaction.options.getRole(rle);
+            return rleInput;
+        }
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };
