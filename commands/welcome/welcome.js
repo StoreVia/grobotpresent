@@ -90,16 +90,12 @@ module.exports = class Welcome extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
         if (subcommand === 'set') {
 
-            const channel = interaction.options.getChannel('channel');
-            const channelcheck = db.fetch(`welcome_${interaction.guild.id}`, channel.id)
+            const channel1 = channel('channel');
+            const channelcheck = db.fetch(`welcome_${interaction.guild.id}`, channel1.id)
+
             if(!channelcheck){
-
-                /////////////////////////////////////
-
                 const welcomenew = new ModalBuilder()
                     .setCustomId('myModalWelcomeNew')
                     .setTitle('Welcome System Configuration.');
@@ -110,16 +106,9 @@ module.exports = class Welcome extends Command {
                 const welcome0 = new ActionRowBuilder().addComponents(welcomenew1);
                 welcomenew.addComponents(welcome0);
 
-                /////////////////////////////////////
-
-                db.set(`welcome_${interaction.guild.id}`, channel.id);
+                db.set(`welcome_${interaction.guild.id}`, channel1.id);
                 await interaction.showModal(welcomenew);
-
-            }
-            if(channelcheck){
-
-                /////////////////////////////////////
-
+            } else if(channelcheck){
                 const welcomeold = new ModalBuilder()
                     .setCustomId('myModalWelcomeOld')
                     .setTitle('Welcome System Configuration.');
@@ -129,20 +118,12 @@ module.exports = class Welcome extends Command {
                     .setStyle(TextInputStyle.Paragraph);
                 const welcomeold0 = new ActionRowBuilder().addComponents(welcomeold1);
                 welcomeold.addComponents(welcomeold0);
-            
-                /////////////////////////////////////
-
-			    db.set(`welcome_${interaction.guild.id}`, channel.id);
+			    db.set(`welcome_${interaction.guild.id}`, channel1.id);
                 await interaction.showModal(welcomeold);
-
             }
         }
         
-        
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         if (subcommand === 'delete') {
             const channel = interaction.options.getChannel('deletechannel');
@@ -586,6 +567,35 @@ module.exports = class Welcome extends Command {
                     await interaction.editReply({ components: [] });
                 }
             });
-        }    
+        } 
+        
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+
+        function string(text){
+            let stringInput = interaction.options.getString(text);
+            return stringInput;
+        }
+        function user(usr){
+            let usrInput = interaction.options.getUser(usr);
+            return usrInput;
+        }
+        function channel(chl){
+            let chlInput = interaction.options.getChannel(chl);
+            return chlInput;
+        }
+        function integer(int){
+            let intInput = interaction.options.getInteger(int);
+            return intInput;
+        }
+        function number(num){
+            let numInput = interaction.options.getNumber(num);
+            return numInput;
+        }
+        function role(rle){
+            let rleInput = interaction.options.getRole(rle);
+            return rleInput;
+        }
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };

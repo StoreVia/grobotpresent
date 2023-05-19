@@ -42,7 +42,7 @@ module.exports = class Botinfo extends Command {
                 { name: '**🟢 Api: **', value: `> ┕\`${Math.round(client.ws.ping)}ms\``, inline: true },
 				{ name: '**🏓 Latency: **', value: `> ┕\`0ms\``, inline: true },
             	{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
-             	{ name: '**👥 Users: **', value: `> ${client.users.cache.size}`, inline: true },
+             	{ name: '**👥 Users: **', value: `> ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}`, inline: true },
             	{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
 				{ name: '**🤖 Version: **', value: `\`\`\`> v${version}\`\`\``,inline: true },
             )
@@ -61,7 +61,7 @@ module.exports = class Botinfo extends Command {
                 	{ name: '**🟢 Api: **', value: `> \`${Math.round(client.ws.ping)} ms\``, inline: true },
 					{ name: '**🏓 Latency: **', value: `> \`${msg.createdTimestamp - interaction.createdTimestamp} ms\``, inline: true },
             		{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
-             		{ name: '**👥 Users: **', value: `> ${client.users.cache.size}`, inline: true },
+             		{ name: '**👥 Users: **', value: `> ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}`, inline: true },
             		{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
 					{ name: '**🤖 Version: **', value: `\`\`\`> v${version}\`\`\``,inline: true },
             	)

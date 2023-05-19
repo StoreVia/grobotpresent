@@ -158,61 +158,65 @@ module.exports = class InteractionCreate extends Event {
 
 //ticketstart
 		if(interaction.customId === 'ticketopen') {
+			await interaction.deferReply({ ephemeral: true })
+
+			const blockeduser = db.fetch(`ticketblock_${interaction.guild.id}_${interaction.user.id}`)
 			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
 			const category1 = db.fetch(`ticketcategory_${interaction.guild.id}`)
 			const category = client.channels.cache.get(category1)
-			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase()}_${interaction.user.id}`);
-  
-			if(channelcheck){
-				await interaction.deferReply({ ephemeral: true })
-				await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
-			} else 
-			if(!channelcheck) {
-				const channel1 = await interaction.guild.channels.create({
-					name: `${interaction.user.username}_${interaction.user.id}`,
-					type: Discord.ChannelType.GuildText,
-					parent: category,
-					topic: `${interaction.user.id}`,
-					permissionOverwrites: [
-						{
-							id: interaction.guild.roles.everyone.id,
-							deny: [Discord.PermissionsBitField.Flags.ViewChannel]
-						},
-						{
-							id: interaction.user.id,
-							allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
-						},
-						{
-			  				id: role,
-			  				allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
-						}
-					]
-	    		}).then( async (channel) => {
-					await interaction.deferReply({ ephemeral: true })
-					await interaction.followUp({ content: `Done✅. Check Out ${channel}.` })
-  
-					const buttonRow = new Discord.ActionRowBuilder()
-						.addComponents(
-		  					new Discord.ButtonBuilder()
-								.setLabel('Close')
-								.setEmoji(`❌`)
-								.setCustomId('closeticket')
-								.setStyle(Discord.ButtonStyle.Danger),
-						)
-					const embed = new Discord.EmbedBuilder()
-		  				.setAuthor({
-							name: `${interaction.user.tag}`,
-							iconURL: `${interaction.user.displayAvatarURL({ extension: "png"})}`
-		  				})
-		  				.setTitle(`Ticket Opened`)
-		  				.setDescription(`Please Wait Our Staff Will Arrive Soon To Help You.`)
-		  				.setColor(`${process.env.ec}`)
-		  				.setFooter({
-							text: `${client.user.username} - ${process.env.year} ©`,
-							iconURL: process.env.iconurl
-		  				})
-					channel.send({ content: `<@&${role}>, ${interaction.user} Created Ticket!`, embeds: [embed], components: [buttonRow] })
-	  			})
+			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
+
+			if(blockeduser){
+				await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
+			} else if(!blockeduser){
+				if(channelcheck){
+					await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
+				} else if(!channelcheck) {
+					const channel1 = await interaction.guild.channels.create({
+						name: `${interaction.user.username}_${interaction.user.id}`,
+						type: Discord.ChannelType.GuildText,
+						parent: category,
+						topic: `${interaction.user.id}`,
+						permissionOverwrites: [
+							{
+								id: interaction.guild.roles.everyone.id,
+								deny: [Discord.PermissionsBitField.Flags.ViewChannel]
+							},
+							{
+								id: interaction.user.id,
+								allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
+							},
+							{
+								  id: role,
+								  allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
+							}
+						]
+					}).then( async (channel) => {
+						await interaction.followUp({ content: `Done✅. Check Out ${channel}.` })
+	  
+						const buttonRow = new Discord.ActionRowBuilder()
+							.addComponents(
+								  new Discord.ButtonBuilder()
+									.setLabel('Close')
+									.setEmoji(`❌`)
+									.setCustomId('closeticket')
+									.setStyle(Discord.ButtonStyle.Danger),
+							)
+						const embed = new Discord.EmbedBuilder()
+							  .setAuthor({
+								name: `${interaction.user.tag}`,
+								iconURL: `${interaction.user.displayAvatarURL({ extension: "png"})}`
+							  })
+							  .setTitle(`Ticket Opened`)
+							  .setDescription(`Please Wait Our Staff Will Arrive Soon To Help You.`)
+							  .setColor(`${process.env.ec}`)
+							  .setFooter({
+								text: `${client.user.username} - ${process.env.year} ©`,
+								iconURL: process.env.iconurl
+							  })
+						channel.send({ content: `<@&${role}>, ${interaction.user} Created Ticket!`, embeds: [embed], components: [buttonRow] })
+					})
+				}
 			}
 		}
   
@@ -230,6 +234,21 @@ module.exports = class InteractionCreate extends Event {
 						.setEmoji(`❌`)
 						.setCustomId('cancel')
 						.setStyle(Discord.ButtonStyle.Danger),
+				);
+			const row1 = new Discord.ActionRowBuilder()
+				.addComponents(
+		 			new Discord.ButtonBuilder()
+						.setLabel('Yes')
+						.setEmoji(`✅`)
+						.setCustomId('yes1')
+						.setDisabled(true)
+						.setStyle(Discord.ButtonStyle.Success),
+		  			new Discord.ButtonBuilder()
+						.setLabel('No')
+						.setEmoji(`❌`)
+						.setDisabled(true)
+						.setCustomId('cancel1')
+						.setStyle(Discord.ButtonStyle.Danger),
 				)
    			let message = await interaction.reply({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   
@@ -246,9 +265,10 @@ module.exports = class InteractionCreate extends Event {
 					if(interaction.member.roles.cache.has(`${role}`)){
 						const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
 						const guild = client.guilds.cache.get(interaction.guild.id);
-     	 				const chan = guild.channels.cache.get(logs);
-
-      					interaction.followUp({ content: 'Saving Messages Please Wait...' });
+     	 				const logschannel = guild.channels.cache.get(logs);
+						
+						await i.update({ components: [row1] })
+      					interaction.channel.send({ content: '> Saving Messages Please Wait...' });
 
       					interaction.channel.messages.fetch().then(async (messages) => {
                     		let a = messages.filter(m => m.author.bot !== true).map(m =>
@@ -262,7 +282,7 @@ module.exports = class InteractionCreate extends Event {
 								.setTitle('Ticket Logs')
 								.setDescription(`To See Logs Of The Ticket Created By <@!${interaction.channel.topic}> [ClickHere](${getPasteUrl(result)})`)
 								.addFields(
-									{ name: `**CreatedBy: **`, value: `<@!${interaction.chanel.topic}>`, inline: true },
+									{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
 									{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
 								)
 								.setColor(`${process.env.ec}`)
@@ -272,7 +292,6 @@ module.exports = class InteractionCreate extends Event {
 								})
 								.setTimestamp()
 
-							await i.deferUpdate()
 							const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
 							client.channels.cache.get(logs).send({ embeds: [embed] }).then(() => {
 								interaction.channel.delete()
@@ -292,9 +311,8 @@ module.exports = class InteractionCreate extends Event {
 								})
 								.setTimestamp()
 
-							await i.deferUpdate()
 							const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
-							client.channels.cache.get(logs).send({ embeds: [embed] }).then(() => {
+							logschannel.send({ embeds: [embed] }).then(() => {
 								interaction.channel.delete()
 							})
 						})

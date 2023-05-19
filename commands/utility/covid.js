@@ -7,7 +7,7 @@ module.exports = class Covid extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('covid')
-				.setDescription('Get All Covid Cases Number List(premium).')
+				.setDescription('Get All Covid Cases Number List.')
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('all')
@@ -39,7 +39,7 @@ module.exports = class Covid extends Command {
                         { name: '**Critical: **', value: `> ${data.critical.toLocaleString()}`, inline: true },
                         { name: '**CasesPerMillion: **', value: `> ${data.casesPerOneMillion.toLocaleString()}`, inline: true },
                     )
-                    .setThumbnail(`https://i.imgur.com/gosmq21.png`)
+                    .setThumbnail(`https://i.imgur.com/MCuKHkI.png`)
                     .setColor(`${process.env.ec}`)
                     .setFooter({
                         text: `${client.user.username} - ${process.env.year} ©`, 

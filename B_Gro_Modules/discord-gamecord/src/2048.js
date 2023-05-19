@@ -19,10 +19,10 @@ module.exports = class TwoZeroFourEight extends events {
     if (!options.embed.color) options.embed.color = '#5865F2';
 
     if (!options.emojis) options.emojis = {};
-    if (!options.emojis.up) options.emojis.up = '⬆️';
-    if (!options.emojis.down) options.emojis.down = '⬇️';
-    if (!options.emojis.left) options.emojis.left = '⬅️';
-    if (!options.emojis.right) options.emojis.right = '➡️';
+    if (!options.emojis.up) options.emojis.up = '';
+    if (!options.emojis.down) options.emojis.down = '';
+    if (!options.emojis.left) options.emojis.left = '';
+    if (!options.emojis.right) options.emojis.right = '';
     
     if (!options.timeoutTime) options.timeoutTime = 60000;
     if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
@@ -89,15 +89,18 @@ module.exports = class TwoZeroFourEight extends events {
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl });
 
     this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
-    const up = new ButtonBuilder().setEmoji(this.options.emojis.up).setStyle(this.options.buttonStyle).setCustomId('2048_up');
-    const down = new ButtonBuilder().setEmoji(this.options.emojis.down).setStyle(this.options.buttonStyle).setCustomId('2048_down');
-    const left = new ButtonBuilder().setEmoji(this.options.emojis.left).setStyle(this.options.buttonStyle).setCustomId('2048_left');
-    const right = new ButtonBuilder().setEmoji(this.options.emojis.right).setStyle(this.options.buttonStyle).setCustomId('2048_right');
+    const dis1 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis1').setDisabled(true);
+    const dis2 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis2').setDisabled(true);
+    const dis3 = new ButtonBuilder().setLabel('\u200b').setStyle(buttonStyle('SECONDARY')).setCustomId('dis3').setDisabled(true);
+    const up = new ButtonBuilder().setEmoji(`1108935528084160542`).setStyle(this.options.buttonStyle).setCustomId('2048_up');
+    const down = new ButtonBuilder().setEmoji(`1108935533528354876`).setStyle(this.options.buttonStyle).setCustomId('2048_down');
+    const left = new ButtonBuilder().setEmoji(`1108935538922242138`).setStyle(this.options.buttonStyle).setCustomId('2048_left');
+    const right = new ButtonBuilder().setEmoji(`1108935544039297127`).setStyle(this.options.buttonStyle).setCustomId('2048_right');
     const stop = new ButtonBuilder().setEmoji(`🛑`).setStyle(ButtonStyle.Danger).setCustomId('2048_stop');
-    const row = new ActionRowBuilder().addComponents(up, left, down, right, stop);
+    const row = new ActionRowBuilder().addComponents(dis1, up, dis2, dis3);
+    const row1 = new ActionRowBuilder().addComponents(left, down, right, stop);
 
-
-    const msg = await this.sendMessage({ embeds: [embed], components: [row], files: [await this.getBoardImage()] });
+    const msg = await this.sendMessage({ embeds: [embed], components: [row, row1], files: [await this.getBoardImage()] });
     return this.handleButtons(msg);
   }
 
@@ -123,7 +126,7 @@ module.exports = class TwoZeroFourEight extends events {
         return;
       }
       if(btn.customId === '2048_stop'){
-        return this.gameOver(msg, this.gameBoard.includes('b'));
+        return this.gameOver(msg);
       }
 
       let moved = false;

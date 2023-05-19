@@ -29,6 +29,6 @@ module.exports = class ReadyEvent extends Event {
 		await client.player.extractors.register(SoundCloudExtractor);
 		await client.player.extractors.register(AppleMusicExtractor);
 		await client.player.extractors.register(YouTubeExtractor);
-		console.log(colors.red(`Discord Bot Is Now Online With ${client.users.cache.size} Users And ${client.guilds.cache.size} Servers.`));
+		console.log(colors.red(`Discord Bot Is Now Online With ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)} Users And ${client.guilds.cache.size} Servers.`));
 	}
 };
