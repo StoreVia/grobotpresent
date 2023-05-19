@@ -119,7 +119,7 @@ module.exports = class Giveaway extends Command {
                 messages,
                 hostedBy: interaction.user,
             }).then(() => {
-                interaction.followUp({content: `Done✅. Giveaway Started In ${channel1}`})
+                interaction.followUp({content: `> Done✅. Giveaway Started In ${channel1}`})
             }).catch((err) => {
                 interaction.followUp({ content: '> Failed To Start Giveaway. Please Make Sure You Have Entered Correct Details.'})
             })
@@ -135,7 +135,7 @@ module.exports = class Giveaway extends Command {
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else {
                 client.giveawaysManager.delete(giveaway.messageId).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Deleted.` })
+                    interaction.followUp({content: `> Done✅. Giveaway Deleted.` })
                 })
             }
         }
@@ -151,7 +151,7 @@ module.exports = class Giveaway extends Command {
                 interaction.followUp({ content: `> This Giveaway Has Been Already Ended.` })
             } else {
                 client.giveawaysManager.end(giveaway.messageId).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Ended.` })
+                    interaction.followUp({content: `> Done✅. Giveaway Ended.` })
                 })
             }
         }
@@ -167,7 +167,7 @@ module.exports = class Giveaway extends Command {
                 interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
             } else {
                 client.giveawaysManager.pause(giveaway.messageId).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Paused.` })
+                    interaction.followUp({content: `> Done✅. Giveaway Paused.` })
                 })
             }
         }
@@ -183,7 +183,7 @@ module.exports = class Giveaway extends Command {
                 interaction.followUp({ content: `> This Giveaway Was Not Paused.` })
             } else {
                 client.giveawaysManager.unpause(giveaway.messageId).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Resumed.` })
+                    interaction.followUp({content: `> Done✅. Giveaway Resumed.` })
                 })
             }
         }
@@ -202,7 +202,7 @@ module.exports = class Giveaway extends Command {
                     newWinnerCount: newwinnercount,
                     newPrize: newprize
                 }).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Updated.`})
+                    interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
                 });
@@ -211,21 +211,21 @@ module.exports = class Giveaway extends Command {
                     addTime: 5000,
                     newPrize: newprize
                 }).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Updated.`})
+                    interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
+                    interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
                 });
             } else if(newwinnercount){
                 client.giveawaysManager.edit(giveaway.messageId, {
                     addTime: 5000,
                     newWinnerCount: newwinnercount
                 }).then(() => {
-                    interaction.reply({content: `Done✅. Giveaway Updated.`})
+                    interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
                 });
             } else {
-                interaction.reply({ content: `> Choose Any Option, No Changes Were Made.` })
+                interaction.followUp({ content: `> Choose Any Option, No Changes Were Made.` })
             }
         }
 
@@ -236,10 +236,11 @@ module.exports = class Giveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
-            } else {
-                await interaction.deferReply()
+            } else if(!giveaway.ended){
+                interaction.followUp({ content: `> The Giveaway isn't Ended To Reroll.` })
+            }else {
                 client.giveawaysManager.reroll(giveaway.messageId).then(() => {
-                    interaction.followUp({content: `Done✅. Giveaway Rerolled.` })
+                    interaction.followUp({content: `> Done✅. Giveaway Rerolled.` })
                 })
             }
         }
