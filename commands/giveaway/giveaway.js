@@ -37,8 +37,8 @@ module.exports = class Giveaway extends Command {
                         .setName('delete')
                         .setDescription('Delete A Giveaway.')
                         .addStringOption(option =>
-                            option.setName('message_id')
-                            .setDescription('Enter Giveaway Message Id.')
+                            option.setName('query')
+                            .setDescription('Enter Giveaway Message Id (Or) Prize.')
                             .setRequired(true)))
                 .addSubcommand(subcommand =>
                     subcommand
@@ -53,33 +53,32 @@ module.exports = class Giveaway extends Command {
                         .setName('pause')
                         .setDescription('Pause A Giveaways.')
                         .addStringOption(option =>
-                            option.setName('message_id')
-                                .setDescription('Enter Giveaway Message Id.')
+                            option.setName('query')
+                                .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('resume')
                         .setDescription('Resume A Giveaways.')
                         .addStringOption(option =>
-                            option.setName('message_id')
-                                .setDescription('Enter Giveaway Message Id.')
+                            option.setName('query')
+                                .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName(`reroll`)
                         .setDescription(`Reroll A Giveaway`)
                         .addStringOption(option =>
-                            option
-                                .setName(`message_id`)
-                                .setDescription(`Enter Giveaway Message Id.`)
+                            option.setName(`query`)
+                                .setDescription(`Enter Giveaway Message Id (Or) Prize.`)
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('edit')
                         .setDescription('Edit A Giveaway.')
                         .addStringOption(option =>
-                            option.setName('message_id')
-                                .setDescription('Enter Giveaway Message Id.')
+                            option.setName('query')
+                                .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true))
                         .addStringOption(option =>
                             option.setName('prize')
@@ -95,123 +94,183 @@ module.exports = class Giveaway extends Command {
 		});
 	}
 	async run(client, interaction) {
+        
+        let subcommand = interaction.options.getSubcommand();
+        await interaction.deferReply({ ephemeral: true })
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            return await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
+            return await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`})
         }
 
-        if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            return await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command.`, ephemeral: true})
-        }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (interaction.options.getSubcommand() === 'create') {
-            const channel = interaction.options.getChannel('channel');
-            const duration1 = interaction.options.getString('duration');
+        if (subcommand === 'create') {
+            const channel1 = channel('channel');
+            const duration1 = string('duration');
             const duration = ms(duration1)
-            const winnerCount = interaction.options.getInteger('winnercount');
-            const prize = interaction.options.getString('prize');
-            return client.giveawaysManager.start(channel, {
+            const winnerCount = integer('winnercount');
+            const prize = string('prize');
+            return client.giveawaysManager.start(channel1, {
                 prize,
                 duration,
                 winnerCount,
                 messages,
                 hostedBy: interaction.user,
             }).then(() => {
-                interaction.reply({content: `Done✅. Giveaway Started In ${channel}`, ephemeral: true})
+                interaction.followUp({content: `Done✅. Giveaway Started In ${channel1}`})
             }).catch((err) => {
-                interaction.reply({ content: '> Failed To Start Giveaway. Please Make Sure You Have Entered Correct Details.', ephemeral:true})
+                interaction.followUp({ content: '> Failed To Start Giveaway. Please Make Sure You Have Entered Correct Details.'})
             })
         }
 
-        if (interaction.options.getSubcommand() === 'delete') {
-            const messageId = interaction.options.getString('message_id');
-            client.giveawaysManager.delete(messageId).then(() => {
-                interaction.reply({content: `Done✅. Giveaway Deleted.`, ephemeral: true})
-              }).catch((err) => {
-                interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
-            });
-        }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (interaction.options.getSubcommand() === 'end') {
-            const query = interaction.options.getString(`query`);
+        if (subcommand === 'delete') {
+            const query = string(`query`);
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 await interaction.deferReply({ ephemeral: true })
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else {
+                client.giveawaysManager.delete(giveaway.messageId).then(() => {
+                    interaction.followUp({content: `Done✅. Giveaway Deleted.` })
+                })
+            }
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (subcommand === 'end') {
+            const query = string(`query`);
+            const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
+            if(!giveaway){
+                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else if(giveaway.ended){
-                await interaction.deferReply({ ephemeral: true })
                 interaction.followUp({ content: `> This Giveaway Has Been Already Ended.` })
             } else {
-                await interaction.deferReply()
                 client.giveawaysManager.end(giveaway.messageId).then(() => {
                     interaction.followUp({content: `Done✅. Giveaway Ended.` })
                 })
             }
         }
 
-        if (interaction.options.getSubcommand() === 'pause') {
-            const messageId = interaction.options.getString('message_id');
-            client.giveawaysManager.pause(messageId).then(() => {
-                interaction.reply({content: `Done✅. Giveaway Paused.`, ephemeral: true})
-            }).catch((err) => {
-                interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
-            });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (subcommand === 'pause') {
+            const query = string('query');
+            const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
+            if(!giveaway){
+                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else if(giveaway.paused){
+                interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
+            } else {
+                client.giveawaysManager.pause(giveaway.messageId).then(() => {
+                    interaction.followUp({content: `Done✅. Giveaway Paused.` })
+                })
+            }
         }
 
-        if (interaction.options.getSubcommand() === 'resume') {
-            const messageId = interaction.options.getString('message_id');
-            client.giveawaysManager.unpause(messageId).then(() => {
-                interaction.reply({content: `Done✅. Giveaway Resumed.`, ephemeral: true})
-            }).catch((err) => {
-                interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
-            });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (subcommand === 'resume') {
+            const query = string('query');
+            const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
+            if(!giveaway){
+                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else if(giveaway.unpaused){
+                interaction.followUp({ content: `> This Giveaway Was Not Paused.` })
+            } else {
+                client.giveawaysManager.unpause(giveaway.messageId).then(() => {
+                    interaction.followUp({content: `Done✅. Giveaway Resumed.` })
+                })
+            }
         }
 
-        if (interaction.options.getSubcommand() === 'edit') {
-            const messageId = interaction.options.getString('message_id');
-            const newprize = interaction.options.getString('prize');
-            const newwinnercount = interaction.options.getInteger('winnercount');
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (subcommand === 'edit') {
+            const query = string('query');
+            const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
+            const newprize = string('prize');
+            const newwinnercount = integer('winnercount');
 
             if(newprize && newwinnercount){
-                client.giveawaysManager.edit(messageId, {
+                client.giveawaysManager.edit(giveaway.messageId, {
                     addTime: 5000,
                     newWinnerCount: newwinnercount,
                     newPrize: newprize
                 }).then(() => {
-                    interaction.reply({content: `Done✅. Giveaway Updated.`, ephemeral: true})
+                    interaction.followUp({content: `Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
+                    interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
                 });
             } else if(newprize){
-                client.giveawaysManager.edit(messageId, {
+                client.giveawaysManager.edit(giveaway.messageId, {
                     addTime: 5000,
                     newPrize: newprize
                 }).then(() => {
-                    interaction.reply({content: `Done✅. Giveaway Updated.`, ephemeral: true})
+                    interaction.followUp({content: `Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
                 });
             } else if(newwinnercount){
-                client.giveawaysManager.edit(messageId, {
+                client.giveawaysManager.edit(giveaway.messageId, {
                     addTime: 5000,
                     newWinnerCount: newwinnercount
                 }).then(() => {
-                    interaction.reply({content: `Done✅. Giveaway Updated.`, ephemeral: true})
+                    interaction.reply({content: `Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
                 });
             } else {
-                interaction.reply({ content: `> Choose Any Option, No Changes Were Made.`, ephemeral: true })
+                interaction.reply({ content: `> Choose Any Option, No Changes Were Made.` })
             }
         }
 
-        if (interaction.options.getSubcommand() === 'reroll') {
-            const messageId = interaction.options.getString('message_id');
-            client.giveawaysManager.reroll(messageId).then(() => {
-                interaction.reply({content: `Done✅. Giveaway Rerolled.`, ephemeral: true})
-            }).catch((err) => {
-                interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
-            });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////        
+
+        if (subcommand === 'reroll') {
+            const query = string('query');
+            const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
+            if(!giveaway){
+                interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else {
+                await interaction.deferReply()
+                client.giveawaysManager.reroll(giveaway.messageId).then(() => {
+                    interaction.followUp({content: `Done✅. Giveaway Rerolled.` })
+                })
+            }
         }
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+
+        function string(text){
+            let stringInput = interaction.options.getString(text);
+            return stringInput;
+        }
+        function user(usr){
+            let usrInput = interaction.options.getUser(usr);
+            return usrInput;
+        }
+        function channel(chl){
+            let chlInput = interaction.options.getChannel(chl);
+            return chlInput;
+        }
+        function integer(int){
+            let intInput = interaction.options.getInteger(int);
+            return intInput;
+        }
+        function number(num){
+            let numInput = interaction.options.getNumber(num);
+            return numInput;
+        }
+        function role(rle){
+            let rleInput = interaction.options.getRole(rle);
+            return rleInput;
+        }
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };

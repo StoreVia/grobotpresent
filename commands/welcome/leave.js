@@ -39,11 +39,12 @@ module.exports = class Leave extends Command {
 	async run(client, interaction) {
 
         let subcommand = interaction.options.getSubcommand();
+        await interaction.deferReply({ ephemeral: true })
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
+            await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`})
         }
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +98,7 @@ module.exports = class Leave extends Command {
 
         if(subcommand === "delete"){
             db.delete(`leave_${interaction.guild.id}`, channel.id);
-            await interaction.reply({ content: `> Leaving Message System Was Now Deleted In This Server`, ephemeral: true})
+            await interaction.followUp({ content: `> Leaving Message System Was Now Deleted In This Server`, ephemeral: true})
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +113,6 @@ module.exports = class Leave extends Command {
                     text: `${client.user.username} - ${process.env.year} ©`,
                     iconURL: process.env.iconurl
                 })
-            await interaction.deferReply({ ephemeral: true })
             await interaction.followUp({ embeds: [embed] })
         }
 

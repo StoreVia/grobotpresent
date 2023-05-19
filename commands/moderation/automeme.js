@@ -37,7 +37,7 @@ module.exports = class Avatar extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
+            await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`})
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
