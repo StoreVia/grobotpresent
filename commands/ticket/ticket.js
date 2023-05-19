@@ -79,7 +79,22 @@ module.exports = class Ticker extends Command {
                                     .setDescription(`Edit Embed Title In Ticket Panel.`)
                                     .addStringOption(option =>
                                         option.setName(`text`)
-                                            .setDescription(`Enter Text That You Want Set As Title Of Panel Embed.`))))
+                                            .setDescription(`Enter Text That You Want Set As Title Of Panel Embed.`)
+                                            .setRequired(true)))
+                            .addSubcommand(subcommand =>
+                                subcommand.setName(`description`)
+                                    .setDescription(`Edit Embed Description In Ticket Panel.`)
+                                    .addStringOption(option =>
+                                        option.setName(`text`)
+                                            .setDescription(`Enter Text That You Want Set As Description Of Panel Embed.`)
+                                            .setRequired(true)))
+                            .addSubcommand(subcommand =>
+                                subcommand.setName(`thumbnail`)
+                                    .setDescription(`Edit Embed Thumbnail In Ticket Panel.`)
+                                    .addStringOption(option =>
+                                        option.setName(`url`)
+                                            .setDescription(`Enter Url That You Want Set As Thumbnail Of Panel Embed.`)
+                                            .setRequired(true))))
                     .addSubcommand(subcommand =>
                         subcommand.setName(`block`)
                             .setDescription(`Block Any User From Creating Ticket.`)
@@ -129,32 +144,47 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
+            let check = db.fetch(`ticketchannel_${interaction.guild.id}`)
             let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
             let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
             let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
             if(!check){
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(check){
-                let channel = client.channels.cache.get(check)
-                const buttonRow = new ActionRowBuilder()
-			    .addComponents(
-				    new ButtonBuilder()
-				        .setLabel('Open')
-                        .setEmoji(`📩`)
-				        .setCustomId('ticketopen')
-				        .setStyle(ButtonStyle.Success),
-                )
-                const embed = new EmbedBuilder()
-                .setTitle(`${title}`)
-                .setThumbnail(`${thumbnail}`)
-                .setDescription(`${description}`)
-                .setColor(`${process.env.ec}`)
-                .setFooter({
-                    text: `${client.user.username} - ${process.env.year} ©`,
-                    iconURL: process.env.iconurl
-                  });
-                channel.send({ embeds: [embed], components: [buttonRow] })
-                return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
+                try {
+                    let channel1 = client.channels.cache.get(check)
+                    const buttonRow = new ActionRowBuilder()
+			            .addComponents(
+				            new ButtonBuilder()
+				                .setLabel('Open')
+				                .setEmoji(`📩`)
+				                .setCustomId('ticketopen')
+				                .setStyle(ButtonStyle.Success),
+				                )
+				    const embed = new EmbedBuilder()
+				        .setTitle(`${title}`)
+				        .setThumbnail(`${thumbnail}`)
+				        .setDescription(`${description}`)
+				        .setColor(`${process.env.ec}`)
+				        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`,
+                            iconURL: process.env.iconurl
+				        });
+                    channel1.send({ embeds: [embed], components: [buttonRow] })
+				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
+                } catch(e) {
+                    const embed = new EmbedBuilder()
+				        .setTitle(`${title}`)
+				        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+				        .setDescription(`${description}`)
+				        .setColor(`${process.env.ec}`)
+				        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`,
+                            iconURL: process.env.iconurl
+				        });
+                    channel1.send({ embeds: [embed], components: [buttonRow] })
+				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
+                }
             }
         }
 
@@ -234,6 +264,41 @@ module.exports = class Ticker extends Command {
             }
         }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if(subcommand === "description"){
+            const description = string(`text`)
+            let descriptioncheck = db.fetch(`ticketdescription_${interaction.guild.id}`)
+            if(description.length > 4096){
+                return await interaction.followUp({ content: `> Embed Description Can't Be More Than 4096 Characters.` })
+            } else if(!descriptioncheck) {
+                db.set(`tickettitle_${interaction.guild.id}`, `${description}`)
+                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Description Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+            } else if(descriptioncheck){
+                db.set(`tickettitle_${interaction.guild.id}`, `${description}`)
+                return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Description Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+            }
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if(subcommand === "thumbnail"){
+            const thumbnail = string(`url`)
+            let thumbnailcheck = db.fetch(`ticketthumbnail_${interaction.guild.id}`)
+            let validurl = isValidURL(thumbnail)
+            if(validurl === false){
+                return await interaction.followUp({ content: `> Invlaid Url.` })
+            } else if(validurl === true){
+                if(!thumbnailcheck) {
+                    db.set(`ticketthumbnail_${interaction.guild.id}`, `${thumbnail}`)
+                    return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+                } else if(thumbnailcheck){
+                    db.set(`tickettitle_${interaction.guild.id}`, `${thumbnail}`)
+                    return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Thumbnail Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+                }
+            }
+        }
+
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 
         function string(text){
@@ -259,6 +324,10 @@ module.exports = class Ticker extends Command {
         function role(rle){
             let rleInput = interaction.options.getRole(rle);
             return rleInput;
+        }
+        function isValidURL(url){
+            const pattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
+            return pattern.test(url);
         }
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
