@@ -55,8 +55,10 @@ module.exports = class TruthOrDare extends Command {
 			return lines[randomIndex];
 		}
 		
-		const truthLines = readFileLines(`./A_Gro_db/truth.json`);
-		const dareLines = readFileLines(`./A_Gro_db/dare.json`);
+		const truthFilePath = './A_Gro_db/truth.json';
+		const dareFilePath = './A_Gro_db/dare.json';
+		const truthLines = readFileLines(truthFilePath);
+		const dareLines = readFileLines(dareFilePath);
 
 		function pickRandomLineFromFile(filename) {
 			const lines = readFileLines(filename);

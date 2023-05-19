@@ -129,13 +129,13 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
-            let title = db.fetch(`ticketblock_${interaction.guild.id}_${user1.id}`) || "Ticket"
-            let check = db.fetch(`ticketchannel_${interaction.guild.id}`)
+            let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
+            let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
+            let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
             if(!check){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
-            }
-            if(check){
+            } else if(check){
                 let channel = client.channels.cache.get(check)
                 const buttonRow = new ActionRowBuilder()
 			    .addComponents(
@@ -147,7 +147,8 @@ module.exports = class Ticker extends Command {
                 )
                 const embed = new EmbedBuilder()
                 .setTitle(`${title}`)
-                .setDescription(`> Open Ticket By Clicking Below Button.`)
+                .setThumbnail(`${thumbnail}`)
+                .setDescription(`${description}`)
                 .setColor(`${process.env.ec}`)
                 .setFooter({
                     text: `${client.user.username} - ${process.env.year} ©`,
@@ -197,25 +198,6 @@ module.exports = class Ticker extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(subcommand === "title"){
-            const title = string(`text`)
-            let titlecheck = db.fetch(`ticketpaneltitle_${interaction.guild.id}`)
-            if(title.length > 256){
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
-            } else if(!titlecheck) {
-                db.set(`ticketpaneltitle_${interaction.guild.id}`, `${title}`)
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-            } else if(titlecheck){
-                db.set(`ticketpaneltitle_${interaction.guild.id}`, `${title}`)
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Title Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
-            }
-        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         if(subcommand === "block"){
             let user1 = user(`user`);
             let usercheck = db.fetch(`ticketblock_${interaction.guild.id}_${user1.id}`)
@@ -243,6 +225,25 @@ module.exports = class Ticker extends Command {
             if(!usercheck){
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> This User Was Not Blocked To UnBlock.` })
+            }
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if(subcommand === "title"){
+            const title = string(`text`)
+            let titlecheck = db.fetch(`tickettitle_${interaction.guild.id}`)
+            if(title.length > 256){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
+            } else if(!titlecheck) {
+                db.set(`tickettitle_${interaction.guild.id}`, `${title}`)
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+            } else if(titlecheck){
+                db.set(`tickettitle_${interaction.guild.id}`, `${title}`)
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Title Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
             }
         }
 
