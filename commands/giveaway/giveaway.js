@@ -131,7 +131,6 @@ module.exports = class Giveaway extends Command {
             const query = string(`query`);
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
-                await interaction.deferReply({ ephemeral: true })
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else {
                 client.giveawaysManager.delete(giveaway.messageId).then(() => {
@@ -148,10 +147,14 @@ module.exports = class Giveaway extends Command {
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else if(giveaway.ended){
-                interaction.followUp({ content: `> This Giveaway Has Been Already Ended.` })
+                interaction.followUp({ content: `> This Giveaway Has Been Already Ended. Else Try By Entering Message Id.` })
             } else {
                 client.giveawaysManager.end(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Ended.` })
+                }).catch((e) => {
+                    if(e.includes(`already ended`)){
+                        interaction.followUp({ content: `> Please Try To Enter Message Id As There Are Many Giveaway's With The Same Prize.` })
+                    } 
                 })
             }
         }
@@ -163,11 +166,15 @@ module.exports = class Giveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
-            } else if(giveaway.paused){
-                interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
             } else {
                 client.giveawaysManager.pause(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Paused.` })
+                }).catch((e) => {
+                    if(e.includes(`already paused`)){
+                        interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
+                    } else if(e.includes(`already ended`)){
+                        interaction.followUp({ content: `> Please Try To Enter Message Id As There Are Many Giveaway's With The Same Prize.` })
+                    } 
                 })
             }
         }
@@ -179,11 +186,15 @@ module.exports = class Giveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
-            } else if(giveaway.unpaused){
-                interaction.followUp({ content: `> This Giveaway Was Not Paused.` })
             } else {
                 client.giveawaysManager.unpause(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Resumed.` })
+                }).catch((e) => {
+                    if(e.includes(`not paused`)){
+                        interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
+                    } else if(e.includes(`already ended`)){
+                        interaction.followUp({ content: `> Please Try To Enter Message Id As There Are Many Giveaway's With The Same Prize.` })
+                    } 
                 })
             }
         }
@@ -213,7 +224,7 @@ module.exports = class Giveaway extends Command {
                 }).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
+                    interaction.followUp({ content: '> No Giveaway Found. Please Try By Entering MessageId.', ephemeral:true});
                 });
             } else if(newwinnercount){
                 client.giveawaysManager.edit(giveaway.messageId, {
@@ -222,7 +233,7 @@ module.exports = class Giveaway extends Command {
                 }).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
-                    interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId.', ephemeral:true});
+                    interaction.reply({ content: '> No Giveaway Found. Please Try By Entering MessageId.', ephemeral:true});
                 });
             } else {
                 interaction.followUp({ content: `> Choose Any Option, No Changes Were Made.` })
