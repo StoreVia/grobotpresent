@@ -5,6 +5,7 @@ const db = require(`quick.db`);
 const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor, YouTubeExtractor } = require('@discord-player/extractor');
 const fetch = require('node-fetch');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+const titlecase = require(`titlecase`);
 
 module.exports = class ReadyEvent extends Event {
 	constructor(client) {
@@ -64,12 +65,11 @@ module.exports = class ReadyEvent extends Event {
 								iconURL: process.env.iconurl
 							});
 							client.channels.cache.get(`${channel}`).send({ embeds: [embed] });
-        
 						}
 					});
 				}
 			});
-		}, 5000);
+		}, 6000000);
 		
 		await client.player.extractors.register(SpotifyExtractor);
 		await client.player.extractors.register(SoundCloudExtractor);

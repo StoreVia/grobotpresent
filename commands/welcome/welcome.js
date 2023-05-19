@@ -20,15 +20,6 @@ module.exports = class Welcome extends Command {
                                     option.setName('channel')
                                         .addChannelTypes(ChannelType.GuildText)
                                         .setDescription('Select Channel')
-                                        .setRequired(true)))
-                        .addSubcommand(subcommand =>
-                            subcommand
-                                .setName('delete')
-                                .setDescription('Delete Welcome Channel.')
-                                .addChannelOption(option =>
-                                    option.setName('deletechannel')
-                                        .addChannelTypes(ChannelType.GuildText)
-                                        .setDescription('Select Channel')
                                         .setRequired(true))))
                 .addSubcommand(subcommand => 
                     subcommand
@@ -120,15 +111,8 @@ module.exports = class Welcome extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (subcommand === 'delete') {
-            const channel1 = channel('deletechannel');
-            const checkchannel = db.fetch(`welcome_${interaction.guild.id}`, channel1.id);
-            if(checkchannel){
-                db.delete(`welcome_${interaction.guild.id}`, channel1.id);
-                await interaction.reply({ content: `> Welcome Message System Was Now Disabled In ${channel1}`, ephemeral: true})
-            }
-            if(!checkchannel){
-                await interaction.reply({ content: `> ${channel1} Was Not Bounded To Welcome System.`, ephemeral: true})
-            }
+            db.delete(`welcome_${interaction.guild.id}`);
+            await interaction.reply({ content: `> Welcome Message System Was Now Deleted In This Server.`, ephemeral: true})
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

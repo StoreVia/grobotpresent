@@ -21,15 +21,6 @@ module.exports = class Leave extends Command {
                                     option.setName('channel')
                                         .addChannelTypes(ChannelType.GuildText)
                                         .setDescription('Select Channel')
-                                        .setRequired(true)))
-                        .addSubcommand(subcommand =>
-                            subcommand
-                                .setName('delete')
-                                .setDescription('Delete Leave Message Channel.')
-                                .addChannelOption(option =>
-                                    option.setName('deletechannel')
-                                        .addChannelTypes(ChannelType.GuildText)
-                                        .setDescription('Select Channel')
                                         .setRequired(true))))
                 .addSubcommandGroup(group =>
                     group.setName(`text`)
@@ -105,15 +96,8 @@ module.exports = class Leave extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "delete"){
-            const channel = interaction.options.getChannel('deletechannel');
-            const checkchannel = db.fetch(`leave_${interaction.guild.id}`, channel.id);
-            if(checkchannel){
-                db.delete(`leave_${interaction.guild.id}`, channel.id);
-                await interaction.reply({ content: `> Leaving Message System Was Now Disabled In ${channel}`, ephemeral: true})
-            }
-            if(!checkchannel){
-                await interaction.reply({ content: `> ${channel} Was Not Bounded To Leave System.`, ephemeral: true})
-            }
+            db.delete(`leave_${interaction.guild.id}`, channel.id);
+            await interaction.reply({ content: `> Leaving Message System Was Now Deleted In This Server`, ephemeral: true})
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
