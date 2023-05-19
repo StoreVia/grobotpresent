@@ -1,3 +1,4 @@
+const { ButtonBuilder } = require(`discord.js`)
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -229,7 +230,7 @@ function calculator(interaction, options = {
                     style = 'SUCCESS';
                 else if (isNaN(label))
                     style = (_j = options.buttons) === null || _j === void 0 ? void 0 : _j.symbols;
-                const btn = new discord_js_1.MessageButton()
+                const btn = new discord_js_1.ButtonBuilder()
                     .setLabel(label)
                     .setStyle(style)
                     .setCustomId('cal-' + label);
