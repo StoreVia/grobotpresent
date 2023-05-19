@@ -142,6 +142,20 @@ module.exports = class InteractionCreate extends Event {
 				db.set(`leavetext_${interaction.guild.id}`, text1)
 			})
 		}
+		if(interaction.customId === "myModalDescriptioNew"){
+			await interaction.reply({ content: `> Done✅. Ticket Panel Embed Description Was Now Set.`, ephemeral: true })
+			.then(() => {
+				const text = interaction.fields.getTextInputValue('text');
+				db.set(`ticketdescription_${interaction.guild.id}`, text)
+			})
+		}
+		if(interaction.customId === "myModalDescriptioOld"){
+			await interaction.reply({ content: `> Done✅. Ticket Panel Embed Description Was Now Updated.`, ephemeral: true })
+			.then(() => {
+				const text = interaction.fields.getTextInputValue('text');
+				db.set(`ticketdescription_${interaction.guild.id}`, text)
+			})
+		}
 //welcomeend
 
 //privateslashstart

@@ -39,7 +39,6 @@ module.exports = class Leave extends Command {
 	async run(client, interaction) {
 
         let subcommand = interaction.options.getSubcommand();
-        await interaction.deferReply({ ephemeral: true })
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,7 +96,8 @@ module.exports = class Leave extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "delete"){
-            db.delete(`leave_${interaction.guild.id}`, channel.id);
+            db.delete(`leave_${interaction.guild.id}`);
+            await interaction.deferReply({ ephemeral: true })
             await interaction.followUp({ content: `> Leaving Message System Was Now Deleted In This Server`, ephemeral: true})
         }
 
@@ -113,6 +113,7 @@ module.exports = class Leave extends Command {
                     text: `${client.user.username} - ${process.env.year} ©`,
                     iconURL: process.env.iconurl
                 })
+            await interaction.deferReply({ ephemeral: true })
             await interaction.followUp({ embeds: [embed] })
         }
 
