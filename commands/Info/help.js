@@ -99,9 +99,7 @@ module.exports = class Help extends Command {
 
 		await interaction.deferReply();
 			
-		const filter = i => i.customId === 'hlpcmd';
-		const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
-			
+		
 		let embed = new EmbedBuilder()
   			.setTitle('Help')
 			.setThumbnail(`${process.env.iconurl}`)
@@ -113,6 +111,8 @@ module.exports = class Help extends Command {
         	.setColor(`${process.env.ec}`);
 		const i1 = await interaction.followUp({ embeds: [embed], components: [selectMenuRow] });
 
+		const filter = i => i.customId === 'hlpcmd';
+		const collector = i1.createMessageComponentCollector({ filter, idle: 60000 });
 
 		collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
