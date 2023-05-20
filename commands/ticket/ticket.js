@@ -117,6 +117,7 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
+            await interaction.deferReply({ ephemeral: true })
             await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
         }
 
@@ -154,6 +155,7 @@ module.exports = class Ticker extends Command {
                         .setStyle(ButtonStyle.Success),
                 )
             if(!check){
+                await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(check){
                 try {
@@ -166,7 +168,7 @@ module.exports = class Ticker extends Command {
                             text: `${client.user.username} - ${process.env.year} ©`,
                             iconURL: process.env.iconurl
 				        });
-                    channel1.send({ embeds: [embed], components: [buttonRow] })
+                    await channel1.send({ embeds: [embed], components: [buttonRow] })
                     await interaction.deferReply({ ephemeral: true })
 				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
                 } catch(e) {
@@ -179,7 +181,7 @@ module.exports = class Ticker extends Command {
                             text: `${client.user.username} - ${process.env.year} ©`,
                             iconURL: process.env.iconurl
 				        });
-                    channel1.send({ embeds: [embed], components: [buttonRow] })
+                    await channel1.send({ embeds: [embed], components: [buttonRow] })
                     await interaction.deferReply({ ephemeral: true })
 				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
                 }
