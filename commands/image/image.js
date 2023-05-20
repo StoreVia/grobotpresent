@@ -1,6 +1,5 @@
 const Command = require('../../structures/CommandClass');
 const { SlashCommandBuilder, AttachmentBuilder  } = require('discord.js');
-const canvacord = require("canvacord");
 
 module.exports = class Image extends Command {
 	constructor(client) {

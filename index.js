@@ -16,19 +16,12 @@
 //packagesstart
 const Client = require('./structures/Client');
 require('dotenv').config();
-const canvacord = require("canvacord");
 const Discord = require(`discord.js`)
-const Canvas = require('canvas');
 const db = require(`quick.db`)
 const version = require(`./package.json`).version;
 const { GiveawaysManager } = require("./B_Gro_Modules/discord-giveaways");
 const client = new Client();
-const canv = require('canvas'),
-	canvas = canv.createCanvas(1018, 468),
-	ctx = canvas.getContext('2d')
-const { loadImage } = require(`canvas`)
 const moment = require('moment');
-const titlecase = require(`title-case`)
 const { readdirSync } = require("fs");
 const colors = require("colors");
 const fetch = require(`node-fetch`);
