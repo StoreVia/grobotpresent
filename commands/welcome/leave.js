@@ -14,14 +14,16 @@ module.exports = class Leave extends Command {
                     group.setName(`channel`)
                         .setDescription(`Set Leave Message Channel.`)
                         .addSubcommand(subcommand =>
-                            subcommand
-                                .setName('set')
+                            subcommand.setName('set')
                                 .setDescription('Set Welcome Channel.')
                                 .addChannelOption(option =>
                                     option.setName('channel')
                                         .addChannelTypes(ChannelType.GuildText)
                                         .setDescription('Select Channel')
-                                        .setRequired(true))))
+                                        .setRequired(true)))
+                        .addSubcommand(subcommand =>
+                            subcommand.setName('delete')
+                                .setDescription('Delete Welcome Channel.')))
                 .addSubcommandGroup(group =>
                     group.setName(`text`)
                         .setDescription(`Edit Leave Message.`)
