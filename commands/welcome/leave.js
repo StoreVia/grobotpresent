@@ -98,9 +98,15 @@ module.exports = class Leave extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "delete"){
-            db.delete(`leave_${interaction.guild.id}`);
-            await interaction.deferReply({ ephemeral: true })
-            await interaction.followUp({ content: `> Leaving Message System Was Now Deleted In This Server`, ephemeral: true})
+            let leavecheck = db.fetch(`leave_${interaction.guild.id}`)
+            if(!leavecheck){
+                await interaction.deferReply({ ephemeral: true })
+                await interaction.followUp({ content: `> Leaving Message System Was Not Linked In This Server To Delete.`, ephemeral: true})
+            } else if(leavecheck){
+                db.delete(`leave_${interaction.guild.id}`);
+                await interaction.deferReply({ ephemeral: true })
+                await interaction.followUp({ content: `> Leaving Message System Was Now Deleted In This Server.`, ephemeral: true})
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
