@@ -3,11 +3,6 @@ const { InteractionType, EmbedBuilder } = require('discord.js');
 const db = require(`quick.db`);
 const Discord = require(`discord.js`);
 const version = require(`../../package.json`).version;
-const Canvas = require('canvas');
-const canv = require('canvas'),
-    canvas = canv.createCanvas(1018, 468),
-    ctx = canvas.getContext('2d');
-const canvacord = require("canvacord");
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(client) {
@@ -29,8 +24,7 @@ module.exports = class GuildMemberAdd extends Event {
 
         if(welcomedmuser === "off"){
             return;
-        }
-        if(welcomedmuser === "on"){
+        } else if(welcomedmuser === "on"){
             const row = new Discord.ActionRowBuilder()
 			    .addComponents(
 				    new Discord.ButtonBuilder()
@@ -53,8 +47,7 @@ module.exports = class GuildMemberAdd extends Event {
 
         if (!server) {
             return;
-        }
-        if (server) {
+        } else if (server) {
             let text = db.fetch(`welcometext_${member.guild.id}`) || "<MemberMention>, Welcome To <ServerName>."
             const text1 = text.replace('<MemberMention>', `${member}`)
                 .replace('<MemberCount>', `${member.guild.memberCount}`)

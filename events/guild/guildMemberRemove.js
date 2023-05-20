@@ -3,11 +3,6 @@ const { InteractionType, EmbedBuilder } = require('discord.js');
 const db = require(`quick.db`);
 const Discord = require(`discord.js`);
 const version = require(`../../package.json`).version;
-const Canvas = require('canvas');
-const canv = require('canvas'),
-    canvas = canv.createCanvas(1018, 468),
-    ctx = canvas.getContext('2d');
-const canvacord = require("canvacord");
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(client) {
