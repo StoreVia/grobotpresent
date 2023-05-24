@@ -22,7 +22,7 @@ module.exports = class Botinfo extends Command {
                 new ButtonBuilder()
 					.setLabel('Website')
 					.setStyle(ButtonStyle.Link)
-					.setURL(`https://grobot.store`),
+					.setURL(`${process.env.website}`),
                 new ButtonBuilder()
 					.setLabel('Invite')
 					.setStyle(ButtonStyle.Link)

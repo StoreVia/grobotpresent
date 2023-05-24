@@ -20,7 +20,7 @@ module.exports = class Invite extends Command {
         	.setTitle("Invite Me")
         	.setThumbnail(`${process.env.iconurl}`)
         	.setColor(`${process.env.ec}`)
-        	.setDescription(`Invite \`${client.user.username}\` Bot Now - [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`)
+        	.setDescription(`Invite \`${client.user.username}\` Bot Now - [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`)
         	.setFooter({
         		text: `${client.user.username} - ${process.env.year} ©`, 
         		iconURL: process.env.iconurl

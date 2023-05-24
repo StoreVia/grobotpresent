@@ -17,6 +17,12 @@ module.exports = class ReadyEvent extends Event {
 	async run() {
 		
 		const client = this.client;
+		let status = [
+			"/help | grobot.store",
+		]
+		client.user.setPresence({
+			activities: [{ name: `${status[Math.floor(Math.random() * status.length)]}`, type: ActivityType.Playing }]
+		});
 
 		setInterval(()=>{
 			let status = [

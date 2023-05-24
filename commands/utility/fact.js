@@ -73,7 +73,7 @@ module.exports = class Fact extends Command {
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
 			} else if(i.customId === "fastop"){
-				await i.update({ components: [buttonRow1] });
+				await i.update({ components: disableButtons(message.components) });
 			}
 		})
 
@@ -82,5 +82,14 @@ module.exports = class Fact extends Command {
 				return await interaction.editReply({ components: [buttonRow1] });
 			}
 		});
+		function disableButtons(components) {
+			for (let x = 0; x < components.length; x++) {
+			  for (let y = 0; y < components[x].components.length; y++) {
+				components[x].components[y] = ButtonBuilder.from(components[x].components[y]);
+				components[x].components[y].setDisabled(true);
+			  }
+			}
+			return components;
+		  }
 	}
 };

@@ -25,9 +25,9 @@ module.exports = class MemberCount extends Command {
 		let embed = new EmbedBuilder()
   			.setTitle(`Member Count - \`${interaction.guild.name}\``)
 			.addFields(
-				{ name: `**Total: **`, value: `\`${members.size.toLocaleString()}\``, inline: true },
-				{ name: `**Bots: **`, value: `\`${botMembers.size.toLocaleString()}\``, inline: true },
 				{ name: `**Members: **`, value: `\`${realMembers.size.toLocaleString()}\``, inline: true },
+				{ name: `**Bots: **`, value: `\`${botMembers.size.toLocaleString()}\``, inline: true },
+				{ name: `**Total: **`, value: `\`${members.size.toLocaleString()}\``, inline: true },
 			)
   			.setColor(`${process.env.ec}`)
   			.setFooter({
