@@ -18,6 +18,7 @@
     "avconv": "^3.1.0",
     "axios": "^1.2.1",
     "bcrypt": "^5.1.0",
+    "canvacord": "^5.4.9",
     "colors": "^1.4.0",
     "common-tags": "^1.8.2",
     "covidtracker": "^2.0.1",

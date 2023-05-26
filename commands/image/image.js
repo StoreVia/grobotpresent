@@ -1,5 +1,6 @@
 const Command = require('../../structures/CommandClass');
 const { SlashCommandBuilder, AttachmentBuilder  } = require('discord.js');
+const canvacord = require("canvacord");
 
 module.exports = class Image extends Command {
 	constructor(client) {
@@ -87,8 +88,8 @@ module.exports = class Image extends Command {
             }
 
             if(StringOption == "img_trigger"){
-                let image = await canvacord.Canvas.trigger(UserOption.displayAvatarURL({ dynamic: false, extension: 'png' }));
-                let attachment = new AttachmentBuilder(image, "triggered.gif");
+                let image = await canvacord.Canvas.trigger(UserOption.displayAvatarURL({ extension: 'png' }));
+                let attachment = new AttachmentBuilder(image, "triggered.png");
                 return await interaction.followUp({ files : [attachment] });
             }
 
