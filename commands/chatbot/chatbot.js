@@ -79,6 +79,10 @@ module.exports = class ChatBot extends Command {
                         .setLabel(`Disabled`)
                         .setStyle(ButtonStyle.Danger)
                         .setCustomId(`chedisable`),
+                    new ButtonBuilder()
+                        .setLabel(`Stop`)
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`chstop`),
                 )
             if(!checkchannel && !checkdisable){
                 await interaction.deferReply({ ephemeral: true });
@@ -115,26 +119,25 @@ module.exports = class ChatBot extends Command {
             collector.on('collect', async i => {
 			    if (i.user.id != interaction.user.id) {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			    } else if(i.customId === "fact") {
-                    let embed = new EmbedBuilder()
-  					    .setTitle('Facts')
-    				    .setThumbnail(`https://i.imgur.com/ryyJgAK.png`)
-  					    .setDescription(titlecase(facts[Math.floor(Math.random() * facts.length)]))
-  					    .setFooter({
-      					    text: `${client.user.username} - ${process.env.year} ©`, 
-      					    iconURL: process.env.iconurl
-    				    })
-        			    .setColor(`${process.env.ec}`);
-				    await i.update({ embeds: [embed], components: [buttonRow] });
-			    } else if(i.customId === "fastop"){
-				    buttonRow.components.map(component=> component.setDisabled(true));
-				    await i.update({ components: [buttonRow] });
-			    }
+			    } else if(i.customId === "chenable") {
+                    db.set(`chatbot_${interaction.guild.id}`, checkchannel)
+                    db.delete(`chatbotdisable_${interaction.guild.id}`);
+                    buttonRow.components[0].setDisabled(true)
+                    await i.update({ components: [buttonRow]})
+                } else if(i.customId === "chdisable"){
+                    db.set(`chatbotdisable_${interaction.guild.id}`);
+                    db.delete(`chatbot_${interaction.guild.id}`, checkchannel);
+                    buttonRow.components[1].setDisabled(true)
+                    await i.update({ components: [buttonRow]})
+                } else if(i.customId === "chstop"){
+                    buttonRow.components.map(component=> component.setDisabled(true));
+                    await i.update({ components: [buttonRow]})
+                }
 		    })
-
 		    collector.on('end', async (_, reason) => {
 			    if (reason === 'idle' || reason === 'user') {
-				    return await interaction.editReply({ components: [buttonRow1] });
+                    buttonRow.components.map(component=> component.setDisabled(true));
+				    return await interaction.editReply({ components: [buttonRow] });
 			    }
 		    });
         }
