@@ -241,87 +241,81 @@ module.exports = class InteractionCreate extends Event {
 		 			new Discord.ButtonBuilder()
 						.setLabel('Yes')
 						.setEmoji(`✅`)
-						.setCustomId('yes')
+						.setCustomId('tiyes')
 						.setStyle(Discord.ButtonStyle.Success),
 		  			new Discord.ButtonBuilder()
 						.setLabel('No')
 						.setEmoji(`❌`)
-						.setCustomId('cancel')
+						.setCustomId('tino')
 						.setStyle(Discord.ButtonStyle.Danger),
 				);
-   			let msg = await interaction.reply({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
-  
-   			const filter = i => i.customId;
-   			const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
-  
-   			collector.on('collect', async (i) => {
-				const role = db.fetch(`ticketrole_${interaction.guild.id}`)
-	  			if (i.customId === 'yes') {
-					if(!interaction.member.roles.cache.has(`${role}`)){
-		  				await i.deferReply({ ephemeral: true })
-		  				await i.followUp({ content: "> You Dont Have Permissions." })
-					} else if(interaction.member.roles.cache.has(`${role}`)){
-						const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
-						const guild = client.guilds.cache.get(interaction.guild.id);
-     	 				const logschannel = guild.channels.cache.get(logs);
-						
-						await i.update({ content: '> Saving Messages Please Wait...', components: [] });
-
-      					interaction.channel.messages.fetch().then(async (messages) => {
-                    		let a = messages.filter(m => m.author.bot !== true).map(m =>
-          						`\n ${new Date(m.createdTimestamp).toLocaleString('en-EN')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
-        					).reverse().join('\n');
-		                	if (a.length < 1) a = "Nothing"
-		        			var paste = new PrivateBinClient("https://privatebin.net/");
-        					var result = await paste.uploadContent(a, {uploadFormat: 'markdown'})
-
-            				const embed = new EmbedBuilder()
-								.setTitle('Ticket Logs')
-								.setDescription(`To See Logs Of The Ticket Created By <@!${interaction.channel.topic}> [ClickHere](${getPasteUrl(result)})`)
-								.addFields(
-									{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
-									{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
-								)
-								.setColor(`${process.env.ec}`)
-								.setFooter({
-									text: `Link Expires In 6 Days From Now.`,
-									iconURL: process.env.iconurl
-								})
-								.setTimestamp();
-
-							logschannel.send({ embeds: [embed] }).then(() => {
-								interaction.channel.delete()
-							})
-						}).catch(async(e) => {
-							const embed = new EmbedBuilder()
-								.setTitle('Ticket Logs')
-								.setDescription(`Error In Creating Logs.**Please Try Later/Report By Using "/report" If You Think This Is A Bug.**`)
-								.addFields(
-									{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
-									{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
-								)
-								.setColor(`${process.env.ec}`)
-								.setFooter({
-									text: `Link Expires In 6 Days From Now.`,
-									iconURL: process.env.iconurl
-								})
-								.setTimestamp();
-
-							logschannel.send({ embeds: [embed] }).then(() => {
-								interaction.channel.delete();
-							})
-						})
-					}
-	  			} else if (i.customId === 'cancel') {
-					interaction.deleteReply();
-	  			}
-   			})
-   			collector.on('end', async (_, reason) => {
-				if (reason === 'idle' || reason === 'user') {
-	  				return await interaction.deleteReply();
-				}
-			});
+			await interaction.deferReply()
+			await interaction.followUp({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   		}
+
+		if(interaction.customId === "tiyes"){
+			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
+			if(!interaction.member.roles.cache.has(`${role}`)){
+				await interaction.deferReply({ ephemeral: true })
+				await interaction.followUp({ content: `> You Dont Have Permissions\n> Require <@${role}>.` })
+		  	} else if(interaction.member.roles.cache.has(`${role}`)){
+			  	const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
+			  	const guild = client.guilds.cache.get(interaction.guild.id);
+				const logschannel = guild.channels.cache.get(logs);
+			  
+				await interaction.deferReply()
+				await interaction.followUp({ content: `> Saving Messages Please Wait...` })
+
+				interaction.channel.messages.fetch().then(async (messages) => {
+					let a = messages.filter(m => m.author.bot !== true).map(m =>
+						`\n ${new Date(m.createdTimestamp).toLocaleString('en-EN')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
+				  	).reverse().join('\n');
+				  	if (a.length < 1) a = "Nothing"
+				  	var paste = new PrivateBinClient("https://privatebin.net/");
+				  	var result = await paste.uploadContent(a, {uploadFormat: 'markdown'})
+
+				  	const embed = new EmbedBuilder()
+					  	.setTitle('Ticket Logs')
+					  	.setDescription(`To See Logs Of The Ticket Created By <@!${interaction.channel.topic}> [ClickHere](${getPasteUrl(result)})`)
+					  	.addFields(
+						  	{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
+						  	{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
+					  	)
+					  	.setColor(`${process.env.ec}`)
+					  	.setFooter({
+						  	text: `Link Expires In 6 Days From Now.`,
+						  	iconURL: process.env.iconurl
+					  	})
+					  	.setTimestamp();
+
+				  	logschannel.send({ embeds: [embed] }).then(() => {
+					  	interaction.channel.delete()
+				  	})
+			  }).catch(async(e) => {
+				  	const embed = new EmbedBuilder()
+					  	.setTitle('Ticket Logs')
+					  	.setDescription(`Error In Creating Logs.**Please Try Later/Report By Using "/report" If You Think This Is A Bug.**`)
+					  	.addFields(
+						  	{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
+						  	{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
+					  	)
+					  	.setColor(`${process.env.ec}`)
+					  	.setFooter({
+						  	text: `Link Expires In 6 Days From Now.`,
+						  	iconURL: process.env.iconurl
+					  	})
+					  	.setTimestamp();
+
+				  	logschannel.send({ embeds: [embed] }).then(() => {
+					  	interaction.channel.delete();
+				  	})
+			  	})
+		  	}
+  		}
+
+		if(interaction.customId === "tino"){
+			interaction.message.delete();
+		}
 //ticketend
 	}
 };
