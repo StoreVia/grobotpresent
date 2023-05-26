@@ -149,7 +149,7 @@ module.exports = class MatchPairs extends events {
       }
       else if (this.selected.id === id) {
         this.selected = null;
-        emojiBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
+        emojiBtn.setEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
       }
       else {
         const selectedEmoji = this.emojis[this.selected.id];
@@ -171,8 +171,8 @@ module.exports = class MatchPairs extends events {
 
         if (!matched) {
           await msg.edit({ components: this.components });
-          emojiBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
-          selectedBtn.removeEmoji().setStyle(buttonStyle('SECONDARY')).setLabel(' ');
+          emojiBtn.setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+          selectedBtn.setStyle(ButtonStyle.Secondary).setLabel('\u200b').setEmoji(null);
           return this.selected = null;;
         }
 
