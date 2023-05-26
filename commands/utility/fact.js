@@ -28,19 +28,6 @@ module.exports = class Fact extends Command {
 					.setCustomId('fastop')
 					.setStyle(ButtonStyle.Danger),
             )
-        const buttonRow1 = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Next')
-					.setCustomId('fact1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('fastop1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Danger),
-            )
 
 		await interaction.deferReply();
 
@@ -80,7 +67,8 @@ module.exports = class Fact extends Command {
 
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
-				return await interaction.editReply({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				return await interaction.editReply({ components: [buttonRow] });
 			}
 		});
 	}

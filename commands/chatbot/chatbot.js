@@ -1,5 +1,5 @@
 const Command = require('../../structures/CommandClass');
-const { SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType, EmbedBuilder, Embed, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const db = require(`quick.db`);
 
 module.exports = class ChatBot extends Command {
@@ -10,8 +10,7 @@ module.exports = class ChatBot extends Command {
 				.setDescription('Set And Delete Chatbot.')
                 .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('set')
+                    subcommand.setName('set')
                         .setDescription('Set Chatbot Channel.')
                         .addChannelOption(option =>
                             option.setName('channel')
@@ -19,22 +18,22 @@ module.exports = class ChatBot extends Command {
                                 .addChannelTypes(ChannelType.GuildText)
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('delete')
+                    subcommand.setName('delete')
                         .setDescription('Delete Chatbot Channel.')
                         .addChannelOption(option =>
                             option.setName('deletechannel')
                                 .addChannelTypes(ChannelType.GuildText)
                                 .setDescription('Select Channel')
-                                .setRequired(true))),
+                                .setRequired(true)))
+                .addSubcommand(subcommand =>
+                    subcommand.setName('dashboard')
+                            .setDescription('Get Chatbot Dashboard.')),
 			usage: 'chatbot',
 			category: 'Info',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
 	async run(client, interaction) {
-
-        await interaction.deferReply({ ephemeral: true });
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
         return await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
@@ -44,24 +43,100 @@ module.exports = class ChatBot extends Command {
             const channel = interaction.options.getChannel('channel');            
             const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`, channel.id);
             if(!checkchannel){
+                await interaction.deferReply({ ephemeral: true });
                 db.set(`chatbot_${interaction.guild.id}`, channel.id);
-                return await interaction.followUp({ content: `> Chat Bot Was Now Bounded To ${channel}.`})
+                return await interaction.followUp({ content: `> Chatbot Was Now Bounded To ${channel}.`})
             }
             if(checkchannel){
+                await interaction.deferReply({ ephemeral: true });
                 db.set(`chatbot_${interaction.guild.id}`, channel.id);
-                return await interaction.followUp({ content: `> Chat Bot Was Now Updated To ${channel}.`})
+                return await interaction.followUp({ content: `> Chatbot Was Now Updated To ${channel}.`})
             }   
         }
         if (interaction.options.getSubcommand() === 'delete') {
             const channel = interaction.options.getChannel('deletechannel');
             const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`, channel.id);
             if(!checkchannel){
-                return await interaction.followUp({ content: `> Chat Bot Was Not Bounded To ${channel}.`})
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Chatbot Was Not Bounded To ${channel}.`})
             }
             if(checkchannel){
+                await interaction.deferReply({ ephemeral: true });
                 db.delete(`chatbot_${interaction.guild.id}`, channel.id);
-                return await interaction.followUp({ content: `> Chat Bot Was Now Deleted In ${channel}.`})
+                return await interaction.followUp({ content: `> Chatbot Was Now Deleted In ${channel}.`})
             }
+        }
+        if (interaction.options.getSubcommand() === 'dashboard') {
+            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
+            const checkdisable = db.fetch(`chatbotdisable_${interaction.guild.id}`);
+            let buttonRow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel(`Enable`)
+                        .setStyle(ButtonStyle.Success)
+                        .setCustomId(`chenable`),
+                    new ButtonBuilder()
+                        .setLabel(`Disabled`)
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`chedisable`),
+                )
+            if(!checkchannel && !checkdisable){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Chatbot Is Enabled.`})
+            } else if(checkchannel && !checkdisable){
+                await interaction.deferReply();
+                let embed = new EmbedBuilder()
+                    .setTitle(`Chatbot Dashboard`)
+                    .setDescription(`**Control Chatbot With Buttons.**`)
+                    .setColor(`${process.env.ec}`)
+                    .setFooter({
+                        text: `${client.user.username} - ${process.env.year} ©`, 
+                        iconURL: process.env.iconurl
+                    });
+                buttonRow.components[0].setDisabled(true)
+                const msg = await interaction.followUp({ embeds: [embed], components: [buttonRow]})
+            } else if(!checkchannel && checkdisable){
+                await interaction.deferReply();
+                let embed = new EmbedBuilder()
+                    .setTitle(`Chatbot Dashboard`)
+                    .setDescription(`**Control Chatbot With Buttons.**`)
+                    .setColor(`${process.env.ec}`)
+                    .setFooter({
+                        text: `${client.user.username} - ${process.env.year} ©`, 
+                        iconURL: process.env.iconurl
+                    });
+                buttonRow.components[1].setDisabled(true)
+                const msg = await interaction.followUp({ embeds: [embed], components: [buttonRow]})
+            }
+
+            const filter = i => i.customId;
+		    const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
+
+            collector.on('collect', async i => {
+			    if (i.user.id != interaction.user.id) {
+				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+			    } else if(i.customId === "fact") {
+                    let embed = new EmbedBuilder()
+  					    .setTitle('Facts')
+    				    .setThumbnail(`https://i.imgur.com/ryyJgAK.png`)
+  					    .setDescription(titlecase(facts[Math.floor(Math.random() * facts.length)]))
+  					    .setFooter({
+      					    text: `${client.user.username} - ${process.env.year} ©`, 
+      					    iconURL: process.env.iconurl
+    				    })
+        			    .setColor(`${process.env.ec}`);
+				    await i.update({ embeds: [embed], components: [buttonRow] });
+			    } else if(i.customId === "fastop"){
+				    buttonRow.components.map(component=> component.setDisabled(true));
+				    await i.update({ components: [buttonRow] });
+			    }
+		    })
+
+		    collector.on('end', async (_, reason) => {
+			    if (reason === 'idle' || reason === 'user') {
+				    return await interaction.editReply({ components: [buttonRow1] });
+			    }
+		    });
         }
 	}
 };

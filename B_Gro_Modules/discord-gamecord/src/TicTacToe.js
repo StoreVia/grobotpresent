@@ -26,8 +26,8 @@ module.exports = class TicTacToe extends approve {
     if (!options.emojis.blankButton) options.emojis.blankButton = '➖';
 
     if (!options.timeoutTime) options.timeoutTime = 60000;
-    if (!options.xButtonStyle) options.xButtonStyle = 'DANGER';
-    if (!options.oButtonStyle) options.oButtonStyle = 'PRIMARY';
+    if (!options.xButtonStyle) options.xButtonStyle = 'SECONDARY';
+    if (!options.oButtonStyle) options.oButtonStyle = 'SECONDARY';
     if (!options.turnMessage) options.turnMessage = '{emoji} | Its Turn Of Player **{player}**.';
     if (!options.winMessage) options.winMessage = '{emoji} | **{player}** Won The Game.';
     if (!options.tieMessage) options.tieMessage = 'Game Tied.';
