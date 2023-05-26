@@ -73,7 +73,8 @@ module.exports = class Fact extends Command {
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
 			} else if(i.customId === "fastop"){
-				await i.update({ components: [buttonRow1.components[0].setDisabled(true)] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] });
 			}
 		})
 
