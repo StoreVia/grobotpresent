@@ -14,10 +14,10 @@ module.exports = class CatchTheFish extends Command {
 	}
 	async run(client, interaction) {
 
-    const positions = {
-			left: '_ _                   🥅🥅🥅\n_ _                   🕴️\n      \n_ _                         ⚽',
-			middle: '_ _                   🥅🥅🥅\n_ _                        🕴️\n      \n_ _                         ⚽',
-			right: '_ _                   🥅🥅🥅\n_ _                              🕴️\n      \n_ _                         ⚽',
+        const positions = {
+			left    : '_ _                   🥅🥅🥅\n_ _                   🕴️\n      \n_ _                         ⚽',
+			middle  : '_ _                   🥅🥅🥅\n_ _                        🕴️\n      \n_ _                         ⚽',
+			right   : '_ _                   🥅🥅🥅\n_ _                              🕴️\n      \n_ _                         ⚽',
 		};
 		let randomized = Math.floor(Math.random() * Object.keys(positions).length);
 		let gameEnded = false;
@@ -39,25 +39,6 @@ module.exports = class CatchTheFish extends Command {
                     .setCustomId('right')
                     .setLabel('Right')
                     .setDisabled(false)
-                    .setStyle(ButtonStyle.Secondary)
-            );
-
-        const componentsArray1 = new ActionRowBuilder()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('left')
-                    .setLabel('Left')
-                    .setDisabled(true)
-                    .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                    .setCustomId(String(Math.random()))
-                    .setLabel(`Middle`)
-                    .setDisabled(true)
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                    .setCustomId('right')
-                    .setLabel('Right')
-                    .setDisabled(true)
                     .setStyle(ButtonStyle.Secondary)
             );
 
@@ -86,19 +67,21 @@ module.exports = class CatchTheFish extends Command {
             }
             if(button.customId !== Object.keys(positions)[randomized]) {
                 gameEnded = true;
-                msg.edit({ components: [componentsArray1] })
-                return button.reply({ content: 'You Won...'});
-            }
-            else {
+                componentsArray.components.map(component=> component.setDisabled(true));
+				await msg.edit({ components: [componentsArray] });
+                return button.update({ content: 'You Won...'});
+            } else {
                 gameEnded = true;
-                msg.edit({ components: [componentsArray1] })
-                return button.reply({ content: 'You Lose...' });
+				componentsArray.components.map(component=> component.setDisabled(true));
+				await msg.edit({ components: [componentsArray] });
+                return button.update({ content: 'You Lose...'});
             }
         });
         collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
                 gameEnded = true;
-				return await interaction.editReply({ components: [componentsArray1] });
+				componentsArray.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [componentsArray] });
 			}
 		});
 	}

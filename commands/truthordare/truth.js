@@ -72,13 +72,15 @@ module.exports = class Truth extends Command {
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
 			} else if(i.customId === "trstop"){
-				await i.update({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] });
 			}
 		})
 
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
-				return await interaction.editReply({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
 	}

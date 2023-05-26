@@ -30,20 +30,6 @@ module.exports = class Dare extends Command {
 					.setStyle(ButtonStyle.Danger),
             )
 
-        const buttonRow1 = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Dare')
-					.setCustomId('dare')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('dastop1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Danger),
-            )
-
 		let embed = new EmbedBuilder()
   			.setTitle('Dare')
   			.setDescription(`${dare[Math.floor(Math.random() * dare.length)]}`)
@@ -71,13 +57,15 @@ module.exports = class Dare extends Command {
         			.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
 			} else if(i.customId === "dastop"){
-				await i.update({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] });
 			}
 		})
 
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
-				return await interaction.editReply({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
 	}

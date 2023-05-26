@@ -43,19 +43,6 @@ module.exports = class Ping extends Command {
                 	.setDisabled(false)
 					.setStyle(ButtonStyle.Danger),
             )
-        const buttonRow1 = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('NextMeme')
-					.setCustomId('meme1')
-                	.setDisabled(true)
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('mestop1')
-                	.setDisabled(true)
-					.setStyle(ButtonStyle.Danger),
-            )
 			
         fetch(`https://www.reddit.com/r/${sub[random]}/random/.json`)
 		.then((res) => res.json())
@@ -94,7 +81,8 @@ module.exports = class Ping extends Command {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} 
 			if(i.customId === "meme") {
-				await i.update({ content: `Searching...`, components: [buttonRow1] })
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ content: `Searching...`, components: [buttonRow] });
 				let sub1 = [
 					'meme',
 					'me_irl',
@@ -132,17 +120,20 @@ module.exports = class Ping extends Command {
       						text: `${client.user.username} - ${process.env.year} ©`, 
       						iconURL: process.env.iconurl
     					});
+					buttonRow.components.map(component=> component.setDisabled(false));
 					i.editReply({ content: ``, embeds: [embed], components: [buttonRow] });
         		})
 			}
 			if(i.customId === "mestop"){
-				return await i.update({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] });
 			}
 		})
 
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
-				return await interaction.editReply({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
 	}

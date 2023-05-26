@@ -29,19 +29,6 @@ module.exports = class Dice extends Command {
                 	.setDisabled(false)
 					.setStyle(ButtonStyle.Danger),
             )
-        const buttonRow1 = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Roll Again')
-					.setCustomId('dice1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('distop1')
-                	.setDisabled(true)
-					.setStyle(ButtonStyle.Danger),
-            )
 
         const numbers = [
             "1",
@@ -73,13 +60,15 @@ module.exports = class Dice extends Command {
 				i.update({ embeds: [embed], components: [buttonRow] })
 			}
 			if(i.customId === "distop"){
-				return await i.update({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] });
 			}
 		})
 
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
-				return await interaction.editReply({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
 

@@ -81,24 +81,7 @@ module.exports = class Help extends Command {
 					]),
 			);
 
-		const disabled = new ActionRowBuilder()
-			.addComponents(
-				new StringSelectMenuBuilder()
-					.setPlaceholder('Select An Option')
-					.setCustomId('hlpcmd1')
-					.setDisabled(true)
-                	.setOptions([
-						{
-							label: 'GroBot',
-							value: 'grobot',
-							emoji: '🤖',
-						},
-                   	]	
-				)
-			);
-
 		await interaction.deferReply();
-			
 		
 		let embed = new EmbedBuilder()
   			.setTitle('Help')
@@ -293,7 +276,8 @@ module.exports = class Help extends Command {
 
 	   collector.on('end', async (_, reason) => {
     		if (reason === 'idle') {
-            	return await interaction.editReply({ components: [disabled] });
+				selectMenuRow.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [selectMenuRow] });
         	}
       	})
 	}

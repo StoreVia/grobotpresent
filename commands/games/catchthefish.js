@@ -19,11 +19,11 @@ module.exports = class CatchTheFish extends Command {
 	async run(client, interaction) {
 
     const positions = {      
-      safe:   '_ _                          :fish:\n            _ _              :hand_splayed:\n            _ _              :cat:',
+      safe  :   '_ _                          :fish:\n            _ _              :hand_splayed:\n            _ _              :cat:',
       danger: '_ _                          💣\n            _ _              :hand_splayed:\n            _ _              :cat:',
-      win:    '_ _           :crown:**You Won.**:crown:\n_ _                      :hand_splayed:\n_ _                      :cat:',
-      lose:   '_ _           :skull:**You Lost.**:skull:             \n_ _                      :hand_splayed:\n_ _                      :cat:',
-      left:   '_ _                 **You Left.**\n_ _                      :hand_splayed:\n_ _                      :cat:'
+      win   :    '_ _           :crown:**You Won.**:crown:\n_ _                      :hand_splayed:\n_ _                      :cat:',
+      lose  :   '_ _           :skull:**You Lost.**:skull:             \n_ _                      :hand_splayed:\n_ _                      :cat:',
+      left  :   '_ _                 **You Left.**\n_ _                      :hand_splayed:\n_ _                      :cat:'
     };
 
     let randomized = Math.floor(Math.random() * 2);
@@ -56,25 +56,6 @@ module.exports = class CatchTheFish extends Command {
           .setStyle(ButtonStyle.Danger)
       );
 
-    const componentsArray1 = new ActionRowBuilder()
-      .addComponents(
-        new ButtonBuilder()
-          .setCustomId('e')
-          .setLabel('Stop')
-          .setDisabled(true)
-          .setStyle(ButtonStyle.Danger),
-        new ButtonBuilder()
-          .setCustomId(String(Math.random()))
-          .setEmoji('🎣')
-          .setDisabled(true)
-          .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-          .setCustomId('ee')
-          .setLabel('Stop')
-          .setDisabled(true)
-          .setStyle(ButtonStyle.Danger)
-      );
-
     await interaction.deferReply();
     let msg = await interaction.followUp({ content: `Catch ${count} Fishes To Win!\n\n${randomPos}`, components: [componentsArray] })
 
@@ -88,32 +69,26 @@ module.exports = class CatchTheFish extends Command {
       if(data === count) {
         gameEnded = true;
         collector.stop();
-        msg.edit({
-          content: positions.win,
-          components: [componentsArray1],
-        });
+        componentsArray.components.map(component=> component.setDisabled(true));
+				msg.edit({ content: positions.win, components: [componentsArray] });
         button.deferUpdate();
-      } else 
+      } else {
       if(data <= -count * 3) {
         gameEnded = true;
         collector.stop();
-        msg.edit({
-          content: positions.lose,
-          components: [componentsArray1],
-        });
+				componentsArray.components.map(component=> component.setDisabled(true));
+				msg.edit({ content: positions.lose, components: [componentsArray] });
         button.deferUpdate();
-      } 
-      else {
+      } else {
         if(button){
           return button.deferUpdate();
         } else {
-          msg.edit({
-            content: randomPos + `           **${data}**`,
-            components: [componentsArray],
-          });
+				  componentsArray.components.map(component=> component.setDisabled(true));
+				  msg.edit({ content: randomPos + `           **${data}**`, components: [componentsArray] });
         }
       } 
     }
+  }
       
     setInterval(() => {
       if(gameEnded === false){
@@ -127,11 +102,13 @@ module.exports = class CatchTheFish extends Command {
       }
       if(button.customId === "e"){
         gameEnded = true;
-        msg.edit({ content: `${positions.left}`, components: [componentsArray1]});
+				componentsArray.components.map(component=> component.setDisabled(true));
+				await msg.edit({ components: [componentsArray] });
       }
       if(button.customId === "ee"){
         gameEnded = true;
-        msg.edit({ content: `${positions.left}`, components: [componentsArray1]});
+				componentsArray.components.map(component=> component.setDisabled(true));
+				await msg.edit({ components: [componentsArray] });
       }
       if(randomized !== 0) {
         data -= count;
@@ -145,7 +122,8 @@ module.exports = class CatchTheFish extends Command {
     collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
         gameEnded = true;
-				return await interaction.editReply({ components: [componentsArray1] });
+				componentsArray.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [componentsArray] });
 			}
 		});
 	}

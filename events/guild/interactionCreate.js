@@ -249,21 +249,6 @@ module.exports = class InteractionCreate extends Event {
 						.setCustomId('cancel')
 						.setStyle(Discord.ButtonStyle.Danger),
 				);
-			const row1 = new Discord.ActionRowBuilder()
-				.addComponents(
-		 			new Discord.ButtonBuilder()
-						.setLabel('Yes')
-						.setEmoji(`✅`)
-						.setCustomId('yes1')
-						.setDisabled(true)
-						.setStyle(Discord.ButtonStyle.Success),
-		  			new Discord.ButtonBuilder()
-						.setLabel('No')
-						.setEmoji(`❌`)
-						.setDisabled(true)
-						.setCustomId('cancel1')
-						.setStyle(Discord.ButtonStyle.Danger),
-				)
    			let message = await interaction.reply({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   
    			const filter = i => i.customId;
@@ -281,7 +266,8 @@ module.exports = class InteractionCreate extends Event {
 						const guild = client.guilds.cache.get(interaction.guild.id);
      	 				const logschannel = guild.channels.cache.get(logs);
 						
-						await i.update({ components: [row1] })
+						row.components.map(component=> component.setDisabled(true));
+						await i.update({ components: [row] });
       					interaction.channel.send({ content: '> Saving Messages Please Wait...' });
 
       					interaction.channel.messages.fetch().then(async (messages) => {

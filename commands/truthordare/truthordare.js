@@ -30,21 +30,6 @@ module.exports = class TruthOrDare extends Command {
 					.setStyle(ButtonStyle.Danger),
             )
 
-        const buttonRow1 = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('TOD')
-					.setCustomId('tod1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('todstop1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Danger),
-            )
-
-
 		function readFileLines(filename) {
   			const content = fs.readFileSync(filename, 'utf-8');
 			const lines = content.split('\n').map(line => line.trim().replace(/,+$/, '')).filter(line => line !== '');
@@ -103,13 +88,15 @@ module.exports = class TruthOrDare extends Command {
 					.setColor(`${process.env.ec}`);
 				await i.update({ embeds: [embed], components: [buttonRow] });
 			} else if(i.customId === "todstop"){
-				await i.update({ embeds: [embed], components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] });
 			}
 		})
 
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {
-				return await interaction.editReply({ components: [buttonRow1] });
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
 	}
