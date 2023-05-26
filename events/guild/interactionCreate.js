@@ -212,7 +212,6 @@ module.exports = class InteractionCreate extends Event {
 							.addComponents(
 								  new Discord.ButtonBuilder()
 									.setLabel('Close')
-									.setEmoji(`❌`)
 									.setCustomId('closeticket')
 									.setStyle(Discord.ButtonStyle.Danger),
 							)
@@ -239,21 +238,21 @@ module.exports = class InteractionCreate extends Event {
 			const row = new Discord.ActionRowBuilder()
 				.addComponents(
 		 			new Discord.ButtonBuilder()
-						.setLabel('Yes')
+						.setLabel('Continue')
 						.setEmoji(`✅`)
-						.setCustomId('tiyes')
+						.setCustomId('ticontinue')
 						.setStyle(Discord.ButtonStyle.Success),
 		  			new Discord.ButtonBuilder()
-						.setLabel('No')
-						.setEmoji(`❌`)
-						.setCustomId('tino')
+						.setLabel('Stop')
+						.setEmoji(`🛑`)
+						.setCustomId('tistop')
 						.setStyle(Discord.ButtonStyle.Danger),
 				);
 			await interaction.deferReply()
 			await interaction.followUp({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   		}
 
-		if(interaction.customId === "tiyes"){
+		if(interaction.customId === "ticontinue"){
 			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
 			if(!interaction.member.roles.cache.has(`${role}`)){
 				await interaction.deferReply({ ephemeral: true })
@@ -313,7 +312,7 @@ module.exports = class InteractionCreate extends Event {
 		  	}
   		}
 
-		if(interaction.customId === "tino"){
+		if(interaction.customId === "tistop"){
 			interaction.message.delete();
 		}
 //ticketend
