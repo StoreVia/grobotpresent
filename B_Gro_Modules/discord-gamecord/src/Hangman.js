@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, InteractionCollector } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, InteractionCollector, ButtonStyle } = require('discord.js');
 const { getAlphaEmoji, formatMessage, buttonStyle } = require('../utils/utils');
 const words = require('../utils/words.json');
 const events = require('events');
@@ -20,16 +20,16 @@ module.exports = class Hangman extends events {
 
     if (!options.hangman) options.hangman = {};
     if (!options.hangman.hat) options.hangman.hat = '🎩';
-    if (!options.hangman.head) options.hangman.head = '😟';
+    if (!options.hangman.head) options.hangman.head = '🥺';
     if (!options.hangman.shirt) options.hangman.shirt = '👕';
     if (!options.hangman.pants) options.hangman.pants = '🩳';
-    if (!options.hangman.boots) options.hangman.boots = '👞👞';
+    if (!options.hangman.boots) options.hangman.boots = '👟👟';
 
     if (!options.customWord) options.customWord = null;
     if (!options.timeoutTime) options.timeoutTime = 60000;
     if (!options.theme) options.theme = Object.keys(words)[Math.floor(Math.random() * Object.keys(words).length)];
     if (!options.winMessage) options.winMessage = 'You Have Won The Game. The Word Was **{word}**';
-    if (!options.loseMessage) options.loseMessage = 'You Have Lost The Game.BTW The Word Was **{word}**.';
+    if (!options.loseMessage) options.loseMessage = 'You Have Lost The Game. BTW The Word Was **{word}**.';
 
 
     if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
@@ -184,8 +184,8 @@ module.exports = class Hangman extends events {
       for (let x = 0; x < 4; x++) {
         
         const letter = letters[y * 4 + x];
-        const btn = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel(letter).setCustomId(`hangman_${letter}`)
-        .setDisabled(this.guessed.includes(letter));
+        const btn = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(letter).setCustomId(`hangman_${letter}`)
+          .setDisabled(this.guessed.includes(letter));
         row.addComponents(btn);
       }
       components.push(row);
@@ -194,9 +194,9 @@ module.exports = class Hangman extends events {
 
     const row4 = new ActionRowBuilder();
     const stop = new ButtonBuilder().setStyle(buttonStyle('DANGER')).setLabel('Stop').setCustomId('hangman_stop');
-    const pageBtn = new ButtonBuilder().setStyle(buttonStyle('SUCCESS')).setEmoji(this.buttonPage ? '⬅️' : '➡️').setCustomId(pageID);
-    const letterY = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel('Y').setCustomId('hangman_Y');
-    const letterZ = new ButtonBuilder().setStyle(buttonStyle('PRIMARY')).setLabel('Z').setCustomId('hangman_Z');
+    const pageBtn = new ButtonBuilder().setStyle(ButtonStyle.Primary).setEmoji(this.buttonPage ? '1108935538922242138' : '1108935544039297127').setCustomId(pageID);
+    const letterY = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('Y').setCustomId('hangman_Y');
+    const letterZ = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('Z').setCustomId('hangman_Z');
 
     if (this.guessed.includes('Y')) letterY.setDisabled(true);
     if (this.guessed.includes('Z')) letterZ.setDisabled(true);

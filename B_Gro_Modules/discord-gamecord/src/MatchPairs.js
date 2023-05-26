@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 const { disableButtons, shuffleArray, formatMessage, buttonStyle } = require('../utils/utils');
 const events = require('events');
 const cu = `${process.env.botname}`;
@@ -76,7 +76,7 @@ module.exports = class MatchPairs extends events {
     .setDescription(this.options.embed.description)
     .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    const msg = await this.sendMessage({ embeds: [embed], components: this.components });
+    const msg = await this.sendMessage({ embeds: [embed], components: this.getComponents() });
     return this.handleButtons(msg);
   }
 
@@ -98,9 +98,7 @@ module.exports = class MatchPairs extends events {
     for (let y = 0; y < this.length; y++) {
       const row = new ActionRowBuilder();
       for (let x = 0; x < this.length; x++) {
-        const btn = new ButtonBuilder().setStyle(buttonStyle('SECONDARY')).setLabel(' ').setCustomId('matchpairs_' + x + '_' + y);
-        btn.removeLabel = function() { this.data.label = null; return this; };
-        btn.removeEmoji = function() { this.data.emoji = null; return this; };
+        const btn = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId('matchpairs_' + x + '_' + y);
         row.addComponents(btn);
       }
       components.push(row);
@@ -147,7 +145,7 @@ module.exports = class MatchPairs extends events {
       
       if (!this.selected) {
         this.selected = { x: x, y: y, id: id };
-        emojiBtn.setEmoji(emoji).setStyle(buttonStyle('PRIMARY')).removeLabel();
+        emojiBtn.setEmoji(emoji).setStyle(ButtonStyle.Primary)
       }
       else if (this.selected.id === id) {
         this.selected = null;
@@ -164,12 +162,12 @@ module.exports = class MatchPairs extends events {
           const pair = this.getPairEmoji(this.emojis[joker.id]).filter(b => b.id !== joker.id)[0];
           const pairBtn = this.components[pair.y].components[pair.x];
 
-          pairBtn.setEmoji(this.emojis[pair.id]).setStyle(buttonStyle('SUCCESS')).setDisabled(true).removeLabel();
+          pairBtn.setEmoji(this.emojis[pair.id]).setStyle(buttonStyle('SUCCESS')).setDisabled(true)
         }
 
 
-        emojiBtn.setEmoji(emoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched).removeLabel();
-        selectedBtn.setEmoji(selectedEmoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched).removeLabel();
+        emojiBtn.setEmoji(emoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched)
+        selectedBtn.setEmoji(selectedEmoji).setStyle(buttonStyle(matched ? 'SUCCESS' : 'DANGER')).setDisabled(matched)
 
         if (!matched) {
           await msg.edit({ components: this.components });
