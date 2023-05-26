@@ -266,9 +266,7 @@ module.exports = class InteractionCreate extends Event {
 						const guild = client.guilds.cache.get(interaction.guild.id);
      	 				const logschannel = guild.channels.cache.get(logs);
 						
-						row.components.map(component=> component.setDisabled(true));
-						await i.update({ components: [row] });
-      					interaction.channel.send({ content: '> Saving Messages Please Wait...' });
+						await i.update({ content: '> Saving Messages Please Wait...', components: [] });
 
       					interaction.channel.messages.fetch().then(async (messages) => {
                     		let a = messages.filter(m => m.author.bot !== true).map(m =>
@@ -319,7 +317,7 @@ module.exports = class InteractionCreate extends Event {
 					}
 	  			}
 	  			if (i.customId === 'cancel') {
-					interaction.deleteReply();
+					i.deferReply();
 	  			}
    			})
    			collector.on('end', async (_, reason) => {
