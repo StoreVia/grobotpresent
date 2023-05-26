@@ -32,99 +32,97 @@ module.exports = class CatchTheFish extends Command {
     let data = 0;
     let count = interaction.options.getNumber(`count`);
 
-    if(count > 25){ 
+    if(count > 10){ 
 		  await interaction.deferReply({ ephemeral: true });
-      await interaction.followUp({ content: "Number Should Be Less Than 25." })
-    }
+      await interaction.followUp({ content: "Number Should Be Less Than Or Equal To 10." })
+    } else {
+      const componentsArray = new ActionRowBuilder()
+        .addComponents(
+          new ButtonBuilder()
+            .setCustomId('e')
+            .setLabel('Stop')
+            .setDisabled(false)
+            .setStyle(ButtonStyle.Danger),
+          new ButtonBuilder()
+            .setCustomId(String(Math.random()))
+            .setEmoji('🎣')
+            .setDisabled(false)
+            .setStyle(ButtonStyle.Primary),
+          new ButtonBuilder()
+            .setCustomId('ee')
+            .setLabel('Stop')
+            .setDisabled(false)
+            .setStyle(ButtonStyle.Danger)
+        );
 
-    const componentsArray = new ActionRowBuilder()
-      .addComponents(
-        new ButtonBuilder()
-          .setCustomId('e')
-          .setLabel('Stop')
-          .setDisabled(false)
-          .setStyle(ButtonStyle.Danger),
-        new ButtonBuilder()
-          .setCustomId(String(Math.random()))
-          .setEmoji('🎣')
-          .setDisabled(false)
-          .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-          .setCustomId('ee')
-          .setLabel('Stop')
-          .setDisabled(false)
-          .setStyle(ButtonStyle.Danger)
-      );
+      await interaction.deferReply();
+      let msg = await interaction.followUp({ content: `Catch ${count} Fishes To Win!\n\n${randomPos}`, components: [componentsArray] })
 
-    await interaction.deferReply();
-    let msg = await interaction.followUp({ content: `Catch ${count} Fishes To Win!\n\n${randomPos}`, components: [componentsArray] })
+      const filter = i => i.customId;
 
-    const filter = i => i.customId;
+      const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
 
-    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
-
-    function update(button) {
-      randomized = Math.floor(Math.random() * 2);
-      randomPos = positions[Object.keys(positions)[randomized]];
-      if(data === count) {
-        gameEnded = true;
-        collector.stop();
-        componentsArray.components.map(component=> component.setDisabled(true));
-				msg.edit({ content: positions.win, components: [componentsArray] });
-        button.deferUpdate();
-      } else {
-      if(data <= -count * 3) {
-        gameEnded = true;
-        collector.stop();
-				componentsArray.components.map(component=> component.setDisabled(true));
-				msg.edit({ content: positions.lose, components: [componentsArray] });
-        button.deferUpdate();
-      } else {
-        if(button){
-          return button.deferUpdate();
+      function update(button) {
+        randomized = Math.floor(Math.random() * 2);
+        randomPos = positions[Object.keys(positions)[randomized]];
+        if(data === count) {
+          gameEnded = true;
+          collector.stop();
+          componentsArray.components.map(component=> component.setDisabled(true));
+				  msg.edit({ content: positions.win, components: [componentsArray] });
+          button.deferUpdate();
         } else {
-				  componentsArray.components.map(component=> component.setDisabled(true));
-				  msg.edit({ content: randomPos + `           **${data}**`, components: [componentsArray] });
+          if(data <= -count * 3) {
+            gameEnded = true;
+            collector.stop();
+				    componentsArray.components.map(component=> component.setDisabled(true));
+				    msg.edit({ content: positions.lose, components: [componentsArray] });
+            button.deferUpdate();
+          } else {
+            if(button){
+              return button.deferUpdate();
+            } else {
+				      msg.edit({ content: randomPos + `           **${data}**`, components: [componentsArray] });
+            }
+          } 
         }
-      } 
+      }
+      
+      setInterval(() => {
+        if(gameEnded === false){
+          return update();
+        } 
+      }, 1000);
+      
+      collector.on('collect', async (button) => {
+        if(button.user.id != interaction.user.id){
+          await button.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+        }
+        if(button.customId === "e"){
+          gameEnded = true;
+				  componentsArray.components.map(component=> component.setDisabled(true));
+				  await msg.edit({ components: [componentsArray] });
+        }
+        if(button.customId === "ee"){
+          gameEnded = true;
+				  componentsArray.components.map(component=> component.setDisabled(true));
+				  await msg.edit({ components: [componentsArray] });
+        }
+        if(randomized !== 0) {
+          data -= count;
+          update(button);
+        } else {
+          data++;
+          update(button);
+        }
+      });
+      collector.on('end', async (_, reason) => {
+			  if (reason === 'idle' || reason === 'user') {
+          gameEnded = true;
+				  componentsArray.components.map(component=> component.setDisabled(true));
+				  await interaction.editReply({ components: [componentsArray] });
+			  }
+		  });
     }
-  }
-      
-    setInterval(() => {
-      if(gameEnded === false){
-        return update();
-      } 
-    }, 1000);
-      
-    collector.on('collect', async (button) => {
-      if(button.user.id != interaction.user.id){
-        await button.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-      }
-      if(button.customId === "e"){
-        gameEnded = true;
-				componentsArray.components.map(component=> component.setDisabled(true));
-				await msg.edit({ components: [componentsArray] });
-      }
-      if(button.customId === "ee"){
-        gameEnded = true;
-				componentsArray.components.map(component=> component.setDisabled(true));
-				await msg.edit({ components: [componentsArray] });
-      }
-      if(randomized !== 0) {
-        data -= count;
-        update(button);
-      }
-      else {
-        data++;
-        update(button);
-      }
-    });
-    collector.on('end', async (_, reason) => {
-			if (reason === 'idle' || reason === 'user') {
-        gameEnded = true;
-				componentsArray.components.map(component=> component.setDisabled(true));
-				await interaction.editReply({ components: [componentsArray] });
-			}
-		});
 	}
 }
