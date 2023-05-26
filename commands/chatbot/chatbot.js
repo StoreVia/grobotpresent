@@ -35,13 +35,29 @@ module.exports = class ChatBot extends Command {
 	}
 	async run(client, interaction) {
 
+        let buttonRow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel(`Enable`)
+                        .setStyle(ButtonStyle.Success)
+                        .setCustomId(`chenable`),
+                    new ButtonBuilder()
+                        .setLabel(`Disabled`)
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`chdisable`),
+                    new ButtonBuilder()
+                        .setLabel(`Stop`)
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`chstop`),
+                )
+
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
         return await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
         }
 
         if (interaction.options.getSubcommand() === 'set') {
             const channel = interaction.options.getChannel('channel');            
-            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`, channel.id);
+            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 db.set(`chatbot_${interaction.guild.id}`, channel.id);
@@ -55,7 +71,7 @@ module.exports = class ChatBot extends Command {
         }
         if (interaction.options.getSubcommand() === 'delete') {
             const channel = interaction.options.getChannel('deletechannel');
-            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`, channel.id);
+            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Chatbot Was Not Bounded To ${channel}.`})
@@ -69,21 +85,6 @@ module.exports = class ChatBot extends Command {
         if (interaction.options.getSubcommand() === 'dashboard') {
             const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
             const checkdisable = db.fetch(`chatbotdisable_${interaction.guild.id}`);
-            let buttonRow = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setLabel(`Enable`)
-                        .setStyle(ButtonStyle.Success)
-                        .setCustomId(`chenable`),
-                    new ButtonBuilder()
-                        .setLabel(`Disabled`)
-                        .setStyle(ButtonStyle.Danger)
-                        .setCustomId(`chedisable`),
-                    new ButtonBuilder()
-                        .setLabel(`Stop`)
-                        .setStyle(ButtonStyle.Danger)
-                        .setCustomId(`chstop`),
-                )
             if(!checkchannel && !checkdisable){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Chatbot Is Enabled.`})
@@ -99,6 +100,7 @@ module.exports = class ChatBot extends Command {
                     });
                 buttonRow.components[0].setDisabled(true)
                 const msg = await interaction.followUp({ embeds: [embed], components: [buttonRow]})
+                dashCollector(msg);
             } else if(!checkchannel && checkdisable){
                 await interaction.deferReply();
                 let embed = new EmbedBuilder()
@@ -111,10 +113,13 @@ module.exports = class ChatBot extends Command {
                     });
                 buttonRow.components[1].setDisabled(true)
                 const msg = await interaction.followUp({ embeds: [embed], components: [buttonRow]})
+                dashCollector(msg);
             }
+        }
 
+        function dashCollector(msg){
             const filter = i => i.customId;
-		    const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
+		    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
 
             collector.on('collect', async i => {
 			    if (i.user.id != interaction.user.id) {
