@@ -69,12 +69,12 @@ module.exports = class CatchTheFish extends Command {
                 gameEnded = true;
                 componentsArray.components.map(component=> component.setDisabled(true));
 				await msg.edit({ components: [componentsArray] });
-                return button.update({ content: 'You Won...'});
+                return button.reply({ content: 'You Won...'});
             } else {
                 gameEnded = true;
 				componentsArray.components.map(component=> component.setDisabled(true));
 				await msg.edit({ components: [componentsArray] });
-                return button.update({ content: 'You Lose...'});
+                return button.reply({ content: 'You Lose...'});
             }
         });
         collector.on('end', async (_, reason) => {
