@@ -260,8 +260,7 @@ module.exports = class InteractionCreate extends Event {
 					if(!interaction.member.roles.cache.has(`${role}`)){
 		  				await i.deferReply({ ephemeral: true })
 		  				await i.followUp({ content: "> You Dont Have Permissions." })
-					}
-					if(interaction.member.roles.cache.has(`${role}`)){
+					} else if(interaction.member.roles.cache.has(`${role}`)){
 						const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
 						const guild = client.guilds.cache.get(interaction.guild.id);
      	 				const logschannel = guild.channels.cache.get(logs);
@@ -288,10 +287,9 @@ module.exports = class InteractionCreate extends Event {
 									text: `Link Expires In 6 Days From Now.`,
 									iconURL: process.env.iconurl
 								})
-								.setTimestamp()
+								.setTimestamp();
 
-							const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
-							client.channels.cache.get(logs).send({ embeds: [embed] }).then(() => {
+							logschannel.send({ embeds: [embed] }).then(() => {
 								interaction.channel.delete()
 							})
 						}).catch(async(e) => {
@@ -307,17 +305,15 @@ module.exports = class InteractionCreate extends Event {
 									text: `Link Expires In 6 Days From Now.`,
 									iconURL: process.env.iconurl
 								})
-								.setTimestamp()
+								.setTimestamp();
 
-							const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
 							logschannel.send({ embeds: [embed] }).then(() => {
-								interaction.channel.delete()
+								interaction.channel.delete();
 							})
 						})
 					}
-	  			}
-	  			if (i.customId === 'cancel') {
-					i.deferReply();
+	  			} else if (i.customId === 'cancel') {
+					interaction.deleteReply();
 	  			}
    			})
    			collector.on('end', async (_, reason) => {
