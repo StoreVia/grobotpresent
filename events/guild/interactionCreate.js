@@ -1,5 +1,5 @@
 const Event = require('../../structures/EventClass');
-const { InteractionType, EmbedBuilder } = require('discord.js');
+const { InteractionType, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const db = require(`quick.db`)
 const Discord = require(`discord.js`)
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');
@@ -181,7 +181,7 @@ module.exports = class InteractionCreate extends Event {
 			const category = client.channels.cache.get(category1)
 			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
 
-			if(checkdisabled === "true"){
+			if(checkdisabled){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
 					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Use "/ticket dashboard" Activate Ticket System.` })
 				} else {
@@ -190,9 +190,9 @@ module.exports = class InteractionCreate extends Event {
 			} else if(!checkdisabled){
 				if(!category1){
 					if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-						return await interaction.followUp({ content: `> Ticket System Was Not Setup. Use "/ticket send panel" To Setup Ticket System.` })
+						return await interaction.followUp({ content: `> Ticket System Was Not Setup. Use "/ticket setup" To Setup Ticket System.` })
 					} else {
-						return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
+						return await interaction.followUp({ content: `> This Guild Didn't Setup Ticket System. Please Contact Mod.` })
 					}
 				} else if(category1){
 					if(blockeduser){
