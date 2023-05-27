@@ -99,20 +99,20 @@ module.exports = class ChatBot extends Command {
         if(subcommand === 'dashboard') {
             const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
             const checkdisable = db.fetch(`chatbotdisable_${interaction.guild.id}`);
-            if (typeof checkchannel === 'undefined' && typeof checkdisable === 'undefined') {
-                await interaction.deferReply({ ephemeral: true });
-                return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Chatbot Is Enabled.`})
+            if(!checkchannel){
+                if(!checkdisable){
+                    await interaction.deferReply({ ephemeral: true });
+                    return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Chatbot Is Enabled.`})
+                } else if(checkdisable){
+                    await interaction.deferReply();
+                    buttonRow.components[1].setDisabled(true)
+                    const msg = await interaction.followUp({ embeds: [embed("Disabled", `<#${checkdisable}>`)], components: [buttonRow]})
+                    dashCollector(msg);
+                }
             } else if(checkchannel){
                 await interaction.deferReply();
-                let embed1 = embed(`Enabled`, `<#${checkchannel}>`)
                 buttonRow.components[0].setDisabled(true)
-                const msg = await interaction.followUp({ embeds: [embed1], components: [buttonRow]})
-                dashCollector(msg);
-            } else if(!checkchannel){
-                await interaction.deferReply();
-                let embed1 = embed("Disabled", `<#${checkdisable}>`)
-                buttonRow.components[1].setDisabled(true)
-                const msg = await interaction.followUp({ embeds: [embed1], components: [buttonRow]})
+                const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
                 dashCollector(msg);
             }
         }
@@ -173,15 +173,13 @@ module.exports = class ChatBot extends Command {
                     db.delete(`chatbotdisable_${interaction.guild.id}`);
                     buttonRow.components[0].setDisabled(true)
                     buttonRow.components[1].setDisabled(false)
-                    let embed1 = embed(`Enabled`, `<#${checkdisable}>`)
-                    await i.update({ embeds: [embed1], components: [buttonRow]})
+                    await i.update({ embeds: [embed(`Enabled`, `<#${checkdisable}>`)], components: [buttonRow]})
                 } else if(i.customId === "chdisable"){
                     db.set(`chatbotdisable_${interaction.guild.id}`, checkchannel);
                     db.delete(`chatbot_${interaction.guild.id}`);
                     buttonRow.components[1].setDisabled(true)
                     buttonRow.components[0].setDisabled(false)
-                    let embed1 = embed(`Disabled`, `<#${checkchannel}>`)
-                    await i.update({ embeds: [embed1], components: [buttonRow]})
+                    await i.update({ embeds: [embed(`Disabled`, `<#${checkchannel}>`)], components: [buttonRow]})
                 } else if(i.customId === "chstop"){
                     buttonRow.components.map(component=> component.setDisabled(true));
                     await i.update({ components: [buttonRow]})

@@ -30,20 +30,7 @@ module.exports = class Dice extends Command {
 					.setStyle(ButtonStyle.Danger),
             )
 
-        const numbers = [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"
-        ]
-        const rolleddice = numbers[Math.floor(Math.random() * numbers.length)];
-
-		const embed = new EmbedBuilder()
-			.setDescription(`🎲 You Got \`${rolleddice}\``)
-			.setColor(`${process.env.ec}`)
-		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] })
+		let message = await interaction.followUp({ embeds: [embed(dice())], components: [buttonRow] })
 
 		const filter = i => i.customId;
 		const collector = message.createMessageComponentCollector({ filter, idle: 300000 });
@@ -53,11 +40,7 @@ module.exports = class Dice extends Command {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} 
 			if(i.customId === "dice") {
-				const rolleddice1 = numbers[Math.floor(Math.random() * numbers.length)];
-				const embed = new EmbedBuilder()
-					.setDescription(`🎲 You Got \`${rolleddice1}\``)
-					.setColor(`${process.env.ec}`)
-				i.update({ embeds: [embed], components: [buttonRow] })
+				i.update({ embeds: [embed(dice())], components: [buttonRow] })
 			}
 			if(i.customId === "distop"){
 				buttonRow.components.map(component=> component.setDisabled(true));
@@ -71,6 +54,26 @@ module.exports = class Dice extends Command {
 				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
-
+		
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+		function embed(num){
+			const embed = new EmbedBuilder()
+				.setDescription(`🎲 You Got \`${num}\``)
+				.setColor(`${process.env.ec}`)
+			return embed;
+		}
+		function dice(){
+			const numbers = [
+				"1",
+				"2",
+				"3",
+				"4",
+				"5",
+				"6"
+			]
+			const rolleddice = numbers[Math.floor(Math.random() * numbers.length)];
+			return rolleddice;
+		}
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };

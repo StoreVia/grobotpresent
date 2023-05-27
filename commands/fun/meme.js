@@ -18,19 +18,7 @@ module.exports = class Ping extends Command {
 	async run(client, interaction) {
 
 		await interaction.deferReply();
-
-		let sub = [
-            'meme',
-            'me_irl',
-            'memes',
-            'dankmeme',
-            'dankmemes',
-            'ComedyCemetery',
-            'terriblefacebookmemes',
-            'funny'
-        ]
-        const random = Math.floor(Math.random() * sub.length)
-
+		
 		const buttonRow = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -43,38 +31,12 @@ module.exports = class Ping extends Command {
                 	.setDisabled(false)
 					.setStyle(ButtonStyle.Danger),
             )
-			
-        fetch(`https://www.reddit.com/r/${sub[random]}/random/.json`)
-		.then((res) => res.json())
-		.then(async(response) => {
-			if(!response){
-				return;
-			}
-			if(!response[0].data){
-				return;
-			}
-			if(response[0].data.children[0].data.over_18 === true){
-				return;
-			} 
-
-			let perma = response[0].data.children[0].data.permalink;
-			let url = `https://reddit.com${perma}`;
-			let memeImage = response[0].data.children[0].data.url || response[0].data.children[0].data.url_overridden_by_dest;
-			let title = response[0].data.children[0].data.title;
-        	const embed = new EmbedBuilder()
-				.setTitle(`${titlecase(title)}`)
-				.setURL(`${url}`)
-				.setImage(memeImage)
-				.setColor(`${process.env.ec}`)
-      			.setFooter({
-      				text: `${client.user.username} - ${process.env.year} ©`, 
-      				iconURL: process.env.iconurl
-    			});
-			interaction.followUp({ embeds: [embed], components: [buttonRow] });
-        });
+		
+		let meme = await genrateMeme()
+		let message = await interaction.followUp({ embeds: [embed(meme.url, meme.memeImage, meme.title, meme.disable)], components: [buttonRow] });
 
 		const filter = i => i.customId;
-		const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
+		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
 			if (i.user.id != interaction.user.id) {
@@ -83,46 +45,11 @@ module.exports = class Ping extends Command {
 			if(i.customId === "meme") {
 				buttonRow.components.map(component=> component.setDisabled(true));
 				await i.update({ content: `Searching...`, components: [buttonRow] });
-				let sub1 = [
-					'meme',
-					'me_irl',
-					'memes',
-					'dankmeme',
-					'dankmemes',
-					'ComedyCemetery',
-					'terriblefacebookmemes',
-					'funny'
-				]
-				const random1 = Math.floor(Math.random() * sub.length)
-				fetch(`https://www.reddit.com/r/${sub1[random1]}/random/.json`)
-				.then((res) => res.json())
-				.then((response) => {
-					if(!response){
-						return;
-					}
-					if(!response[0].data){
-						return;
-					}
-					if(response[0].data.children[0].data.over_18 === true){
-						return;
-					} 
-
-					let perma = response[0].data.children[0].data.permalink;
-					let url = `https://reddit.com${perma}`;
-					let memeImage = response[0].data.children[0].data.url || response[0].data.children[0].data.url_overridden_by_dest;
-					let title = response[0].data.children[0].data.title;
-        			const embed = new EmbedBuilder()
-						.setTitle(`${titlecase(title)}`)
-						.setURL(`${url}`)
-						.setImage(memeImage)
-						.setColor(`${process.env.ec}`)
-      					.setFooter({
-      						text: `${client.user.username} - ${process.env.year} ©`, 
-      						iconURL: process.env.iconurl
-    					});
+				if(genrateMeme()){
 					buttonRow.components.map(component=> component.setDisabled(false));
-					i.editReply({ content: ``, embeds: [embed], components: [buttonRow] });
-        		})
+					let meme = await genrateMeme()
+					i.editReply({ content: ``, embeds: [embed(meme.url, meme.memeImage, meme.title)], components: [buttonRow] });
+        		}
 			}
 			if(i.customId === "mestop"){
 				buttonRow.components.map(component=> component.setDisabled(true));
@@ -136,5 +63,64 @@ module.exports = class Ping extends Command {
 				await interaction.editReply({ components: [buttonRow] });
 			}
 		});
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+
+		async function genrateMeme(){
+			try{
+				let sub = [
+					'meme',
+					'me_irl',
+					'memes',
+					'dankmeme',
+					'dankmemes',
+					'ComedyCemetery',
+					'terriblefacebookmemes',
+					'funny'
+				]
+				const random = Math.floor(Math.random() * sub.length)
+				const response = await fetch(`https://www.reddit.com/r/${sub[random]}/random/.json`);
+				const data = await response.json();
+				const children = data[0].data.children;
+				const post = children[0].data;
+				const perma = post.permalink;
+				const url = `https://reddit.com${perma}`;
+				const memeImage = post.url || post.url_overridden_by_dest;
+				const title = post.title;
+	
+				if(!data || !data[0].data){
+					return null;
+				} else if(children.length === 0 || children[0].data.over_18){
+					return null;
+				} else {
+					return {
+						url, memeImage, title, disable
+					};
+				}
+			} catch(e) {
+				let url = process.env.website;
+				let memeImage = "https://i.imgur.com/lCGlrZq.png";
+				let title = "Error Occured"
+				console.log(e)
+				return {
+					url, memeImage, title, disable
+				};
+			}
+		}
+		function embed(ur, mI, tit){
+			const embed = new EmbedBuilder()
+				.setTitle(`${titlecase(tit)}`)
+				.setURL(`${ur}`)
+				.setImage(mI)
+				.setColor(`${process.env.ec}`)
+				.setFooter({
+					text: `${client.user.username} - ${process.env.year} ©`, 
+					iconURL: process.env.iconurl
+				});
+			return embed;
+		}
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+
 	}
 };
