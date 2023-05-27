@@ -174,68 +174,78 @@ module.exports = class InteractionCreate extends Event {
 		if(interaction.customId === 'ticketopen') {
 			await interaction.deferReply({ ephemeral: true })
 
-			const check = db.fetch(`ticketchannel_${interaction.guild.id}`)
+			const checkdisabled = db.fetch(`ticketdisable_${interaction.guild.id}`)
 			const blockeduser = db.fetch(`ticketblock_${interaction.guild.id}_${interaction.user.id}`)
 			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
 			const category1 = db.fetch(`ticketcategory_${interaction.guild.id}`)
 			const category = client.channels.cache.get(category1)
 			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
 
-			if(!check){
+			if(checkdisabled === "true"){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-					return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Use "/ticket dashboard" Activate Ticket System.` })
 				} else {
 					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
 				}
-			} else if(blockeduser){
-				await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
-			} else if(!blockeduser){
-				if(channelcheck){
-					await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
-				} else if(!channelcheck) {
-					const channel1 = await interaction.guild.channels.create({
-						name: `${interaction.user.username}_${interaction.user.id}`,
-						type: Discord.ChannelType.GuildText,
-						parent: category,
-						topic: `${interaction.user.id}`,
-						permissionOverwrites: [
-							{
-								id: interaction.guild.roles.everyone.id,
-								deny: [Discord.PermissionsBitField.Flags.ViewChannel]
-							},
-							{
-								id: interaction.user.id,
-								allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
-							},
-							{
-								  id: role,
-								  allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
-							}
-						]
-					}).then( async (channel) => {
-						await interaction.followUp({ content: `Done✅. Check Out ${channel}.` })
-	  
-						const buttonRow = new Discord.ActionRowBuilder()
-							.addComponents(
-								  new Discord.ButtonBuilder()
-									.setLabel('Close')
-									.setCustomId('closeticket')
-									.setStyle(Discord.ButtonStyle.Danger),
-							)
-						const embed = new Discord.EmbedBuilder()
-							  .setAuthor({
-								name: `${interaction.user.tag}`,
-								iconURL: `${interaction.user.displayAvatarURL({ extension: "png"})}`
-							  })
-							  .setTitle(`Ticket Opened`)
-							  .setDescription(`Please Wait Our Staff Will Arrive Soon To Help You.`)
-							  .setColor(`${process.env.ec}`)
-							  .setFooter({
-								text: `${client.user.username} - ${process.env.year} ©`,
-								iconURL: process.env.iconurl
-							  })
-						channel.send({ content: `<@&${role}>, ${interaction.user} Created Ticket!`, embeds: [embed], components: [buttonRow] })
-					})
+			} else if(!checkdisabled){
+				if(!category1){
+					if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
+						return await interaction.followUp({ content: `> Ticket System Was Not Setup. Use "/ticket send panel" To Setup Ticket System.` })
+					} else {
+						return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
+					}
+				} else if(category1){
+					if(blockeduser){
+						await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
+					} else if(!blockeduser){
+						if(channelcheck){
+							await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
+						} else if(!channelcheck) {
+							const channel1 = await interaction.guild.channels.create({
+								name: `${interaction.user.username}_${interaction.user.id}`,
+								type: Discord.ChannelType.GuildText,
+								parent: category,
+								topic: `${interaction.user.id}`,
+								permissionOverwrites: [
+									{
+										id: interaction.guild.roles.everyone.id,
+										deny: [Discord.PermissionsBitField.Flags.ViewChannel]
+									},
+									{
+										id: interaction.user.id,
+										allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
+									},
+									{
+										  id: role,
+										  allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.SendMessages]
+									}
+								]
+							}).then( async (channel) => {
+								await interaction.followUp({ content: `Done✅. Check Out ${channel}.` })
+			  
+								const buttonRow = new Discord.ActionRowBuilder()
+									.addComponents(
+										  new Discord.ButtonBuilder()
+											.setLabel('Close')
+											.setCustomId('closeticket')
+											.setStyle(Discord.ButtonStyle.Danger),
+									)
+								const embed = new Discord.EmbedBuilder()
+									  .setAuthor({
+										name: `${interaction.user.tag}`,
+										iconURL: `${interaction.user.displayAvatarURL({ extension: "png"})}`
+									  })
+									  .setTitle(`Ticket Opened`)
+									  .setDescription(`Please Wait Our Staff Will Arrive Soon To Help You.`)
+									  .setColor(`${process.env.ec}`)
+									  .setFooter({
+										text: `${client.user.username} - ${process.env.year} ©`,
+										iconURL: process.env.iconurl
+									  })
+								channel.send({ content: `<@&${role}>, ${interaction.user} Created Ticket!`, embeds: [embed], components: [buttonRow] })
+							})
+						} 
+					}
 				}
 			}
 		}
