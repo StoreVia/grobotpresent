@@ -174,13 +174,20 @@ module.exports = class InteractionCreate extends Event {
 		if(interaction.customId === 'ticketopen') {
 			await interaction.deferReply({ ephemeral: true })
 
+			const check = db.fetch(`ticketchannel_${interaction.guild.id}`)
 			const blockeduser = db.fetch(`ticketblock_${interaction.guild.id}_${interaction.user.id}`)
 			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
 			const category1 = db.fetch(`ticketcategory_${interaction.guild.id}`)
 			const category = client.channels.cache.get(category1)
 			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
 
-			if(blockeduser){
+			if(!check){
+				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
+					return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+				} else {
+					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
+				}
+			} else if(blockeduser){
 				await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
 			} else if(!blockeduser){
 				if(channelcheck){
@@ -261,54 +268,63 @@ module.exports = class InteractionCreate extends Event {
 			  	const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
 			  	const guild = client.guilds.cache.get(interaction.guild.id);
 				const logschannel = guild.channels.cache.get(logs);
-			  
-				await interaction.deferReply()
-				await interaction.followUp({ content: `> Saving Messages Please Wait...` })
 
-				interaction.channel.messages.fetch().then(async (messages) => {
-					let a = messages.filter(m => m.author.bot !== true).map(m =>
-						`\n ${new Date(m.createdTimestamp).toLocaleString('en-EN')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
-				  	).reverse().join('\n');
-				  	if (a.length < 1) a = "Nothing"
-				  	var paste = new PrivateBinClient("https://privatebin.net/");
-				  	var result = await paste.uploadContent(a, {uploadFormat: 'markdown'})
+				if(!logs){
+					await interaction.deferReply({ ephemeral: true })
+					if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
+						return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+					} else {
+						return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
+					}
+				} else if(logs){
+					await interaction.deferReply()
+					await interaction.followUp({ content: `> Saving Messages Please Wait...` })
 
-				  	const embed = new EmbedBuilder()
-					  	.setTitle('Ticket Logs')
-					  	.setDescription(`To See Logs Of The Ticket Created By <@!${interaction.channel.topic}> [ClickHere](${getPasteUrl(result)})`)
-					  	.addFields(
-						  	{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
-						  	{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
-					  	)
-					  	.setColor(`${process.env.ec}`)
-					  	.setFooter({
-						  	text: `Link Expires In 6 Days From Now.`,
-						  	iconURL: process.env.iconurl
-					  	})
-					  	.setTimestamp();
+					interaction.channel.messages.fetch().then(async (messages) => {
+						let a = messages.filter(m => m.author.bot !== true).map(m =>
+							`\n ${new Date(m.createdTimestamp).toLocaleString('en-EN')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
+						).reverse().join('\n');
+						if (a.length < 1) a = "Nothing"
+						var paste = new PrivateBinClient("https://privatebin.net/");
+						var result = await paste.uploadContent(a, {uploadFormat: 'markdown'})
 
-				  	logschannel.send({ embeds: [embed] }).then(() => {
-					  	interaction.channel.delete()
-				  	})
-			  }).catch(async(e) => {
-				  	const embed = new EmbedBuilder()
-					  	.setTitle('Ticket Logs')
-					  	.setDescription(`Error In Creating Logs.**Please Try Later/Report By Using "/report" If You Think This Is A Bug.**`)
-					  	.addFields(
-						  	{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
-						  	{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
-					  	)
-					  	.setColor(`${process.env.ec}`)
-					  	.setFooter({
-						  	text: `Link Expires In 6 Days From Now.`,
-						  	iconURL: process.env.iconurl
-					  	})
-					  	.setTimestamp();
+						const embed = new EmbedBuilder()
+							.setTitle('Ticket Logs')
+							.setDescription(`To See Logs Of The Ticket Created By <@!${interaction.channel.topic}> [ClickHere](${getPasteUrl(result)})`)
+							.addFields(
+								{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
+								{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
+								)
+								.setColor(`${process.env.ec}`)
+								.setFooter({
+									text: `Link Expires In 6 Days From Now.`,
+									iconURL: process.env.iconurl
+								})
+								.setTimestamp();
 
-				  	logschannel.send({ embeds: [embed] }).then(() => {
-					  	interaction.channel.delete();
-				  	})
-			  	})
+						logschannel.send({ embeds: [embed] }).then(() => {
+							interaction.channel.delete()
+						})
+					}).catch(async(e) => {
+						const embed = new EmbedBuilder()
+							.setTitle('Ticket Logs')
+							.setDescription(`Error In Creating Logs.**Please Try Later/Report By Using "/report" If You Think This Is A Bug.**`)
+							.addFields(
+								{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
+								{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
+							)
+							.setColor(`${process.env.ec}`)
+							.setFooter({
+								text: `Link Expires In 6 Days From Now.`,
+								iconURL: process.env.iconurl
+							})
+							.setTimestamp();
+
+						logschannel.send({ embeds: [embed] }).then(() => {
+							interaction.channel.delete();
+				  		})
+			  		})
+				}
 		  	}
   		}
 

@@ -94,7 +94,7 @@ module.exports = class Ping extends Command {
 					return null;
 				} else {
 					return {
-						url, memeImage, title, disable
+						url, memeImage, title
 					};
 				}
 			} catch(e) {
@@ -103,7 +103,7 @@ module.exports = class Ping extends Command {
 				let title = "Error Occured"
 				console.log(e)
 				return {
-					url, memeImage, title, disable
+					url, memeImage, title
 				};
 			}
 		}
