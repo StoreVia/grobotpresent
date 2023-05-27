@@ -117,7 +117,25 @@ module.exports = class Ticker extends Command {
 
         let subcommand = interaction.options.getSubcommand();
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
+
+        let buttonRow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel(`Enable`)
+                        .setStyle(ButtonStyle.Success)
+                        .setCustomId(`chenable`),
+                    new ButtonBuilder()
+                        .setLabel(`Disable`)
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`chdisable`),
+                    new ButtonBuilder()
+                        .setLabel(`Stop`)
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId(`chstop`),
+                )
+
+///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
             await interaction.deferReply({ ephemeral: true })
@@ -127,7 +145,24 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "dashboard"){
-
+            const checkchannel = db.fetch(`ticketchannel_${interaction.guild.id}`);
+            const checkdisable = db.fetch(`ticketdisable_${interaction.guild.id}`);
+            if(!checkchannel){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Ticket System Is Enabled.`})
+            } else if(checkchannel){
+                if(checkdisable){
+                    await interaction.deferReply();
+                    buttonRow.components[1].setDisabled(true)
+                    const msg = await interaction.followUp({ embeds: [embed("Disabled", `<#${checkdisable}>`)], components: [buttonRow]})
+                    dashCollector(msg);
+                } else if(!checkdisable){
+                    await interaction.deferReply();
+                    buttonRow.components[0].setDisabled(true)
+                    const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    dashCollector(msg);
+                }
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
