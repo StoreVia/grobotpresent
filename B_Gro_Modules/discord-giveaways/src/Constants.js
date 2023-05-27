@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const db = require(`quick.db`);
 
 exports.DEFAULT_CHECK_INTERVAL = 15_000;
 exports.DELETE_DROP_DATA_AFTER = 6.048e8; // 1 week
@@ -60,7 +61,6 @@ exports.GiveawayMessages = {
  * @param {Giveaway} giveaway
  * @returns {Promise<boolean>|boolean}
  */
-
 /**
  * The start options for new giveaways.
  * @typedef GiveawayStartOptions

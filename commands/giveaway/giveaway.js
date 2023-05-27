@@ -31,7 +31,11 @@ module.exports = class Giveaway extends Command {
                         .addIntegerOption(option =>
                             option.setName('winnercount')
                                 .setDescription('Enter Winner Count.')
-                                .setRequired(true)))
+                                .setRequired(true))
+                        .addUserOption(option =>
+                            option.setName('hosted')
+                                .setDescription('Select Host Or Leave It.')
+                                .setRequired(false)))
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('delete')
@@ -96,6 +100,7 @@ module.exports = class Giveaway extends Command {
 	async run(client, interaction) {
         
         let subcommand = interaction.options.getSubcommand();
+        
         await interaction.deferReply({ ephemeral: true })
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,17 +117,14 @@ module.exports = class Giveaway extends Command {
             const duration = ms(duration1)
             const winnerCount = integer('winnercount');
             const prize = string('prize');
-            return client.giveawaysManager.start(channel1, {
-                prize,
-                duration,
-                winnerCount,
-                messages,
-                hostedBy: interaction.user,
-            }).then(() => {
-                interaction.followUp({content: `> Done✅. Giveaway Started In ${channel1}`})
-            }).catch((err) => {
-                interaction.followUp({ content: '> Failed To Start Giveaway. Please Make Sure You Have Entered Correct Details.'})
-            })
+            const hosted = user('user');
+            const ping = role(`ping`)
+            if(ping){
+                db.set(`giveawayping_${interaction.guild.id}`, ping.id)
+                gstart(channel1, prize, duration, winnerCount, hosted);
+            } else {
+                gstart(channel1, prize, duration, winnerCount, hosted);
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,6 +283,19 @@ module.exports = class Giveaway extends Command {
         function role(rle){
             let rleInput = interaction.options.getRole(rle);
             return rleInput;
+        }
+        function gstart(channel1, prize, duration, winnerCount, hosted){
+            return client.giveawaysManager.start(channel1, {
+                prize,
+                duration,
+                winnerCount,
+                messages,
+                hostedBy: hosted || interaction.user,
+            }).then(() => {
+                interaction.followUp({content: `> Done✅. Giveaway Started In ${channel1}`})
+            }).catch((err) => {
+                interaction.followUp({ content: '> Failed To Start Giveaway. Please Make Sure You Have Entered Correct Details.'})
+            })
         }
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
