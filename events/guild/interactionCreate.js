@@ -183,7 +183,7 @@ module.exports = class InteractionCreate extends Event {
 
 			if(checkdisabled){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Use "/ticket dashboard" Activate Ticket System.` })
+					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Use "/ticket dashboard" To Activate Ticket System.` })
 				} else {
 					return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
 				}
