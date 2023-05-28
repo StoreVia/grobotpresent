@@ -19,12 +19,7 @@ module.exports = class ChatBot extends Command {
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
                     subcommand.setName('delete')
-                        .setDescription('Delete Chatbot Channel.')
-                        .addChannelOption(option =>
-                            option.setName('deletechannel')
-                                .addChannelTypes(ChannelType.GuildText)
-                                .setDescription('Select Channel')
-                                .setRequired(true)))
+                        .setDescription('Delete Chatbot Channel.'))
                 .addSubcommand(subcommand =>
                     subcommand.setName('dashboard')
                             .setDescription('Get Chatbot Dashboard.')),
@@ -89,8 +84,8 @@ module.exports = class ChatBot extends Command {
                 return await interaction.followUp({ content: `> Chatbot Was Not Bounded To Any Channel.`})
             } else if(checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                db.delete(`chatbot_${interaction.guild.id}`, channel.id);
-                return await interaction.followUp({ content: `> Chatbot Was Now Deleted In ${channel}.`})
+                db.delete(`chatbot_${interaction.guild.id}`, checkchannel.id);
+                return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
             }
         }
 
@@ -165,21 +160,26 @@ module.exports = class ChatBot extends Command {
 		    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
             collector.on('collect', async i => {
                 const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
-                const checkdisable = db.fetch(`chatbotdisable_${interaction.guild.id}`);
 			    if (i.user.id != interaction.user.id) {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "chenable") {
-                    db.set(`chatbot_${interaction.guild.id}`, checkdisable)
-                    db.delete(`chatbotdisable_${interaction.guild.id}`);
-                    buttonRow.components[0].setDisabled(true)
-                    buttonRow.components[1].setDisabled(false)
-                    await i.update({ embeds: [embed(`Enabled`, `<#${checkdisable}>`)], components: [buttonRow]})
+                    if(!checkchannel){
+                        await i.update({ embeds: [], content:`Chatbot Was Not Bounded To Any Channel.`, components: []})
+                    } else {
+                        db.delete(`chatbotdisable_${interaction.guild.id}`);
+                        buttonRow.components[0].setDisabled(true)
+                        buttonRow.components[1].setDisabled(false)
+                        await i.update({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    }
                 } else if(i.customId === "chdisable"){
-                    db.set(`chatbotdisable_${interaction.guild.id}`, checkchannel);
-                    db.delete(`chatbot_${interaction.guild.id}`);
-                    buttonRow.components[1].setDisabled(true)
-                    buttonRow.components[0].setDisabled(false)
-                    await i.update({ embeds: [embed(`Disabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    if(!checkchannel){
+                        await i.update({ embeds: [], content:`Chatbot Was Not Bounded To Any Channel.`, components: []})
+                    } else {
+                        db.set(`chatbotdisable_${interaction.guild.id}`, checkchannel);
+                        buttonRow.components[1].setDisabled(true)
+                        buttonRow.components[0].setDisabled(false)
+                        await i.update({ embeds: [embed(`Disabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    }
                 } else if(i.customId === "chstop"){
                     buttonRow.components.map(component=> component.setDisabled(true));
                     await i.update({ components: [buttonRow]})

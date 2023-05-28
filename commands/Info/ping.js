@@ -1,5 +1,6 @@
 const Command = require('../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { pingEmbed } = require(`../../functions`);
 
 module.exports = class Ping extends Command {
 	constructor(client) {
@@ -16,20 +17,8 @@ module.exports = class Ping extends Command {
 	async run(client, interaction) {
 
 		await interaction.deferReply();
-		let embed = new EmbedBuilder()
-			.setColor(`${process.env.ec}`)
-			.addFields(
-				{ name: '**🟢 Api: **', value: `> \`0 ms\``,inline: true },  
-				{ name: '**🏓 Latency: **', value: `> \`0 ms\``, inline: true },
-			)
-		interaction.followUp({ embeds: [embed] }).then((msg) =>  {
-			let embed = new EmbedBuilder()
-				.setColor(`${process.env.ec}`)
-				.addFields(
-					{ name: '**🟢 Api: **', value: `> \`${Math.floor(client.ws.ping)} ms\``,inline: true },  
-					{ name: '**🏓 Latency: **', value: `> \`${msg.createdTimestamp - interaction.createdTimestamp} ms\``, inline: true },
-				)
-				msg.edit({ embeds: [embed] });
-		})
+		
+		interaction.followUp({ embeds: [pingEmbed("-", "-")] }).then((msg) =>  msg.edit({ embeds: [pingEmbed(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp)] }));
+
 	}
 };

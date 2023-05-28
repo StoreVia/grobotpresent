@@ -25,6 +25,7 @@ module.exports = class MessageCreate extends Event {
 //clientmentionend
 
 //chatbotstart  
+        let checkdisable = db.fetch(`chatbotdisable_${message.guild.id}`)
         if(message.author.bot){
             return;
         } else {
@@ -36,21 +37,25 @@ module.exports = class MessageCreate extends Event {
                 return;
             }
             if(chatbot) {
-                if (message.channel.id === chatbot){
-                    let text = message.content;
-                    fetch(`http://api.brainshop.ai/get?bid=154409&key=iaRW35CrLdHBpOBW&uid=${message.author.id}&msg=${encodeURIComponent(text)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const text = data.cnt.toLowerCase()
-                            .replace('<tips>', '**')
-                            .replace('my dear great botmaster, acobot team.', 'Professor#0195')
-                            .replace('i was created by acobot team.', 'Professor#0195')
-                            .replace(`creeper chat bot`, `${client.user.username}`)
-                            .replace('</tips>', '**');
-                        message.reply({content: `${titlecase(text)}`})
-                        message.channel.sendTyping();
-                    })
-                };
+                if(message.channel.id === chatbot){
+                    if(checkdisable){
+                        return;
+                    } else {
+                        let text = message.content;
+                        fetch(`http://api.brainshop.ai/get?bid=154409&key=iaRW35CrLdHBpOBW&uid=${message.author.id}&msg=${encodeURIComponent(text)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const text = data.cnt.toLowerCase()
+                                .replace('<tips>', '**')
+                                .replace('my dear great botmaster, acobot team.', 'Professor#0195')
+                                .replace('i was created by acobot team.', 'Professor#0195')
+                                .replace(`creeper chat bot`, `${client.user.username}`)
+                                .replace('</tips>', '**');
+                            message.reply({content: `${titlecase(text)}`})
+                            message.channel.sendTyping();
+                        })
+                    }
+                }
             }
         }
 	}

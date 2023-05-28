@@ -2,7 +2,6 @@ const { Client, GatewayIntentBits, Partials, ActivityType } = require('discord.j
 const { Collection } = require('@discordjs/collection');
 const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
-const Util = require('./Util');
 
 module.exports = class BotClient extends Client {
 	constructor(...opt) {
@@ -38,7 +37,6 @@ module.exports = class BotClient extends Client {
 		
 		this.commands = new Collection();
 		this.events = new Collection();
-		this.util = new Util(this);
 
 		new EventHandler(this).build('../events');
 		new CommandHandler(this).build('../commands');
