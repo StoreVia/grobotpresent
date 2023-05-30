@@ -48,11 +48,10 @@ module.exports = class Ping extends Command {
                 return interaction.followUp({ content: `> Premium Key Already Used.` })
             } else if(filteredKeys.includes(`${key}`)){
                 if(check){
-                    let activatedtime = activatedkey.get(`${interaction.user.id}`)
-                    console.log(activatedtime)
-
-                    if(process.env.premium_timeout - (Date.now() - activatedtime) > 0){
-                    return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Expired` })
+                    let activatedtime = await activatedkey.get(`${interaction.user.id}`)
+                    let [key, time] = activatedtime[0].keyandtime.split(',');
+                    if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
+                        return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Expired` })
                     } else {
                         used.push(`premium.keys`, `${key}`)
                         activatedkey.push(`${interaction.user.id}`, {keyandtime:`${key}, ${Date.now()}`} )
@@ -63,24 +62,9 @@ module.exports = class Ping extends Command {
         }
 
         if(subcommand === "check"){
-            let user_premium_check = db.fetch(`activated_${interaction.user.id}`);
-			let timeleft = db.fetch(`activatedtime_${interaction.user.id}`);
-			let timeout = process.env.premium_timeout;
-			let time = ms(timeout - (Date.now() - timeleft));
 
-            if(!user_premium_check){
-                interaction.followUp({ content: `> There Is No Activated Premium On Your Account.` })
-            } else {
-                const embed = new EmbedBuilder()
-                    .setTitle(`Time Left For Your Premium`)
-                    .setDescription(`\`\`\`${time.days}Days, ${time.hours}Hrs, ${time.minutes}Min, ${time.seconds}Sec\`\`\`\n Account_id: **${interaction.user.id}**`)
-                    .setFooter({
-                        text: `${client.user.username} - ${process.env.year} ©`, 
-                       iconURL: process.env.iconurl
-                     })
-                    .setColor(`${process.env.ec}`);
-                interaction.followUp({ embeds: [embed] })
-            }
+            
+
         }
 
         
