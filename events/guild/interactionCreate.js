@@ -32,13 +32,13 @@ module.exports = class InteractionCreate extends Event {
 			}
 			try {
 				const activatedkey = client.db.table(`premiumactivated`)
-				let userpremiumcheck = activatedkey.get(`${interaction.user.id}`)
+				let userpremiumcheck = await activatedkey.get(`${interaction.user.id}`)
 				if(command.description.includes(`premium`)){
 					if(userpremiumcheck){
 						let [key, time] = userpremiumcheck[0].keyandtime.split(',');
 						if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
 							await interaction.deferReply({ ephemeral: true })
-							interaction.followUp({ content: `> Your Premium Key Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
+							interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
 						} else {
 							let updateid = client.db.get(`updateid`)
 							let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)

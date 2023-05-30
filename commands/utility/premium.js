@@ -91,7 +91,7 @@ module.exports = class Ping extends Command {
                         .setColor(`${process.env.ec}`);
                     return interaction.followUp({ embeds: [embed] })
                 } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
-                    return interaction.followUp({ content: `> Your Premium Key Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
+                    return interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
                 }
             } else if(!activatedfetch){
                 return interaction.followUp({ content: `> There Is No Recent Premium Subscription In Your Account.` })
