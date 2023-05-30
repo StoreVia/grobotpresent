@@ -26,32 +26,46 @@ module.exports = class Ping extends Command {
 	async run(client, interaction) {
 
         const keys = client.db.table('premium')
-        const usedkeys = client.db.table('premiumused')
-        const activekey = client.db.table(`premiumactive`)
+        const used = client.db.table('premiumused')
+        const activatedkey = client.db.table(`premiumactivated`)
+        
 
         await interaction.deferReply({ ephemeral: true });
         let subcommand = interaction.options.getSubcommand()
 
         if(subcommand === "redeem"){
             let key = interaction.options.getString(`redeem_code`);
-            let check0 = await keys.get(`premium.keys`);
-            let check = check0.includes(key)
-            if(!check){
-                return interaction.followUp({ content: `> Premium Key Not Found.` })
-            } else if(check){
-                    usedkeys.push(`premium.keys`, `${key}`)
-                    activekey.psuh(`${interaction.user.id}.key`, `${key}`)
-                    activekey.push(`${interaction.user.id}.time`, `${Date.now()}`)
-        
-                    interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
-                }
-        }
+            let avilablekeys = await keys.get(`premium.keys`)
+            let usedkeys = await used.get(`premium.keys`);
+            let arrayKeys = Array.isArray(avilablekeys) ? avilablekeys : [];
+            let filterarrayKeys = Array.isArray(usedkeys) ? usedkeys : [];
+            let filteredKeys = arrayKeys.filter(key => !filterarrayKeys.some(usedKey => usedKey === key));
+            let check = avilablekeys.some(value => value.includes(key))
 
+            if(!check){
+                interaction.followUp({ content: `> Premium Key Not Found.` })
+            } else if(!filteredKeys.includes(`${key}`)){
+                return interaction.followUp({ content: `> Premium Key Already Used.` })
+            } else if(filteredKeys.includes(`${key}`)){
+                if(check){
+                    let activatedtime = activatedkey.get(`${interaction.user.id}`)
+                    console.log(activatedtime)
+
+                    if(process.env.premium_timeout - (Date.now() - activatedtime) > 0){
+                    return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Expired` })
+                    } else {
+                        used.push(`premium.keys`, `${key}`)
+                        activatedkey.push(`${interaction.user.id}`, {keyandtime:`${key}, ${Date.now()}`} )
+                        interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
+                    }
+                }
+            }
+        }
 
         if(subcommand === "check"){
             let user_premium_check = db.fetch(`activated_${interaction.user.id}`);
 			let timeleft = db.fetch(`activatedtime_${interaction.user.id}`);
-			let timeout = 2592000000;
+			let timeout = process.env.premium_timeout;
 			let time = ms(timeout - (Date.now() - timeleft));
 
             if(!user_premium_check){

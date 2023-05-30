@@ -33,7 +33,7 @@ module.exports = class InteractionCreate extends Event {
 			try {
 				let user_premium_check = client.db.get(`activated_${interaction.user.id}`)
 				let timeleft = client.db.get(`activatedtime_${interaction.user.id}`)
-				let timeout = 2592000000;
+				let timeout = process.env.premium_timeout;
 				if(command.description.includes(`premium`, `Premium`)){
 					if(user_premium_check){
 						if(timeout - (Date.now() - timeleft) < 0){

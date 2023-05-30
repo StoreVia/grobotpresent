@@ -51,11 +51,14 @@ module.exports = class Update extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "active-keys"){
-            let array = await keys.get(`premium.keys`)
-            let filterarray = await usedkeys.get(`premium.keys`)
-            console.log(array, filterarray)
+            let array = await keys.get(`premium.keys`);
+            let filterarray = await usedkeys.get(`premium.keys`);
+            let arrayKeys = Array.isArray(array) ? array : [];
+            let filterarrayKeys = Array.isArray(filterarray) ? filterarray : [];
+            let filteredKeys = arrayKeys.filter(key => !filterarrayKeys.some(usedKey => usedKey === key));
+
             await interaction.deferReply()
-            interaction.followUp({ content: `> Acitve Keys: **${filteredArray}**` })
+            interaction.followUp({ content: `Acitve Keys:\n> ${filteredKeys.join("\n> ")}` })
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
