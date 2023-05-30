@@ -58,7 +58,7 @@ module.exports = class Update extends Command {
             let filteredKeys = arrayKeys.filter(key => !filterarrayKeys.some(usedKey => usedKey === key));
 
             await interaction.deferReply()
-            interaction.followUp({ content: `Acitve Keys:\n> ${filteredKeys.join("\n> ")}` })
+            interaction.followUp({ content: `Acitve Keys:\n> ${filteredKeys.length ? filteredKeys.join("\n> ") : "None"}` })
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

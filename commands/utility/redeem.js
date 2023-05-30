@@ -1,5 +1,6 @@
 const Command = require('../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { increment } = require('libsodium-wrappers');
 const ms = require(`parse-ms-2`);
 
 module.exports = class Ping extends Command {
@@ -28,43 +29,52 @@ module.exports = class Ping extends Command {
         const keys = client.db.table('premium')
         const used = client.db.table('premiumused')
         const activatedkey = client.db.table(`premiumactivated`)
-        
 
         await interaction.deferReply({ ephemeral: true });
         let subcommand = interaction.options.getSubcommand()
 
         if(subcommand === "redeem"){
-            let key = interaction.options.getString(`redeem_code`);
+            let enteredkey = interaction.options.getString(`redeem_code`);
             let avilablekeys = await keys.get(`premium.keys`)
             let usedkeys = await used.get(`premium.keys`);
             let arrayKeys = Array.isArray(avilablekeys) ? avilablekeys : [];
             let filterarrayKeys = Array.isArray(usedkeys) ? usedkeys : [];
             let filteredKeys = arrayKeys.filter(key => !filterarrayKeys.some(usedKey => usedKey === key));
-            let check = avilablekeys.some(value => value.includes(key))
-
-            if(!check){
-                interaction.followUp({ content: `> Premium Key Not Found.` })
-            } else if(!filteredKeys.includes(`${key}`)){
-                return interaction.followUp({ content: `> Premium Key Already Used.` })
-            } else if(filteredKeys.includes(`${key}`)){
-                if(check){
-                    let activatedtime = await activatedkey.get(`${interaction.user.id}`)
-                    let [key, time] = activatedtime[0].keyandtime.split(',');
-                    if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
-                        return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Expired` })
-                    } else {
-                        used.push(`premium.keys`, `${key}`)
-                        activatedkey.push(`${interaction.user.id}`, {keyandtime:`${key}, ${Date.now()}`} )
-                        interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
+            try{
+                let check = avilablekeys.some(value => value === enteredkey)
+                if(!check){
+                    interaction.followUp({ content: `> Premium Key Not Found.` })
+                } if(check){
+                    if(!filteredKeys.includes(`${enteredkey}`)){
+                        return interaction.followUp({ content: `> Premium Key Already Used.` })
+                    } else if(filteredKeys.includes(`${enteredkey}`)){
+                        let activatecheck = await activatedkey.get(`${interaction.user.id}`)
+                        if(activatecheck){
+                            let activatedtime = await activatedkey.get(`${interaction.user.id}`)
+                            let [key, time] = activatedtime[0].keyandtime.split(',');
+                            if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
+                                return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Subscription Expired.` })
+                            } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
+                                await used.push(`premium.keys`, `${enteredkey}`)
+                                await activatedkey.delete(`${interaction.user.id}`)
+                                await activatedkey.push(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
+                                interaction.followUp({ content: `> Done✅.Your New Premium Key Has Been Activated.` })
+                            }
+                        } else {
+                            await used.push(`premium.keys`, `${enteredkey}`)
+                            await activatedkey.push(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
+                            interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
+                        }
                     }
                 }
+            } catch(e) {
+                console.log(e)
+                return interaction.followUp({ content: `> Premium Key Not Found.` })
             }
         }
 
         if(subcommand === "check"){
-
             
-
         }
 
         
