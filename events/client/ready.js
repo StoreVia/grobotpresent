@@ -1,7 +1,6 @@
 const Event = require('../../structures/EventClass');
 const colors = require(`colors`)
 const { ActivityType } = require('discord.js');
-const db = require(`quick.db`);
 const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor, YouTubeExtractor } = require('@discord-player/extractor');
 const fetch = require('node-fetch');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');

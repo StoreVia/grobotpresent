@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, Partials, ActivityType } = require('discord.j
 const { Collection } = require('@discordjs/collection');
 const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
+const { QuickDB } = require("quick.db");
 
 module.exports = class BotClient extends Client {
 	constructor(...opt) {
@@ -37,13 +38,12 @@ module.exports = class BotClient extends Client {
 		
 		this.commands = new Collection();
 		this.events = new Collection();
+		this.db = new QuickDB();
 
 		new EventHandler(this).build('../events');
 		new CommandHandler(this).build('../commands');
 		new CommandHandler(this).build('../C_Private_Slash');
 	}
-
-	
 
 	async login() {
 		await super.login(process.env.token);

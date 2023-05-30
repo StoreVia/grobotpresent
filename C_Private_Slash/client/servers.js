@@ -15,23 +15,28 @@ module.exports = class Update extends Command {
 	}
 	async run(client, interaction) {
 
-        await interaction.deferReply()
-        let embed = new EmbedBuilder()
-            .setDescription(`<t:${parseInt(Date.now() / 1000)}:R>`)
-            .setColor(`${process.env.ec}`)
-        interaction.user.send({ embeds: [embed] }).then(() => {
-            interaction.followUp({ content: `Done✅. Sent Details To Your Dm.` }).then(() => {
-                client.guilds.cache.forEach(async(x) => {
-                    let embed = new EmbedBuilder()
-                        .addFields(
-                            { name: `**Name: **`, value: `${x.name}`, inline: true },
-                            { name: `\u200b`, value: `\u200b`, inline: true },
-                            { name: `**Members: **`, value: `${x.memberCount.toLocaleString()}`, inline: true },
-                        )
-                        .setColor(`${process.env.ec}`)
-                    interaction.user.send({embeds: [embed]})
-                });
-            })
-        })   
+        if(interaction.user.id != process.env.developer_id){
+            await interaction.deferReply()
+            return interaction.followUp({ content: `> Developer Only Command.` })
+        } else {
+            await interaction.deferReply()
+            let embed = new EmbedBuilder()
+                .setDescription(`<t:${parseInt(Date.now() / 1000)}:R>`)
+                .setColor(`${process.env.ec}`)
+            interaction.user.send({ embeds: [embed] }).then(() => {
+                interaction.followUp({ content: `Done✅. Sent Details To Your Dm.` }).then(() => {
+                    client.guilds.cache.forEach(async(x) => {
+                        let embed = new EmbedBuilder()
+                            .addFields(
+                                { name: `**Name: **`, value: `${x.name}`, inline: true },
+                                { name: `\u200b`, value: `\u200b`, inline: true },
+                                { name: `**Members: **`, value: `${x.memberCount.toLocaleString()}`, inline: true },
+                            )
+                            .setColor(`${process.env.ec}`)
+                        interaction.user.send({embeds: [embed]})
+                    })
+                })
+            })   
+        }
 	}
 };

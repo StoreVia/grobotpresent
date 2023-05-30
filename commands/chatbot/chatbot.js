@@ -1,6 +1,5 @@
 const Command = require('../../structures/CommandClass');
 const { SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType, EmbedBuilder, Embed, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const db = require(`quick.db`);
 
 module.exports = class ChatBot extends Command {
 	constructor(client) {
@@ -30,6 +29,10 @@ module.exports = class ChatBot extends Command {
 	}
 	async run(client, interaction) {
 
+        const chatbot = client.db.table(`chatbot`)
+        const chatbotdisable = client.db.table(`chatbotdisable`)
+        const checkchannel = await chatbot.get(`${interaction.guild.id}`);
+        const checkdisable = await chatbotdisable.get(`${interaction.guild.id}`);
         let subcommand = interaction.options.getSubcommand();
 
 ///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
@@ -59,18 +62,17 @@ module.exports = class ChatBot extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (subcommand === 'set') {
-            const channel1 = channel('channel');            
-            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
+            const channel1 = channel('channel');
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                db.set(`chatbot_${interaction.guild.id}`, channel1.id);
+                await chatbot.set(`${interaction.guild.id}`, channel1.id);
                 return await interaction.followUp({ content: `> Chatbot Was Now Bounded To ${channel1}.`})
             } else if(channel1.id === checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Chatbot Was Already Linked To ${channel1}.`})
             } else if(channel1.id != checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                db.set(`chatbot_${interaction.guild.id}`, channel1.id);
+                await chatbot.set(`${interaction.guild.id}`, channel1.id);
                 return await interaction.followUp({ content: `> Chatbot Was Now Updated To ${channel1}.`})
             }   
         }
@@ -78,13 +80,12 @@ module.exports = class ChatBot extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'delete'){
-            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Chatbot Was Not Bounded To Any Channel.`})
             } else if(checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                db.delete(`chatbot_${interaction.guild.id}`, checkchannel.id);
+                await chatbot.delete(`${interaction.guild.id}`, checkchannel.id);
                 return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
             }
         }
@@ -92,23 +93,23 @@ module.exports = class ChatBot extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'dashboard') {
-            const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
-            const checkdisable = db.fetch(`chatbotdisable_${interaction.guild.id}`);
             if(!checkchannel){
                 if(!checkdisable){
                     await interaction.deferReply({ ephemeral: true });
                     return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Chatbot Is Enabled.`})
-                } else if(checkdisable){
+                }
+            } else if(checkchannel){
+                if(checkdisable){
                     await interaction.deferReply();
                     buttonRow.components[1].setDisabled(true)
                     const msg = await interaction.followUp({ embeds: [embed("Disabled", `<#${checkdisable}>`)], components: [buttonRow]})
                     dashCollector(msg);
+                } else if(!checkdisable){
+                    await interaction.deferReply();
+                    buttonRow.components[0].setDisabled(true)
+                    const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    dashCollector(msg);
                 }
-            } else if(checkchannel){
-                await interaction.deferReply();
-                buttonRow.components[0].setDisabled(true)
-                const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
-                dashCollector(msg);
             }
         }
 
@@ -159,14 +160,13 @@ module.exports = class ChatBot extends Command {
             const filter = i => i.customId;
 		    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
             collector.on('collect', async i => {
-                const checkchannel = db.fetch(`chatbot_${interaction.guild.id}`);
 			    if (i.user.id != interaction.user.id) {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "chenable") {
                     if(!checkchannel){
                         await i.update({ embeds: [], content:`Chatbot Was Not Bounded To Any Channel.`, components: []})
                     } else {
-                        db.delete(`chatbotdisable_${interaction.guild.id}`);
+                        chatbotdisable.delete(`${interaction.guild.id}`);
                         buttonRow.components[0].setDisabled(true)
                         buttonRow.components[1].setDisabled(false)
                         await i.update({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
@@ -175,7 +175,7 @@ module.exports = class ChatBot extends Command {
                     if(!checkchannel){
                         await i.update({ embeds: [], content:`Chatbot Was Not Bounded To Any Channel.`, components: []})
                     } else {
-                        db.set(`chatbotdisable_${interaction.guild.id}`, checkchannel);
+                        chatbotdisable.set(`${interaction.guild.id}`, checkchannel);
                         buttonRow.components[1].setDisabled(true)
                         buttonRow.components[0].setDisabled(false)
                         await i.update({ embeds: [embed(`Disabled`, `<#${checkchannel}>`)], components: [buttonRow]})

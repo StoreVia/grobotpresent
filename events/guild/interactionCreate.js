@@ -1,6 +1,5 @@
 const Event = require('../../structures/EventClass');
 const { InteractionType, EmbedBuilder, PermissionsBitField } = require('discord.js');
-const db = require(`quick.db`)
 const Discord = require(`discord.js`)
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');
 const ms = require("parse-ms-2");
@@ -32,8 +31,8 @@ module.exports = class InteractionCreate extends Event {
 				return await interaction.followUp({ content: `> This Isn't Avilable For Now.`, ephemeral: true }) && client.commands.delete(interaction.commandName);
 			}
 			try {
-				let user_premium_check = db.fetch(`activated_${interaction.user.id}`)
-				let timeleft = db.fetch(`activatedtime_${interaction.user.id}`)
+				let user_premium_check = client.db.get(`activated_${interaction.user.id}`)
+				let timeleft = client.db.get(`activatedtime_${interaction.user.id}`)
 				let timeout = 2592000000;
 				if(command.description.includes(`premium`, `Premium`)){
 					if(user_premium_check){
@@ -41,9 +40,9 @@ module.exports = class InteractionCreate extends Event {
 							await interaction.deferReply({ ephemeral: true })
 							interaction.followUp({ content: `> Your Premium Was Expired.` })
 						} else {
-							let update = db.fetch(`update`)
-							let updateid = db.fetch(`updateid`)
-							let updatecheck = db.fetch(`update_${interaction.user.id}_${updateid}`)
+							let update = client.db.get(`update`)
+							let updateid = client.db.get(`updateid`)
+							let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)
 							if(!updateid){
 								command.run(client, interaction);
 							} else if(updateid){
@@ -61,9 +60,9 @@ module.exports = class InteractionCreate extends Event {
 						interaction.followUp({ content: `> This Command Is For Only Premium Users.` })
 					}
 				} else {
-					let update = db.fetch(`update`)
-					let updateid = db.fetch(`updateid`)
-					let updatecheck = db.fetch(`update_${interaction.user.id}_${updateid}`)
+					let update = client.db.get(`update`)
+					let updateid = client.db.get(`updateid`)
+					let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)
 					if(!updateid){
 						command.run(client, interaction);
 					} else if(updateid){
@@ -78,8 +77,8 @@ module.exports = class InteractionCreate extends Event {
 				}
 			} catch (e) {
 				console.log(e);
-				await interaction.deferReply();
-				return await interaction.followUp({ content: `> An Error Has Been Occured.` });
+				await interaction.deferReply({ ephemeral: true });
+				return await interaction.followUp({ content: `> An Error Has Occured.` });
 			}
 		}
 //commandruneventend
@@ -174,10 +173,10 @@ module.exports = class InteractionCreate extends Event {
 		if(interaction.customId === 'ticketopen') {
 			await interaction.deferReply({ ephemeral: true })
 
-			const checkdisabled = db.fetch(`ticketdisable_${interaction.guild.id}`)
-			const blockeduser = db.fetch(`ticketblock_${interaction.guild.id}_${interaction.user.id}`)
-			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
-			const category1 = db.fetch(`ticketcategory_${interaction.guild.id}`)
+			const checkdisabled = client.db.get(`ticketdisable_${interaction.guild.id}`)
+			const blockeduser = client.db.get(`ticketblock_${interaction.guild.id}_${interaction.user.id}`)
+			const role = client.db.get(`ticketrole_${interaction.guild.id}`)
+			const category1 = client.db.get(`ticketcategory_${interaction.guild.id}`)
 			const category = client.channels.cache.get(category1)
 			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
 
@@ -251,7 +250,7 @@ module.exports = class InteractionCreate extends Event {
 		}
   
 		if(interaction.customId === "closeticket"){
-			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
+			const role = client.db.get(`ticketrole_${interaction.guild.id}`)
 			const row = new Discord.ActionRowBuilder()
 				.addComponents(
 		 			new Discord.ButtonBuilder()
@@ -270,12 +269,12 @@ module.exports = class InteractionCreate extends Event {
   		}
 
 		if(interaction.customId === "ticontinue"){
-			const role = db.fetch(`ticketrole_${interaction.guild.id}`)
+			const role = client.db.get(`ticketrole_${interaction.guild.id}`)
 			if(!interaction.member.roles.cache.has(`${role}`)){
 				await interaction.deferReply({ ephemeral: true })
 				await interaction.followUp({ content: `> You Dont Have Permissions\n> Require <@${role}>.` })
 		  	} else if(interaction.member.roles.cache.has(`${role}`)){
-			  	const logs = db.fetch(`ticketlogs_${interaction.guild.id}`)
+			  	const logs = client.db.get(`ticketlogs_${interaction.guild.id}`)
 			  	const guild = client.guilds.cache.get(interaction.guild.id);
 				const logschannel = guild.channels.cache.get(logs);
 

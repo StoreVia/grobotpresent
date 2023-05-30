@@ -31,20 +31,6 @@ module.exports = class Truth extends Command {
 					.setStyle(ButtonStyle.Danger),
             )
 
-        const buttonRow1 = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Truth')
-					.setCustomId('truth1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('trstop1')
-					.setDisabled(true)
-					.setStyle(ButtonStyle.Danger),
-            )
-
 		let embed = new EmbedBuilder()
   			.setTitle('Truth')
 			.setDescription(`${truth[Math.floor(Math.random() * truth.length)]}`)

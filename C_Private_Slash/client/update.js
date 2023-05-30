@@ -1,5 +1,4 @@
 const Command = require('../../structures/CommandClass');
-const db = require(`quick.db`);
 const { EmbedBuilder, SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = class Update extends Command {
@@ -15,7 +14,10 @@ module.exports = class Update extends Command {
 	}
 	async run(client, interaction) {
 
-        const text = interaction.options.getString(`text`);
+		if(interaction.user.id != process.env.developer_id){
+            await interaction.deferReply()
+            return interaction.followUp({ content: `> Developer Only Command.` })
+        }
 
 		const update = new ModalBuilder()
 			.setCustomId('myUpdate')

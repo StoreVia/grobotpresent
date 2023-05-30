@@ -82,14 +82,14 @@ module.exports = class Image extends Command {
             }
 
             if(StringOption == "img_sepia"){
-                let image = await canvacord.Canvas.sepia(UserOption.displayAvatarURL({ extensiFon: 'png' }));
+                let image = await canvacord.Canvas.sepia(UserOption.displayAvatarURL({ extension: 'png' }));
                 let attachment = new AttachmentBuilder(image, "sepia.png");
                 return await interaction.followUp({ files : [attachment] });
             }
 
             if(StringOption == "img_trigger"){
-                let image = await canvacord.Canvas.trigger(UserOption.displayAvatarURL({ extension: 'png' }));
-                let attachment = new AttachmentBuilder(image, "triggered.png");
+                let image = await canvacord.Canvas.trigger(UserOption.displayAvatarURL({ dynamic: false, extension: 'png' }));
+                let attachment = new AttachmentBuilder(image, "triggered.gif");
                 return await interaction.followUp({ files : [attachment] });
             }
 

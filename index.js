@@ -17,7 +17,6 @@
 const Client = require('./structures/Client');
 require('dotenv').config();
 const Discord = require(`discord.js`)
-const db = require(`quick.db`)
 const version = require(`./package.json`).version;
 const { GiveawaysManager } = require("./B_Gro_Modules/discord-giveaways");
 const client = new Client();
