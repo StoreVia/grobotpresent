@@ -31,16 +31,15 @@ module.exports = class InteractionCreate extends Event {
 				return await interaction.followUp({ content: `> This Isn't Avilable For Now.`, ephemeral: true }) && client.commands.delete(interaction.commandName);
 			}
 			try {
-				let user_premium_check = client.db.get(`activated_${interaction.user.id}`)
-				let timeleft = client.db.get(`activatedtime_${interaction.user.id}`)
-				let timeout = process.env.premium_timeout;
-				if(command.description.includes(`premium`, `Premium`)){
-					if(user_premium_check){
-						if(timeout - (Date.now() - timeleft) < 0){
+				const activatedkey = client.db.table(`premiumactivated`)
+				let userpremiumcheck = activatedkey.get(`${interaction.user.id}`)
+				if(command.description.includes.toLowerCase(`premium`)){
+					if(userpremiumcheck){
+						let [key, time] = activatedfetch[0].keyandtime.split(',');
+						if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
 							await interaction.deferReply({ ephemeral: true })
-							interaction.followUp({ content: `> Your Premium Was Expired.` })
+							interaction.followUp({ content: `> Your Premium Key Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
 						} else {
-							let update = client.db.get(`update`)
 							let updateid = client.db.get(`updateid`)
 							let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)
 							if(!updateid){
@@ -60,7 +59,6 @@ module.exports = class InteractionCreate extends Event {
 						interaction.followUp({ content: `> This Command Is For Only Premium Users.` })
 					}
 				} else {
-					let update = client.db.get(`update`)
 					let updateid = client.db.get(`updateid`)
 					let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)
 					if(!updateid){

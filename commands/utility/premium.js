@@ -1,5 +1,6 @@
 const Command = require('../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { P } = require('flip-text/lib/chars');
 const { increment } = require('libsodium-wrappers');
 const ms = require(`parse-ms-2`);
 
@@ -74,6 +75,27 @@ module.exports = class Ping extends Command {
         }
 
         if(subcommand === "check"){
+            let activatedfetch = await activatedkey.get(`${interaction.user.id}`)
+
+            if(activatedfetch){
+                let [key, time] = activatedfetch[0].keyandtime.split(',');
+                let timeleft = ms(process.env.premium_timeout - (Date.now() - time.trim()));
+                if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Time Left For Your Premium`)
+                        .setDescription(`\`\`\`${timeleft.days}Days, ${timeleft.hours}Hrs, ${timeleft.minutes}Min, ${timeleft.seconds}Sec\`\`\``)
+                        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`, 
+                            iconURL: process.env.iconurl
+                        })
+                        .setColor(`${process.env.ec}`);
+                    return interaction.followUp({ embeds: [embed] })
+                } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
+                    return interaction.followUp({ content: `> Your Premium Key Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
+                }
+            } else if(!activatedfetch){
+                return interaction.followUp({ content: `> There Is No Recent Premium Subscription In Your Account.` })
+            }
             
         }
 
