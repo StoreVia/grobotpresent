@@ -35,7 +35,7 @@ module.exports = class InteractionCreate extends Event {
 				let userpremiumcheck = activatedkey.get(`${interaction.user.id}`)
 				if(command.description.includes(`premium`)){
 					if(userpremiumcheck){
-						let [key, time] = activatedfetch[0].keyandtime.split(',');
+						let [key, time] = userpremiumcheck[0].keyandtime.split(',');
 						if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
 							await interaction.deferReply({ ephemeral: true })
 							interaction.followUp({ content: `> Your Premium Key Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })

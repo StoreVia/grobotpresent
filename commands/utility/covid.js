@@ -7,7 +7,7 @@ module.exports = class Covid extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('covid')
-				.setDescription('Get All Covid Cases Number List.')
+				.setDescription('Get All Covid Cases Number List(premium).')
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('all')
