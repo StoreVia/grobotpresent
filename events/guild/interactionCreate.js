@@ -40,15 +40,15 @@ module.exports = class InteractionCreate extends Event {
 							await interaction.deferReply({ ephemeral: true })
 							interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
 						} else {
-							let updateid = client.db.get(`updateid`)
-							let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)
+							let updateid = await client.db.get(`updateid`)
+							let updatecheck = awaitclient.db.get(`update_${interaction.user.id}_${updateid}`)
 							if(!updateid){
 								command.run(client, interaction);
 							} else if(updateid){
 								if(!updatecheck){
 									interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
 									command.run(client, interaction);
-									db.set(`update_${interaction.user.id}_${updateid}`, true)
+									client.db.set(`update_${interaction.user.id}_${updateid}`, true)
 								} else if(updatecheck){
 									command.run(client, interaction);
 								}
@@ -59,15 +59,15 @@ module.exports = class InteractionCreate extends Event {
 						interaction.followUp({ content: `> This Command Is For Only Premium Users.` })
 					}
 				} else {
-					let updateid = client.db.get(`updateid`)
-					let updatecheck = client.db.get(`update_${interaction.user.id}_${updateid}`)
+					let updateid = await client.db.get(`updateid`)
+					let updatecheck = await client.db.get(`update_${interaction.user.id}_${updateid}`)
 					if(!updateid){
 						command.run(client, interaction);
 					} else if(updateid){
 						if(!updatecheck){
 							interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
 							command.run(client, interaction);
-							db.set(`update_${interaction.user.id}_${updateid}`, true)
+							client.db.set(`update_${interaction.user.id}_${updateid}`, true)
 						} else if(updatecheck){
 							command.run(client, interaction);
 						}
@@ -161,8 +161,8 @@ module.exports = class InteractionCreate extends Event {
 			await interaction.reply({ content: `> Done✅. Update Text To Database.`, ephemeral: true })
 			.then(() => {
 				const text = interaction.fields.getTextInputValue('text');
-				db.set(`update`, text)
-				db.set(`updateid`, id)
+				client.db.set(`update`, text)
+				client.db.set(`updateid`, id)
 			})
 		}
 //privateslashend

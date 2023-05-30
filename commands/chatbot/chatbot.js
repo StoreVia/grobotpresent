@@ -85,7 +85,8 @@ module.exports = class ChatBot extends Command {
                 return await interaction.followUp({ content: `> Chatbot Was Not Bounded To Any Channel.`})
             } else if(checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                await chatbot.delete(`${interaction.guild.id}`, checkchannel.id);
+                await chatbot.delete(`${interaction.guild.id}`);
+                if(chatbotdisable) await chatbotdisable.delete(`${interaction.guild.id}`);
                 return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
             }
         }
@@ -164,7 +165,9 @@ module.exports = class ChatBot extends Command {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "chenable") {
                     if(!checkchannel){
-                        await i.update({ embeds: [], content:`Chatbot Was Not Bounded To Any Channel.`, components: []})
+                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
+                    } else if(!checkdisable){
+                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
                     } else {
                         chatbotdisable.delete(`${interaction.guild.id}`);
                         buttonRow.components[0].setDisabled(true)
@@ -173,7 +176,9 @@ module.exports = class ChatBot extends Command {
                     }
                 } else if(i.customId === "chdisable"){
                     if(!checkchannel){
-                        await i.update({ embeds: [], content:`Chatbot Was Not Bounded To Any Channel.`, components: []})
+                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
+                    } else if(!checkdisable){
+                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
                     } else {
                         chatbotdisable.set(`${interaction.guild.id}`, checkchannel);
                         buttonRow.components[1].setDisabled(true)
