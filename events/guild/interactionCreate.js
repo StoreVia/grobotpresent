@@ -33,7 +33,7 @@ module.exports = class InteractionCreate extends Event {
 			try {
 				const activatedkey = client.db.table(`premiumactivated`)
 				let userpremiumcheck = activatedkey.get(`${interaction.user.id}`)
-				if(command.description.includes.toLowerCase(`premium`)){
+				if(command.description.includes(`premium`)){
 					if(userpremiumcheck){
 						let [key, time] = activatedfetch[0].keyandtime.split(',');
 						if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
