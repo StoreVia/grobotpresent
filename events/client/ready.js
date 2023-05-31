@@ -31,7 +31,8 @@ module.exports = class ReadyEvent extends Event {
 				activities: [{ name: `${status[Math.floor(Math.random() * status.length)]}`, type: ActivityType.Playing }]
 			});
 			client.guilds.cache.forEach(async(x) => {
-				let channel = db.fetch(`automeme_${x.id}`)
+				let automemedb = client.db.table(`automeme`)
+				let channel = await automemedb.get(`${x.id}`)
 				let sub = [
 					'meme',
 					'me_irl',
@@ -74,7 +75,7 @@ module.exports = class ReadyEvent extends Event {
 					});
 				}
 			});
-		}, 6000000);
+		}, 3600000);
 		
 		await client.player.extractors.register(SpotifyExtractor);
 		await client.player.extractors.register(SoundCloudExtractor);

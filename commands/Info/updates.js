@@ -17,13 +17,16 @@ module.exports = class Updates extends Command {
 	async run(client, interaction) {
 
         const updateget = await client.db.get(`update`);
-		let [text, id] = updateget[0].textandid.split(',') || "None"
+		let updatetext = null;
+		let id = null;
+		if(!updateget) updatetext = "None"
+		if(updateget) [updatetext, id] = updateget[0].textandid.split(',')
 		 
 
 		await interaction.deferReply();
 		let embed = new EmbedBuilder()
             .setTitle(`Updates`)
-            .setDescription(`\`\`\`${text.trim()}\`\`\``)
+            .setDescription(`\`\`\`${updatetext}\`\`\``)
 			.setColor(`${process.env.ec}`)
             .setFooter({
                 text: `${client.user.username} - ${process.env.year} ©`,

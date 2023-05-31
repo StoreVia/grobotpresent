@@ -32,7 +32,6 @@ module.exports = class Avatar extends Command {
         
         await interaction.deferReply({ ephemeral: true })
         let subcommand = interaction.options.getSubcommand();
-        let channelid = db.fetch(`automeme_${interaction.guild.id}`)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,15 +43,19 @@ module.exports = class Avatar extends Command {
 
         if(subcommand === "set"){
             let channel1 = channel(`channel`);
-            if(!channelid){
-                db.set(`automeme_${interaction.guild.id}`, channel1.id)
+            let automemedb = client.db.table(`automeme`)
+            let automemecheck = await automemedb.get(`${interaction.guild.id}`)
+            if(!automemecheck){
+                automemedb.set(`${interaction.guild.id}`, `${channel1.id}`)
                 return interaction.followUp({ content: `> Done✅. Automeme Channel Set.\n\n**Note: **As Automeme Is In Beta Stage Meme Will Be Posted For Every 1 Hr.` })
-            } else if(channelid === channel1.id){
-                return interaction.followUp({ content: `> Automeme Already Linked To This Channel.` })
-            } else if(channelid){
-                db.set(`automeme_${interaction.guild.id}`, channel1.id)
-                return interaction.followUp({ content: `> Done✅. Updated Automeme Channel.\n\n**Note: **As Automeme Is In Beta Stage Meme Will Be Posted For Every 1 Hr.` })
-            } 
+            } else if(automemecheck){
+                if(automemecheck === channel1.id){
+                    return interaction.followUp({ content: `> Automeme Already Linked To This Channel.` })
+                } else if(channelid){
+                    automemedb.set(`${interaction.guild.id}`, `${channel1.id}`)
+                    return interaction.followUp({ content: `> Done✅. Updated Automeme Channel.\n\n**Note: **As Automeme Is In Beta Stage Meme Will Be Posted For Every 1 Hr.` })
+                }
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

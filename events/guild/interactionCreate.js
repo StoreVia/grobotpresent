@@ -68,7 +68,7 @@ module.exports = class InteractionCreate extends Event {
 					if(!update){
 						command.run(client, interaction);
 					} else if(update){
-						let [text, id] = update[0].textandid.split(',');
+						let [text, id] = update.textandid.split(',');
 						if(updatecheck != id.trim()){
 							interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
 							command.run(client, interaction);
@@ -168,10 +168,9 @@ module.exports = class InteractionCreate extends Event {
 				let updateid = rand.generate(10)
 				const updatetext = interaction.fields.getTextInputValue('text');
 				if(updatecheck){
-					client.db.delete(`update`)
-					client.db.push(`update`, { textandid: `${updatetext}, ${updateid}`})
+					client.db.set(`update`, { textandid: `${updatetext}, ${updateid}`})
 				} else if(!updatecheck){
-					client.db.push(`update`, { textandid: `${updatetext}, ${updateid}`})
+					client.db.set(`update`, { textandid: `${updatetext}, ${updateid}`})
 				}
 			})
 		}
