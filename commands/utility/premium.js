@@ -57,13 +57,12 @@ module.exports = class Ping extends Command {
                                 return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Subscription Expired.` })
                             } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
                                 await used.push(`premium.keys`, `${enteredkey}`)
-                                await activatedkey.delete(`${interaction.user.id}`)
-                                await activatedkey.push(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
+                                await activatedkey.set(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
                                 interaction.followUp({ content: `> Done✅.Your New Premium Key Has Been Activated.` })
                             }
                         } else {
                             await used.push(`premium.keys`, `${enteredkey}`)
-                            await activatedkey.push(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
+                            await activatedkey.set(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
                             interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
                         }
                     }
