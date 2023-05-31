@@ -40,16 +40,19 @@ module.exports = class InteractionCreate extends Event {
 							await interaction.deferReply({ ephemeral: true })
 							interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
 						} else {
-							let updateid = await client.db.get(`updateid`)
-							let updatecheck = awaitclient.db.get(`update_${interaction.user.id}_${updateid}`)
-							if(!updateid){
+							let updatedb = client.db.table(`updates`)
+							let update = await client.db.get(`update`)
+							let [text, id] = update[0].textandid.split(',');
+							let updatecheck = await updatedb.get(`${interaction.user.id}`)
+							if(!update){
 								command.run(client, interaction);
-							} else if(updateid){
-								if(!updatecheck){
+							} else if(update){
+								let [text, id] = update[0].textandid.split(',');
+								if(updatecheck != id.trim()){
 									interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
 									command.run(client, interaction);
-									client.db.set(`update_${interaction.user.id}_${updateid}`, true)
-								} else if(updatecheck){
+									updatedb.set(`${interaction.user.id}`, `${id.trim()}`)
+								} else if(updatecheck === id.trim()){
 									command.run(client, interaction);
 								}
 							}
@@ -59,16 +62,18 @@ module.exports = class InteractionCreate extends Event {
 						interaction.followUp({ content: `> This Command Is For Only Premium Users.` })
 					}
 				} else {
-					let updateid = await client.db.get(`updateid`)
-					let updatecheck = await client.db.get(`update_${interaction.user.id}_${updateid}`)
-					if(!updateid){
+					let updatedb = client.db.table(`updates`)
+					let update = await client.db.get(`update`)
+					let updatecheck = await updatedb.get(`${interaction.user.id}`)
+					if(!update){
 						command.run(client, interaction);
-					} else if(updateid){
-						if(!updatecheck){
+					} else if(update){
+						let [text, id] = update[0].textandid.split(',');
+						if(updatecheck != id.trim()){
 							interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
 							command.run(client, interaction);
-							client.db.set(`update_${interaction.user.id}_${updateid}`, true)
-						} else if(updatecheck){
+							updatedb.set(`${interaction.user.id}`, `${id.trim()}`)
+						} else if(updatecheck === id.trim()){
 							command.run(client, interaction);
 						}
 					}
@@ -157,12 +162,17 @@ module.exports = class InteractionCreate extends Event {
 
 //privateslashstart
 		if(interaction.customId === "myUpdate"){
-			let id = rand.generate(10)
 			await interaction.reply({ content: `> Done✅. Update Text To Database.`, ephemeral: true })
-			.then(() => {
-				const text = interaction.fields.getTextInputValue('text');
-				client.db.set(`update`, text)
-				client.db.set(`updateid`, id)
+			.then(async() => {
+				let updatecheck = await client.db.get(`update`)
+				let updateid = rand.generate(10)
+				const updatetext = interaction.fields.getTextInputValue('text');
+				if(updatecheck){
+					client.db.delete(`update`)
+					client.db.push(`update`, { textandid: `${updatetext}, ${updateid}`})
+				} else if(!updatecheck){
+					client.db.push(`update`, { textandid: `${updatetext}, ${updateid}`})
+				}
 			})
 		}
 //privateslashend
