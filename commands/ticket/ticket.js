@@ -172,11 +172,9 @@ module.exports = class Ticker extends Command {
             const category = channel(`category`);
             const ticketlogs = channel(`ticket_logs`);
             const supportrole = role(`support_role`);
+            const ticketdb = client.db.table(`economy`)
 
-            db.set(`ticketchannel_${interaction.guild.id}`, channel1.id)
-            db.set(`ticketcategory_${interaction.guild.id}`, category.id)
-            db.set(`ticketlogs_${interaction.guild.id}`, ticketlogs.id)
-            db.set(`ticketrole_${interaction.guild.id}`, supportrole.id)
+            ticketdb.set(`${interaction.guil.id}`, {channel: `${channel1.id}`}, {category: `${category.id}`}, {logs: `${ticketlogs.id}`}, {role: `${supportrole.id}`})
             
             await interaction.deferReply({ ephemeral: true })
             return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` })
