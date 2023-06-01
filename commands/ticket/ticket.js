@@ -174,6 +174,8 @@ module.exports = class Ticker extends Command {
             const supportrole = role(`support_role`);
             const ticketdb = client.db.table(`economy`)
 
+            let ticketcheck = ticketdb.get(``)
+
             ticketdb.set(`${interaction.guil.id}`, {channel: `${channel1.id}`}, {category: `${category.id}`}, {logs: `${ticketlogs.id}`}, {role: `${supportrole.id}`})
             
             await interaction.deferReply({ ephemeral: true })
