@@ -178,7 +178,14 @@ module.exports = class Ticker extends Command {
 
             if(!ticketcheck){
                 return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` }).then(() => {
-                    ticketdb.set(`${interaction.guild.id}`, {channel: `${channel1.id}`}, {category: `${category.id}`}, {logs: `${ticketlogs.id}`}, {role: `${supportrole.id}`})
+                    ticketdb.set(interaction.guild.id, {
+                        details: {
+                          channel: channel1.id,
+                          category: category.id,
+                          ticketLogs: ticketlogs.id,
+                          supportRole: supportrole.id
+                        }
+                    });
                 })
             } else if(ticketcheck){
                 return await interaction.followUp({ content: `> Ticket System Was Already Activated.***Use Below Commands To Edit Ticket System***\n\n> **/ticket edit channel** - Edits Tickets Channel Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Support Role Category.` })
