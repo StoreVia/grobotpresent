@@ -72,7 +72,7 @@ module.exports = class Ticker extends Command {
                                         .setRequired(true)
                                         .addChannelTypes(ChannelType.GuildText))))
                     .addSubcommandGroup(group =>
-                        group.setName(`embed`)
+                        group.setName(`panel-embed`)
                             .setDescription(`Edit Embed In Ticket System.`)
                             .addSubcommand(subcommand =>
                                 subcommand.setName(`title`)
@@ -168,18 +168,21 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "setup"){
+            await interaction.deferReply({ ephemeral: true })
             const channel1 =  channel(`channel`);
             const category = channel(`category`);
             const ticketlogs = channel(`ticket_logs`);
             const supportrole = role(`support_role`);
-            const ticketdb = client.db.table(`economy`)
+            const ticketdb = client.db.table(`ticket`)
+            let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
 
-            let ticketcheck = ticketdb.get(``)
-
-            ticketdb.set(`${interaction.guil.id}`, {channel: `${channel1.id}`}, {category: `${category.id}`}, {logs: `${ticketlogs.id}`}, {role: `${supportrole.id}`})
-            
-            await interaction.deferReply({ ephemeral: true })
-            return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` })
+            if(!ticketcheck){
+                return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` }).then(() => {
+                    ticketdb.set(`${interaction.guild.id}`, {channel: `${channel1.id}`}, {category: `${category.id}`}, {logs: `${ticketlogs.id}`}, {role: `${supportrole.id}`})
+                })
+            } else if(ticketcheck){
+                return await interaction.followUp({ content: `> Ticket System Was Already Activated.***Use Below Commands To Edit Ticket System***\n\n> **/ticket edit channel** - Edits Tickets Channel Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Support Role Category.` })
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
