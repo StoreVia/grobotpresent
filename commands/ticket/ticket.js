@@ -115,6 +115,10 @@ module.exports = class Ticker extends Command {
 	}
 	async run(client, interaction) {
 
+        
+        const ticketdb = client.db.table(`ticket`)
+        const ticketembeddb = client.db.table(`ticketembed`)
+        let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
         let subcommand = interaction.options.getSubcommand();
 
 ///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
@@ -173,8 +177,6 @@ module.exports = class Ticker extends Command {
             const category = channel(`category`);
             const ticketlogs = channel(`ticket_logs`);
             const supportrole = role(`support_role`);
-            const ticketdb = client.db.table(`ticket`)
-            let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
 
             if(!ticketcheck){
                 return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` }).then(() => {
@@ -188,19 +190,23 @@ module.exports = class Ticker extends Command {
                     });
                 })
             } else if(ticketcheck){
-                return await interaction.followUp({ content: `> Ticket System Was Already Activated.***Use Below Commands To Edit Ticket System***\n\n> **/ticket edit channel** - Edits Tickets Channel Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Support Role Category.` })
+                return await interaction.followUp({ content: `> Ticket System Was Already Activated.**Use Below Commands To Edit Ticket System**\n\n> **/ticket edit channel** - Edits Tickets Channel For Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Ticket ssSupport Role.` })
             }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
-            let check = db.fetch(`ticketchannel_${interaction.guild.id}`)
-            let channel1 = client.channels.cache.get(check)
-            let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
-            let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
-            let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
-            const buttonRow = new ActionRowBuilder()
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else if(ticketcheck){
+                let [channel, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
+                let channel1 = interaction.guild.channels.cache.get(channel)
+                let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
+                let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
+                let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
+                const buttonRow = new ActionRowBuilder()
 			    .addComponents(
                     new ButtonBuilder()
                         .setLabel('Open')
@@ -208,10 +214,6 @@ module.exports = class Ticker extends Command {
                         .setCustomId('ticketopen')
                         .setStyle(ButtonStyle.Success),
                 )
-            if(!check){
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
-            } else if(check){
                 try {
 				    const embed = new EmbedBuilder()
 				        .setTitle(`${title}`)
