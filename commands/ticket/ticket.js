@@ -119,6 +119,7 @@ module.exports = class Ticker extends Command {
         const ticketdb = client.db.table(`ticket`)
         const ticketembeddb = client.db.table(`ticketembed`)
         let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
+        let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
         let subcommand = interaction.options.getSubcommand();
 
 ///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
@@ -201,19 +202,17 @@ module.exports = class Ticker extends Command {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
-                let [channel, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
+                let [channel, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let [title, thumbnail, description] = [ticketembedcheck.embed.title || "Ticket", ticketembedcheck.embed.thumbnail || "https://i.imgur.com/RTaQlqV.png", ticketembedcheck.embed.description || "> Open Ticket By Clicking Below Button."];
                 let channel1 = interaction.guild.channels.cache.get(channel)
-                let title = db.fetch(`tickettitle_${interaction.guild.id}`) || "Ticket"
-                let thumbnail = db.fetch(`ticketthumbnail_${interaction.guild.id}`) || "https://i.imgur.com/RTaQlqV.png"
-                let description = db.fetch(`ticketdescription_${interaction.guild.id}`) || "> Open Ticket By Clicking Below Button."
                 const buttonRow = new ActionRowBuilder()
-			    .addComponents(
-                    new ButtonBuilder()
-                        .setLabel('Open')
-                        .setEmoji(`📩`)
-                        .setCustomId('ticketopen')
-                        .setStyle(ButtonStyle.Success),
-                )
+			        .addComponents(
+                        new ButtonBuilder()
+                            .setLabel('Open')
+                            .setEmoji(`📩`)
+                            .setCustomId('ticketopen')
+                            .setStyle(ButtonStyle.Success),
+                    )
                 try {
 				    const embed = new EmbedBuilder()
 				        .setTitle(`${title}`)
@@ -226,7 +225,7 @@ module.exports = class Ticker extends Command {
 				        });
                     await channel1.send({ embeds: [embed], components: [buttonRow] })
                     await interaction.deferReply({ ephemeral: true })
-				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
+				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
                 } catch(e) {
                     const embed = new EmbedBuilder()
 				        .setTitle(`${title}`)
@@ -239,7 +238,7 @@ module.exports = class Ticker extends Command {
 				        });
                     await channel1.send({ embeds: [embed], components: [buttonRow] })
                     await interaction.deferReply({ ephemeral: true })
-				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${check}>.` })
+				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
                 }
             }
         }
