@@ -203,7 +203,11 @@ module.exports = class Ticker extends Command {
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
                 let [channel, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
-                let [title, thumbnail, description] = [ticketembedcheck.embed.title || "Ticket", ticketembedcheck.embed.thumbnail || "https://i.imgur.com/RTaQlqV.png", ticketembedcheck.embed.description || "> Open Ticket By Clicking Below Button."];
+                let [title, thumbnail, description] = [null, null, null, null]
+
+                if(!ticketcheck) [title, thumbnail, description] = [ "Ticket", "https://i.imgur.com/RTaQlqV.png", "> Open Ticket By Clicking Below Button." ]
+                if(ticketcheck) [title, thumbnail, description] = [ticketembedcheck.embed.title, ticketembedcheck.embed.thumbnail, ticketembedcheck.embed.description];
+                
                 let channel1 = interaction.guild.channels.cache.get(channel)
                 const buttonRow = new ActionRowBuilder()
 			        .addComponents(
