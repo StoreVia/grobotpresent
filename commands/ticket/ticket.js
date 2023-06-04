@@ -210,7 +210,6 @@ module.exports = class Ticker extends Command {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
-                let [title, thumbnail, description] = [ticketembedcheck.embed.title, ticketembedcheck.embed.thumbnail, ticketembedcheck.embed.description];
                 let [channel, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
                 let channel1 = interaction.guild.channels.cache.get(channel)
                 if(!ticketembedcheck){
@@ -227,6 +226,7 @@ module.exports = class Ticker extends Command {
                     await interaction.deferReply({ ephemeral: true })
 				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
                 } else if(ticketembedcheck){
+                    let [title, thumbnail, description] = [ticketembedcheck.embed.title, ticketembedcheck.embed.thumbnail, ticketembedcheck.embed.description];
                     try{
                         const embed = new EmbedBuilder()
 				            .setTitle(`${title}`)
@@ -261,10 +261,42 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "role"){
-            const role1 = role(`support_role`);
-            db.set(`ticketrole_${interaction.guild.id}`, role1.id)
-            await interaction.deferReply({ ephemeral: true })
-            return await interaction.followUp({ content: `> Done✅. Support Role Has Been Edited.` })
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else if(ticketcheck){
+                let [channel, category, logs, role2] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let role1 = role(`support_role`);
+                const embed = new EmbedBuilder()
+				    .setTitle(`Ticket Role Edited`)
+				    .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+                    .addFields(
+                        { name: `**OldRole: **`, value: `<@&${role}>`, inline: true },
+                        { name: `**NewRole: **`, value: `Updating...`, inline: true },
+                    )
+				    .setColor(`${process.env.ec}`)
+				    .setFooter({
+                        text: `${client.user.username} - ${process.env.year} ©`,
+                        iconURL: process.env.iconurl
+				    });
+                return await interaction.followUp({ embeds: [embed] }).then(async(msg) => {
+                    const embed = new EmbedBuilder()
+				        .setTitle(`Ticket Role Edited`)
+				        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+                        .addFields(
+                            { name: `**OldRole: **`, value: `<@&${role2}>`, inline: true },
+                            { name: `**NewRole: **`, value: `${role1}`, inline: true },
+                        )
+				        .setColor(`${process.env.ec}`)
+				        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`,
+                            iconURL: process.env.iconurl
+				        });
+                    ticketcheck.supportRole.set(`${role1.id}`)
+                    return await msg.edit({ embed: [embed] })
+                })
+            }
+            
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
