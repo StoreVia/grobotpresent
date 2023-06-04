@@ -280,7 +280,7 @@ module.exports = class Ticker extends Command {
                         text: `${client.user.username} - ${process.env.year} ©`,
                         iconURL: process.env.iconurl
 				    });
-                return await interaction.followUp({ embeds: [embed] }).then(async(msg) => {
+                let message = await interaction.followUp({ embeds: [embed] }).then((msg) => {
                     const embed = new EmbedBuilder()
 				        .setTitle(`Ticket Role Edited`)
 				        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
@@ -293,9 +293,16 @@ module.exports = class Ticker extends Command {
                             text: `${client.user.username} - ${process.env.year} ©`,
                             iconURL: process.env.iconurl
 				        });
-                    ticketdb.set(`${interaction.guild.id}`, {details: {supportRole: role1.id}})
+                    ticketdb.set(interaction.guild.id, {
+                        details: {
+                            channel: channel,
+                            category: category,
+                            ticketLogs: logs,
+                            supportRole: role1.id
+                        }
+                    });
                     msg.edit({ embed: [embed] })
-                })
+                });
             }
             
         }
