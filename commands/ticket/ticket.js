@@ -198,43 +198,26 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
+            const buttonRow = new ActionRowBuilder()
+			    .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Open')
+                        .setEmoji(`📩`)
+                        .setCustomId('ticketopen')
+                        .setStyle(ButtonStyle.Success),
+                )
             if(!ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
+                let [title, thumbnail, description] = [ticketembedcheck.embed.title, ticketembedcheck.embed.thumbnail, ticketembedcheck.embed.description];
                 let [channel, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
-                let [title, thumbnail, description] = [null, null, null, null]
-
-                if(!ticketcheck) [title, thumbnail, description] = [ "Ticket", "https://i.imgur.com/RTaQlqV.png", "> Open Ticket By Clicking Below Button." ]
-                if(ticketcheck) [title, thumbnail, description] = [ticketembedcheck.embed.title, ticketembedcheck.embed.thumbnail, ticketembedcheck.embed.description];
-                
                 let channel1 = interaction.guild.channels.cache.get(channel)
-                const buttonRow = new ActionRowBuilder()
-			        .addComponents(
-                        new ButtonBuilder()
-                            .setLabel('Open')
-                            .setEmoji(`📩`)
-                            .setCustomId('ticketopen')
-                            .setStyle(ButtonStyle.Success),
-                    )
-                try {
-				    const embed = new EmbedBuilder()
-				        .setTitle(`${title}`)
-				        .setThumbnail(`${thumbnail}`)
-				        .setDescription(`${description}`)
-				        .setColor(`${process.env.ec}`)
-				        .setFooter({
-                            text: `${client.user.username} - ${process.env.year} ©`,
-                            iconURL: process.env.iconurl
-				        });
-                    await channel1.send({ embeds: [embed], components: [buttonRow] })
-                    await interaction.deferReply({ ephemeral: true })
-				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
-                } catch(e) {
+                if(!ticketembedcheck){
                     const embed = new EmbedBuilder()
-				        .setTitle(`${title}`)
+				        .setTitle(`Ticket`)
 				        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
-				        .setDescription(`${description}`)
+				        .setDescription(`> Open Ticket By Clicking Below Button.`)
 				        .setColor(`${process.env.ec}`)
 				        .setFooter({
                             text: `${client.user.username} - ${process.env.year} ©`,
@@ -243,6 +226,34 @@ module.exports = class Ticker extends Command {
                     await channel1.send({ embeds: [embed], components: [buttonRow] })
                     await interaction.deferReply({ ephemeral: true })
 				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
+                } else if(ticketembedcheck){
+                    try{
+                        const embed = new EmbedBuilder()
+				            .setTitle(`${title}`)
+				            .setThumbnail(`${thumbnail}`)
+				            .setDescription(`${description}`)
+				            .setColor(`${process.env.ec}`)
+				            .setFooter({
+                                text: `${client.user.username} - ${process.env.year} ©`,
+                                iconURL: process.env.iconurl
+				            });
+                        await channel1.send({ embeds: [embed], components: [buttonRow] })
+				        await interaction.deferReply({ ephemeral: true })
+				        return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
+                    } catch (e){
+                        const embed = new EmbedBuilder()
+				            .setTitle(`${title}`)
+				            .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+				            .setDescription(`${description}`)
+				            .setColor(`${process.env.ec}`)
+				            .setFooter({
+                                text: `${client.user.username} - ${process.env.year} ©`,
+                                iconURL: process.env.iconurl
+				            });
+                        await channel1.send({ embeds: [embed], components: [buttonRow] })
+                        await interaction.deferReply({ ephemeral: true })
+				        return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
+                    }
                 }
             }
         }
