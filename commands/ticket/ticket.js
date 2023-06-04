@@ -265,13 +265,14 @@ module.exports = class Ticker extends Command {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
                 let [channel, category, logs, role2] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
                 let role1 = role(`support_role`);
                 const embed = new EmbedBuilder()
 				    .setTitle(`Ticket Role Edited`)
 				    .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
                     .addFields(
-                        { name: `**OldRole: **`, value: `<@&${role}>`, inline: true },
+                        { name: `**OldRole: **`, value: `<@&${role2}>`, inline: true },
                         { name: `**NewRole: **`, value: `Updating...`, inline: true },
                     )
 				    .setColor(`${process.env.ec}`)
@@ -292,8 +293,8 @@ module.exports = class Ticker extends Command {
                             text: `${client.user.username} - ${process.env.year} ©`,
                             iconURL: process.env.iconurl
 				        });
-                    ticketcheck.supportRole.set(`${role1.id}`)
-                    return await msg.edit({ embed: [embed] })
+                    ticketdb.set(`${interaction.guild.id}`, {details: {supportRole: role1.id}})
+                    msg.edit({ embed: [embed] })
                 })
             }
             
