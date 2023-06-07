@@ -191,7 +191,7 @@ module.exports = class Ticker extends Command {
                     });
                 })
             } else if(ticketcheck){
-                return await interaction.followUp({ content: `> Ticket System Was Already Activated.**Use Below Commands To Edit Ticket System**\n\n> **/ticket edit channel** - Edits Tickets Channel For Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Ticket ssSupport Role.` })
+                return await interaction.followUp({ content: `> Ticket System Was Already Activated. **Use Below Commands To Edit Ticket System**\n\n> **/ticket edit channel** - Edits Tickets Channel For Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Ticket ssSupport Role.` })
             }
         }
 
@@ -299,19 +299,77 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "channel"){
-            const channel = channel(`select_channel`);
-            db.set(`ticketchannel_${interaction.guild.id}`, channel.id)
-            await interaction.deferReply({ ephemeral: true })
-            return await interaction.followUp({ content: `> Done✅. Ticket Channel Has Been Updated.\n> **Delete Panel Message In Old Channel.**\n> **Use "/ticket send panel" Command To Send Panel To Updated Channel.**"` })
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else if(ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                let [channel2, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let channel1 = channel(`select_channel`);
+                if(channel1.id === channel2){
+                    await interaction.followUp({ content: `> You Should Provide New Channel Inorder To Change Old Channel.` })
+                } else {
+                    ticketdb.set(interaction.guild.id, {
+                        details: {
+                            channel: channel1.id,
+                            category: category,
+                            ticketLogs: logs,
+                            supportRole: role
+                        }
+                    });
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Ticket Channel Edited`)
+                        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+                        .addFields(
+                            { name: `**OldChannel: **`, value: `<#${channel2}>`, inline: true },
+                            { name: `**NewChannel: **`, value: `${channel1}`, inline: true },
+                        )
+                        .setColor(`${process.env.ec}`)
+                        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`,
+                            iconURL: process.env.iconurl
+                        });
+                    await interaction.followUp({ embeds: [embed] })
+                }
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "category"){
-            const category = channel(`select_category`);
-            db.set(`ticketcategory_${interaction.guild.id}`, category.id)
-            await interaction.deferReply({ ephemeral: true })
-            return await interaction.followUp({ content: `> Done✅. Ticket Category Has Been Updated.` })
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else if(ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                let [channel2, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let givencategory = channel(`select_category`);
+                if(givencategory.id === category){
+                    await interaction.followUp({ content: `> You Should Provide New Category Inorder To Change Old Category.` })
+                } else {
+                    ticketdb.set(interaction.guild.id, {
+                        details: {
+                            channel: channel2,
+                            category: category,
+                            ticketLogs: logs,
+                            supportRole: role
+                        }
+                    });
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Ticket Category Edited`)
+                        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+                        .addFields(
+                            { name: `**OldCategory: **`, value: `<#${category}>`, inline: true },
+                            { name: `**NewCategory: **`, value: `${channel1}`, inline: true },
+                        )
+                        .setColor(`${process.env.ec}`)
+                        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`,
+                            iconURL: process.env.iconurl
+                        });
+                    await interaction.followUp({ embeds: [embed] })
+                }
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
