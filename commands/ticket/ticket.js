@@ -268,31 +268,9 @@ module.exports = class Ticker extends Command {
                 await interaction.deferReply({ ephemeral: true })
                 let [channel, category, logs, role2] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
                 let role1 = role(`support_role`);
-                const embed = new EmbedBuilder()
-				    .setTitle(`Ticket Role Edited`)
-				    .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
-                    .addFields(
-                        { name: `**OldRole: **`, value: `<@&${role2}>`, inline: true },
-                        { name: `**NewRole: **`, value: `Updating...`, inline: true },
-                    )
-				    .setColor(`${process.env.ec}`)
-				    .setFooter({
-                        text: `${client.user.username} - ${process.env.year} ©`,
-                        iconURL: process.env.iconurl
-				    });
-                let message = await interaction.followUp({ embeds: [embed] }).then((msg) => {
-                    const embed = new EmbedBuilder()
-				        .setTitle(`Ticket Role Edited`)
-				        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
-                        .addFields(
-                            { name: `**OldRole: **`, value: `<@&${role2}>`, inline: true },
-                            { name: `**NewRole: **`, value: `${role1}`, inline: true },
-                        )
-				        .setColor(`${process.env.ec}`)
-				        .setFooter({
-                            text: `${client.user.username} - ${process.env.year} ©`,
-                            iconURL: process.env.iconurl
-				        });
+                if(role1.id === role2){
+                    await interaction.followUp({ content: `> You Should Provide New Role Inorder To Change Old Role.` })
+                } else {
                     ticketdb.set(interaction.guild.id, {
                         details: {
                             channel: channel,
@@ -301,10 +279,21 @@ module.exports = class Ticker extends Command {
                             supportRole: role1.id
                         }
                     });
-                    msg.edit({ embed: [embed] })
-                });
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Ticket Role Edited`)
+                        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
+                        .addFields(
+                            { name: `**OldRole: **`, value: `<@&${role2}>`, inline: true },
+                            { name: `**NewRole: **`, value: `${role1}`, inline: true },
+                        )
+                        .setColor(`${process.env.ec}`)
+                        .setFooter({
+                            text: `${client.user.username} - ${process.env.year} ©`,
+                            iconURL: process.env.iconurl
+                        });
+                    await interaction.followUp({ embeds: [embed] })
+                }
             }
-            
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
