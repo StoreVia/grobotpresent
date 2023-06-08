@@ -118,6 +118,7 @@ module.exports = class Ticker extends Command {
         
         const ticketdb = client.db.table(`ticket`)
         const ticketembeddb = client.db.table(`ticketembed`)
+        const ticketblockdb = client.db.table(`ticketblock`)
         let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
         let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
         let subcommand = interaction.options.getSubcommand();
@@ -414,13 +415,14 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "block"){
             let user1 = user(`user`);
-            let usercheck = db.fetch(`ticketblock_${interaction.guild.id}_${user1.id}`)
-            if(usercheck){
+            let ticketblockguild = await ticketblockdb.get(`${interaction.guild.id}`)
+            let ticketblockcheck = ticketblockguild.includes(`${user1.id}`).Array.isArray(array) ? array : [].includes(`${user1.id}`)
+            if(ticketblockcheck){
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> This User Has Been Already Blocked.` })
+                return await interaction.followUp({ content: `> This User Was Already Blocked.` })
             }
-            if(!usercheck){
-                db.set(`ticketblock_${interaction.guild.id}_${user1.id}`, true)
+            if(!ticketblockcheck){
+                ticketblockdb.push(`${user1.id}`)
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
             }
