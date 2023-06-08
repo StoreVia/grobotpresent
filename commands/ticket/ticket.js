@@ -416,13 +416,13 @@ module.exports = class Ticker extends Command {
         if(subcommand === "block"){
             let user1 = user(`user`);
             let ticketblockguild = await ticketblockdb.get(`${interaction.guild.id}`)
-            let ticketblockcheck = ticketblockguild.includes(`${user1.id}`).Array.isArray(array) ? array : [].includes(`${user1.id}`)
+            let ticketblockcheck = Array.isArray(ticketblockguild) ? array : [].includes(`${user1.id}`)
             if(ticketblockcheck){
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> This User Was Already Blocked.` })
             }
             if(!ticketblockcheck){
-                ticketblockdb.push(`${user1.id}`)
+                ticketblockdb.push(`Users:`,`${user1.id}`)
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
             }
