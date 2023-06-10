@@ -481,7 +481,15 @@ module.exports = class Ticker extends Command {
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
                 } else if(ticketembedcheck){
-                    ticketembeddb.set(`${interaction.guild.id}`, { title: title })
+                    let thumbnail1 = null;
+                    let description1 = null;
+                    if(ticketembedcheck.thumbnail) thumbnail1 = ticketembedcheck.thumbnail;
+                    if(ticketembedcheck.description) description1 = ticketembedcheck.description;
+                    ticketembeddb.set(`${interaction.guild.id}`, {
+                        title: title,
+                        description: description1,
+                        thumbnail: thumbnail1 
+                    })
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
                 }
@@ -500,6 +508,7 @@ module.exports = class Ticker extends Command {
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
+                                    .setMaxLength(4096)
                                     .setCustomId('text')
                                     .setLabel("Set Ticket Panel Embed Description.")
                                     .setStyle(TextInputStyle.Paragraph)
@@ -514,6 +523,7 @@ module.exports = class Ticker extends Command {
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
+                                    .setMaxLength(4096)
                                     .setCustomId('text')
                                     .setLabel("Set Ticket Panel Embed Description.")
                                     .setStyle(TextInputStyle.Paragraph)
@@ -541,10 +551,16 @@ module.exports = class Ticker extends Command {
                         ticketembeddb.set(`${interaction.guild.id}`, { thumbnail: thumbnail })
                         await interaction.deferReply({ ephemeral: true })
                         return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-                    } else if(ticketembedcheck.title){
-                        
                     } else if(ticketembedcheck){
-                        ticketembeddb.set(`${interaction.guild.id}`, { thumbnail: thumbnail })
+                        let title1 = null;
+                        let description1 = null;
+                        if(ticketembedcheck.title) title1 = ticketembedcheck.title;
+                        if(ticketembedcheck.description) description1 = ticketembedcheck.description;
+                        ticketembeddb.set(`${interaction.guild.id}`, {
+                                title: title1,
+                                description: description1,
+                                thumbnail: thumbnail 
+                            })
                         await interaction.deferReply({ ephemeral: true })
                         return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
                     }
