@@ -144,7 +144,7 @@ module.exports = class InteractionCreate extends Event {
 				db.set(`leavetext_${interaction.guild.id}`, text1)
 			})
 		}
-		if(interaction.customId === "myModalDescriptio"){
+		if(interaction.customId === "myModalDescription"){
 			const description = interaction.fields.getTextInputValue('text');
 			const ticketdb = client.db.table(`ticket`)
         	const ticketembeddb = client.db.table(`ticketembed`)
