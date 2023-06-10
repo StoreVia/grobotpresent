@@ -541,6 +541,8 @@ module.exports = class Ticker extends Command {
                         ticketembeddb.set(`${interaction.guild.id}`, { thumbnail: thumbnail })
                         await interaction.deferReply({ ephemeral: true })
                         return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+                    } else if(ticketembedcheck.title){
+                        
                     } else if(ticketembedcheck){
                         ticketembeddb.set(`${interaction.guild.id}`, { thumbnail: thumbnail })
                         await interaction.deferReply({ ephemeral: true })
