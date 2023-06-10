@@ -427,7 +427,6 @@ module.exports = class Ticker extends Command {
                     return await interaction.followUp({ content: `> The User Was Already Blocked From Making Ticket.` })
                 }
             } catch(e) {
-                console.log(e)
                 ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
@@ -438,15 +437,21 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "unblock"){
             let user1 = user(`user`);
-            let usercheck = db.fetch(`ticketblock_${interaction.guild.id}_${user1.id}`)
-            if(usercheck){
-                db.delete(`ticketblock_${interaction.guild.id}_${user1.id}`)
+            let ticketblockarray = await ticketblockdb.get(`${interaction.guild.id}`)
+            let ticketblockcheck = Array.isArray(ticketblockarray) ? ticketblockarray : [];
+            try{
+                if(!ticketblockarray.includes(`${user1.id}`)){
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> The User Was Not Blocked To Unblock.` })
+                } else {
+                    let newarray = ticketblockarray.filter(user =>  user != user1.id )
+                    ticketblockdb.set(`${interaction.guild.id}`, newarray)
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Done✅. Unblocked User From Creating Ticket.` })
+                }
+            } catch(e) {
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. UnBlocked User From Creating Ticket.` })
-            }
-            if(!usercheck){
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> This User Was Not Blocked To UnBlock.` })
+                return await interaction.followUp({ content: `> The User Was Not Blocked To Unblock.` })
             }
         }
 
