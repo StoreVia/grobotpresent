@@ -415,16 +415,23 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "block"){
             let user1 = user(`user`);
-            let ticketblockguild = await ticketblockdb.get(`${interaction.guild.id}`);
-            console.log(ticketblockguild)
-            if(!ticketblockcheck){
-                ticketblockdb.push(`Users`, `${user1.id}`)
+            let ticketblockarray = await ticketblockdb.get(`${interaction.guild.id}`)
+            let ticketblockcheck = Array.isArray(ticketblockarray) ? ticketblockarray : [];
+            try{
+                if(!ticketblockarray.includes(`${user1.id}`)){
+                    ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
+                } else {
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> The User Was Already Blocked From Making Ticket.` })
+                }
+            } catch(e) {
+                console.log(e)
+                ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
-            } else if(ticketblockcheck){
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> This User Was Already Blocked.` })
-            } 
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
