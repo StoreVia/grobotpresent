@@ -227,8 +227,11 @@ module.exports = class Ticker extends Command {
                     await interaction.deferReply({ ephemeral: true })
 				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
                 } else if(ticketembedcheck){
-                    let [title, thumbnail, description] = [ticketembedcheck.embed.title, ticketembedcheck.embed.thumbnail, ticketembedcheck.embed.description];
+                    let [title, thumbnail, description] = [ticketembedcheck.title, ticketembedcheck.thumbnail, ticketembedcheck.description];
                     try{
+                        if(title === null) title = "Ticket";
+                        if(thumbnail === null) thumbnail = "https://i.imgur.com/RTaQlqV.png";
+                        if(description === null) description = "> Open Ticket By Clicking Below Button.";
                         const embed = new EmbedBuilder()
 				            .setTitle(`${title}`)
 				            .setThumbnail(`${thumbnail}`)
@@ -477,10 +480,8 @@ module.exports = class Ticker extends Command {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
             } else if(ticketembedcheck){
-                let thumbnail1 = null;
-                let description1 = null;
-                if(ticketembedcheck.thumbnail) thumbnail1 = ticketembedcheck.thumbnail;
-                if(ticketembedcheck.description) description1 = ticketembedcheck.description;
+                let thumbnail1 = ticketembedcheck?.thumbnail || null;
+				let description1 = ticketembedcheck?.description || null;
                 ticketembeddb.set(`${interaction.guild.id}`, {
                     title: title,
                     description: description1,
@@ -522,10 +523,8 @@ module.exports = class Ticker extends Command {
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> Invlaid Url.` })
                 } else if(validurl === true){
-                    let title1 = null;
-                    let description1 = null;
-                    if(ticketembedcheck.title) title1 = ticketembedcheck.title;
-                    if(ticketembedcheck.description) description1 = ticketembedcheck.description;
+                    let title1 = ticketembedcheck?.title || null;
+				    let description1 = ticketembedcheck?.description || null;
                     ticketembeddb.set(`${interaction.guild.id}`, {
                         title: title1,
                         description: description1,
