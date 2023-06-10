@@ -495,7 +495,7 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "description"){
             const descriptionold = new ModalBuilder()
-                .setCustomId('myModalDescriptioOld')
+                .setCustomId('myModalDescriptio')
                 .setTitle('Ticket System Configuration.')
                 .addComponents(
                     new ActionRowBuilder()
