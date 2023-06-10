@@ -52,7 +52,7 @@ module.exports = class Ping extends Command {
                         let activatecheck = await activatedkey.get(`${interaction.user.id}`)
                         if(activatecheck){
                             let activatedtime = await activatedkey.get(`${interaction.user.id}`)
-                            let [key, time] = activatedtime[0].keyandtime.split(',');
+                            let [key, time] = activatedtime.keyandtime.split(',');
                             if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
                                 return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Subscription Expired.` })
                             } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
@@ -75,9 +75,8 @@ module.exports = class Ping extends Command {
 
         if(subcommand === "check"){
             let activatedfetch = await activatedkey.get(`${interaction.user.id}`)
-
             if(activatedfetch){
-                let [key, time] = activatedfetch[0].keyandtime.split(',');
+                let [key, time] = activatedfetch.keyandtime.split(',');
                 let timeleft = ms(process.env.premium_timeout - (Date.now() - time.trim()));
                 if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
                     const embed = new EmbedBuilder()
