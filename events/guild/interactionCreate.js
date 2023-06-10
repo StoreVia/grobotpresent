@@ -154,16 +154,14 @@ module.exports = class InteractionCreate extends Event {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else {
-				let title1 = null;
-                let thumbnail12 = null;
-                if(ticketembedcheck.thumbnail) thumbnail12 = ticketembedcheck.thumbnail;
-                if(ticketembedcheck.title) title1 = ticketembedcheck.title;
+				let title1 = ticketembedcheck?.title || null;
+				let thumbnail12 = ticketembedcheck?.thumbnail || null;
                 ticketembeddb.set(`${interaction.guild.id}`, {
                     title: title1,
                     description: description,
                     thumbnail: thumbnail12
                 })
-                return await interaction.reply({ content: `> Done✅. Ticket Panel Description Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+                return await interaction.reply({ content: `> Done✅. Ticket Panel Description Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.`, ephemeral: true })
             }
 		}
 //welcomeend
