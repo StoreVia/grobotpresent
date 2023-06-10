@@ -417,19 +417,24 @@ module.exports = class Ticker extends Command {
             let user1 = user(`user`);
             let ticketblockarray = await ticketblockdb.get(`${interaction.guild.id}`)
             let ticketblockcheck = Array.isArray(ticketblockarray) ? ticketblockarray : [];
-            try{
-                if(!ticketblockarray.includes(`${user1.id}`)){
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else {
+                try{
+                    if(!ticketblockarray.includes(`${user1.id}`)){
+                        ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
+                        await interaction.deferReply({ ephemeral: true })
+                        return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
+                    } else {
+                        await interaction.deferReply({ ephemeral: true })
+                        return await interaction.followUp({ content: `> The User Was Already Blocked From Making Ticket.` })
+                    }
+                } catch(e) {
                     ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
-                } else {
-                    await interaction.deferReply({ ephemeral: true })
-                    return await interaction.followUp({ content: `> The User Was Already Blocked From Making Ticket.` })
                 }
-            } catch(e) {
-                ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
             }
         }
 
@@ -439,19 +444,24 @@ module.exports = class Ticker extends Command {
             let user1 = user(`user`);
             let ticketblockarray = await ticketblockdb.get(`${interaction.guild.id}`)
             let ticketblockcheck = Array.isArray(ticketblockarray) ? ticketblockarray : [];
-            try{
-                if(!ticketblockarray.includes(`${user1.id}`)){
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else {
+                try{
+                    if(!ticketblockarray.includes(`${user1.id}`)){
+                        await interaction.deferReply({ ephemeral: true })
+                        return await interaction.followUp({ content: `> The User Was Not Blocked To Unblock.` })
+                    } else {
+                        let newarray = ticketblockarray.filter(user =>  user != user1.id )
+                        ticketblockdb.set(`${interaction.guild.id}`, newarray)
+                        await interaction.deferReply({ ephemeral: true })
+                        return await interaction.followUp({ content: `> Done✅. Unblocked User From Creating Ticket.` })
+                    }
+                } catch(e) {
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> The User Was Not Blocked To Unblock.` })
-                } else {
-                    let newarray = ticketblockarray.filter(user =>  user != user1.id )
-                    ticketblockdb.set(`${interaction.guild.id}`, newarray)
-                    await interaction.deferReply({ ephemeral: true })
-                    return await interaction.followUp({ content: `> Done✅. Unblocked User From Creating Ticket.` })
                 }
-            } catch(e) {
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> The User Was Not Blocked To Unblock.` })
             }
         }
 
@@ -459,18 +469,22 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "title"){
             const title = string(`text`)
-            let titlecheck = db.fetch(`tickettitle_${interaction.guild.id}`)
-            if(title.length > 256){
+            if(!ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
-            } else if(!titlecheck) {
-                db.set(`tickettitle_${interaction.guild.id}`, `${title}`)
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-            } else if(titlecheck){
-                db.set(`tickettitle_${interaction.guild.id}`, `${title}`)
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Title Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else {
+                if(title.length > 256){
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
+                } else if(!ticketembedcheck) {
+                    ticketembeddb.set(`${interaction.guild.id}`, { title: title })
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+                } else if(ticketembedcheck){
+                    ticketembeddb.set(`${interaction.guild.id}`, { title: title })
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+                }
             }
         }
 
@@ -512,21 +526,26 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "thumbnail"){
+
             const thumbnail = string(`url`)
-            let thumbnailcheck = db.fetch(`ticketthumbnail_${interaction.guild.id}`)
             let validurl = isValidURL(thumbnail)
-            if(validurl === false){
+            if(!ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Invlaid Url.` })
-            } else if(validurl === true){
-                if(!thumbnailcheck) {
-                    db.set(`ticketthumbnail_${interaction.guild.id}`, `${thumbnail}`)
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else {
+                if(validurl === false){
                     await interaction.deferReply({ ephemeral: true })
-                    return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-                } else if(thumbnailcheck){
-                    db.set(`ticketthumbnail_${interaction.guild.id}`, `${thumbnail}`)
-                    await interaction.deferReply({ ephemeral: true })
-                    return await interaction.followUp({ content: `Done✅. Ticket Panel Embed Thumbnail Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+                    return await interaction.followUp({ content: `> Invlaid Url.` })
+                } else if(validurl === true){
+                    if(!ticketembedcheck) {
+                        ticketembeddb.set(`${interaction.guild.id}`, { thumbnail: thumbnail })
+                        await interaction.deferReply({ ephemeral: true })
+                        return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
+                    } else if(ticketembedcheck){
+                        ticketembeddb.set(`${interaction.guild.id}`, { thumbnail: thumbnail })
+                        await interaction.deferReply({ ephemeral: true })
+                        return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Thumbnail Was Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+                    }
                 }
             }
         }
