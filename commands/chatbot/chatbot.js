@@ -165,8 +165,7 @@ module.exports = class ChatBot extends Command {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "chenable") {
                     if(!checkchannel){
-                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
-                    } else if(!checkdisable){
+                        console.log(`1`)
                         await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
                     } else {
                         chatbotdisable.delete(`${interaction.guild.id}`);
@@ -176,8 +175,6 @@ module.exports = class ChatBot extends Command {
                     }
                 } else if(i.customId === "chdisable"){
                     if(!checkchannel){
-                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
-                    } else if(!checkdisable){
                         await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
                     } else {
                         chatbotdisable.set(`${interaction.guild.id}`, checkchannel);
