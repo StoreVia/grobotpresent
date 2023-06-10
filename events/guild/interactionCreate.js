@@ -154,7 +154,9 @@ module.exports = class InteractionCreate extends Event {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else {
-                if(ticketembedcheck){
+				if(description.length > 4096){
+					return await interaction.followUp({ content: `> Embed Description Can't Be More Than 4096 Characters.` })
+				} else {
                     let title1 = null;
                     let thumbnail1 = null;
                     if(ticketembedcheck.thumbnail) thumbnail1 = ticketembedcheck.thumbnail;

@@ -501,7 +501,6 @@ module.exports = class Ticker extends Command {
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
-                                .setMaxLength(4096)
                                 .setCustomId('text')
                                 .setLabel("Set Ticket Panel Embed Description.")
                                 .setStyle(TextInputStyle.Paragraph)
