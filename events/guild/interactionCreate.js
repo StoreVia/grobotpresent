@@ -154,11 +154,7 @@ module.exports = class InteractionCreate extends Event {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else {
-                if(!ticketembedcheck) {
-                    ticketembeddb.set(`${interaction.guild.id}`, { description: description })
-                    await interaction.deferReply({ ephemeral: true })
-                    return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-                } else if(ticketembedcheck){
+                if(ticketembedcheck){
                     let title1 = null;
                     let thumbnail1 = null;
                     if(ticketembedcheck.thumbnail) thumbnail1 = ticketembedcheck.thumbnail;
@@ -169,34 +165,6 @@ module.exports = class InteractionCreate extends Event {
                         thumbnail: thumbnail11
                     })
                     return await interaction.reply({ content: `> Done✅. Ticket Panel Description Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-                }
-            }
-		}
-		if(interaction.customId === "myModalDescriptioOld"){
-			const description = interaction.fields.getTextInputValue('text');
-			const ticketdb = client.db.table(`ticket`)
-        	const ticketembeddb = client.db.table(`ticketembed`)
-        	let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
-        	let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
-            if(!ticketcheck){
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
-            } else {
-                if(!ticketembedcheck) {
-                    ticketembeddb.set(`${interaction.guild.id}`, { description: description })
-                    await interaction.deferReply({ ephemeral: true })
-                    return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-                } else if(ticketembedcheck){
-                    let title1 = null;
-                    let thumbnail1 = null;
-                    if(ticketembedcheck.thumbnail) thumbnail1 = ticketembedcheck.thumbnail;
-                    if(ticketembedcheck.title) title1 = ticketembedcheck.title;
-                    ticketembeddb.set(`${interaction.guild.id}`, {
-                        title: title1,
-                        description: description,
-                        thumbnail: thumbnail11
-                    })
-                    return await interaction.reply({ content: `> Done✅. Ticket Panel Description Title Was Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
                 }
             }
 		}
