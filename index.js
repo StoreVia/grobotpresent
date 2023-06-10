@@ -26,7 +26,7 @@ const colors = require("colors");
 const fetch = require(`node-fetch`);
 const { Player } = require('discord-player');
 //packagesend
-//123
+
 //clientextensionsstart
 client.player = new Player(client);
 client.commands = new Discord.Collection();
