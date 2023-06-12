@@ -192,7 +192,7 @@ module.exports = class Ticker extends Command {
                     });
                 })
             } else if(ticketcheck){
-                return await interaction.followUp({ content: `> Ticket System Was Already Activated. **Use Below Commands To Edit Ticket System**\n\n> **/ticket edit channel** - Edits Tickets Channel For Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Ticket ssSupport Role.` })
+                return await interaction.followUp({ content: `**Note: **To Send Ticket Panel Use "/ticket send panel" Command.\nTicket System Was Already Activated. **Use Below Commands To Edit Ticket System**\n\n> **/ticket edit channel** - Edits Tickets Channel For Panel.\n> **/ticket edit category** - Edits Ticket Creations Category.\n> **/ticket edit logs** - Edits Ticket Logs Channel.\n> **/ticket edit role** - Edits Ticket ssSupport Role.` })
             }
         }
 
