@@ -183,20 +183,19 @@ module.exports = class InteractionCreate extends Event {
 //privateslashend
 
 //ticketstart
+		const ticketdb = client.db.table(`ticket`)
+		const ticketblockdb = client.db.table(`ticketblock`)
+		const ticketdisabledb = client.db.table(`ticketdisable`)
+		let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
+		let ticketblockcheck = await ticketblockdb.get(`${interaction.guild.id}`)
+		const checkdisabledcheck = await ticketdisabledb.get(`${interaction.guild.id}`)
+		let ticketblockarray = Array.isArray(ticketblockcheck) ? ticketblockcheck : [];
+		const role = ticketcheck.details.supportRole;
+		const category1 = ticketcheck.details.category;
+		const category = client.channels.cache.get(category1)
+		const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
+
 		if(interaction.customId === 'ticketopen') {
-			const ticketdb = client.db.table(`ticket`)
-        	const ticketblockdb = client.db.table(`ticketblock`)
-			const ticketdisabledb = client.db.table(`ticketdisable`)
-        	let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
-			let ticketblockcheck = await ticketblockdb.get(`${interaction.guild.id}`)
-			const checkdisabledcheck = await ticketdisabledb.get(`${interaction.guild.id}`)
-			let ticketblockarray = Array.isArray(ticketblockcheck) ? ticketblockcheck : [];
-
-			const role = ticketcheck.details.supportRole;
-			const category1 = ticketcheck.details.category;
-			const category = client.channels.cache.get(category1)
-			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-
 			if(checkdisabledcheck){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
 					await interaction.deferReply({ ephemeral: true })
@@ -314,20 +313,6 @@ module.exports = class InteractionCreate extends Event {
 //ticketend
 		
 		async function ticketOpen() {
-			await interaction.deferReply({ ephemeral: true })
-			const ticketdb = client.db.table(`ticket`)
-        	const ticketblockdb = client.db.table(`ticketblock`)
-			const ticketdisabledb = client.db.table(`ticketdisable`)
-			const checkdisabledcheck = await ticketdisabledb.get(`${interaction.guild.id}`)
-        	let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
-			let ticketblockcheck = await ticketblockdb.get(`${interaction.guild.id}`)
-			let ticketblockarray = Array.isArray(ticketblockcheck) ? ticketblockcheck : [];
-
-			const role = ticketcheck.details.supportRole;
-			const category1 = ticketcheck.details.category;
-			const category = client.channels.cache.get(category1)
-			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-
 			try{
 				if(ticketblockcheck.includes(`${interaction.user.id}`)){
 					await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
