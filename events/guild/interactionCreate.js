@@ -220,7 +220,6 @@ module.exports = class InteractionCreate extends Event {
 		}
   
 		if(interaction.customId === "closeticket"){
-			const role = client.db.get(`ticketrole_${interaction.guild.id}`)
 			const row = new Discord.ActionRowBuilder()
 				.addComponents(
 		 			new Discord.ButtonBuilder()
@@ -239,7 +238,6 @@ module.exports = class InteractionCreate extends Event {
   		}
 
 		if(interaction.customId === "ticontinue"){
-			const role = client.db.get(`ticketrole_${interaction.guild.id}`)
 			if(!interaction.member.roles.cache.has(`${role}`)){
 				await interaction.deferReply({ ephemeral: true })
 				await interaction.followUp({ content: `> You Dont Have Permissions\n> Require <@${role}>.` })
