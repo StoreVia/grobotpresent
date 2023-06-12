@@ -194,6 +194,9 @@ module.exports = class InteractionCreate extends Event {
 		const category1 = ticketcheck.details.category;
 		const category = client.channels.cache.get(category1)
 		const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
+		const logs = client.db.get(`ticketlogs_${interaction.guild.id}`)
+		const guild = client.guilds.cache.get(interaction.guild.id);
+		const logschannel = guild.channels.cache.get(logs);
 
 		if(interaction.customId === 'ticketopen') {
 			if(checkdisabledcheck){
@@ -240,20 +243,16 @@ module.exports = class InteractionCreate extends Event {
 		if(interaction.customId === "ticontinue"){
 			if(!interaction.member.roles.cache.has(`${role}`)){
 				await interaction.deferReply({ ephemeral: true })
-				await interaction.followUp({ content: `> You Dont Have Permissions\n> Require <@${role}>.` })
+				await interaction.followUp({ content: `> You Don't Have Permission\n> Require <@&${role}>.` })
 		  	} else if(interaction.member.roles.cache.has(`${role}`)){
-			  	const logs = client.db.get(`ticketlogs_${interaction.guild.id}`)
-			  	const guild = client.guilds.cache.get(interaction.guild.id);
-				const logschannel = guild.channels.cache.get(logs);
-
-				if(!logs){
+				if(!ticketcheck){
 					await interaction.deferReply({ ephemeral: true })
 					if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
 						return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
 					} else {
 						return await interaction.followUp({ content: `> This Guild Doesn't Have Active Ticket System. Please Contact Mod.` })
 					}
-				} else if(logs){
+				} else if(ticketcheck){
 					await interaction.deferReply()
 					await interaction.followUp({ content: `> Saving Messages Please Wait...` })
 
