@@ -194,7 +194,7 @@ module.exports = class InteractionCreate extends Event {
 		const category1 = ticketcheck.details.category;
 		const category = client.channels.cache.get(category1)
 		const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-		const logs = client.db.get(`ticketlogs_${interaction.guild.id}`)
+		const logs = ticketcheck.details.ticketLogs;
 		const guild = client.guilds.cache.get(interaction.guild.id);
 		const logschannel = guild.channels.cache.get(logs);
 
@@ -309,6 +309,8 @@ module.exports = class InteractionCreate extends Event {
 		}
 //ticketend
 		
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 		async function ticketOpen() {
 			try{
 				if(ticketblockcheck.includes(`${interaction.user.id}`)){
@@ -412,5 +414,7 @@ module.exports = class InteractionCreate extends Event {
 				}
 			}
 		}
+
+//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };

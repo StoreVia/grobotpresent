@@ -63,6 +63,7 @@ module.exports = class Ping extends Command {
                         } else {
                             await used.push(`premium.keys`, `${enteredkey}`)
                             await activatedkey.set(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
+                            await keys.set(`premium.keys`, `${filteredKeys}`)
                             interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
                         }
                     }
