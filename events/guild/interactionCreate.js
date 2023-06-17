@@ -190,15 +190,15 @@ module.exports = class InteractionCreate extends Event {
 		let ticketblockcheck = await ticketblockdb.get(`${interaction.guild.id}`)
 		const checkdisabledcheck = await ticketdisabledb.get(`${interaction.guild.id}`)
 		let ticketblockarray = Array.isArray(ticketblockcheck) ? ticketblockcheck : [];
-		const role = ticketcheck.details.supportRole;
+
+		if(interaction.customId === 'ticketopen') {
+			const role = ticketcheck.details.supportRole;
 		const category1 = ticketcheck.details.category;
 		const category = client.channels.cache.get(category1)
 		const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
 		const logs = ticketcheck.details.ticketLogs;
 		const guild = client.guilds.cache.get(interaction.guild.id);
 		const logschannel = guild.channels.cache.get(logs);
-
-		if(interaction.customId === 'ticketopen') {
 			if(checkdisabledcheck){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
 					await interaction.deferReply({ ephemeral: true })

@@ -89,6 +89,8 @@ module.exports = class ReadyEvent extends Event {
 		await client.db.table(`ticketblock`).set(`1`, [`123`])
 		await client.db.table(`chatbot`).set(`1`, `123`)
 		await client.db.table(`chatbotdisable`).set(`1`, `123`)
+
+		if(await client.db.table('premiumused').get(`premium`) !== null) { return; } else { await client.db.table(`premiumused`).push(`premium`, `123`)}
 	
 		console.log(colors.red(`Discord Bot Is Now Online With ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)} Users And ${client.guilds.cache.size} Servers.`));
 	}

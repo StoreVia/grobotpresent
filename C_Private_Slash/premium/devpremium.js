@@ -38,11 +38,11 @@ module.exports = class Update extends Command {
         if(subcommand === "create"){
             let key = rand.generate(30)
             if(!keyscheck){
-                await keys.push(`premium.keys`, `${key}` )
+                await keys.push(`premium`, `${key}` )
                 await interaction.deferReply()
                 interaction.followUp({ content: `> Premium Table Create With Starting Key: **${key}**` })
             } else {
-                await keys.push(`premium.keys`, `${key}` )
+                await keys.push(`premium`, `${key}` )
                 await interaction.deferReply()
                 interaction.followUp({ content: `> Added New Premium Key To Table: **${key}**` })
             }
@@ -51,10 +51,10 @@ module.exports = class Update extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "active-keys"){
-            let keys = await keys.get(`premium.keys`);
+            let activekeys = await keys.get(`premium`);
 
             await interaction.deferReply()
-            interaction.followUp({ content: `Acitve Keys:\n> **${keys}** || "None"}` })
+            interaction.followUp({ content: `**AcitveKeys: **\n${activekeys ? activekeys.join(`\n`) : "None"}` })
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

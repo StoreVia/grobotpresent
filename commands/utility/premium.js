@@ -36,15 +36,13 @@ module.exports = class Ping extends Command {
 
         if(subcommand === "redeem"){
             let enteredkey = interaction.options.getString(`redeem_code`);
-            let avilablekeys = await keys.get(`premium.keys`)
-            let usedkeys = await used.get(`premium.keys`);
-            let arrayKeys = Array.isArray(avilablekeys) ? avilablekeys : [];
-            let filterarrayKeys = Array.isArray(usedkeys) ? usedkeys : [];
-            let filteredKeys = arrayKeys.filter(key => !filterarrayKeys.some(usedKey => usedKey === key));
+            let avilablekeys = await keys.get(`premium`)
+            let usedkeys = await used.get(`premium`);
+            let filteredKeys = avilablekeys.filter(key => !usedkeys.includes(key));
             try{
                 let check = avilablekeys.some(value => value === enteredkey)
                 if(!check){
-                    interaction.followUp({ content: `> Premium Key Not Found.` })
+                    interaction.followUp({ content: `> Premium Key Not Found.1` })
                 } if(check){
                     if(!filteredKeys.includes(`${enteredkey}`)){
                         return interaction.followUp({ content: `> Premium Key Already Used.` })
@@ -56,14 +54,14 @@ module.exports = class Ping extends Command {
                             if(process.env.premium_timeout - (Date.now() - time.trim()) > 0){
                                 return interaction.followUp({ content: `> You Have Active Premium Subscription. You Can Activate New Subscription After The Present Subscription Expired.` })
                             } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
-                                await used.push(`premium.keys`, `${enteredkey}`)
+                                await used.push(`premium`, `${enteredkey}`)
                                 await activatedkey.set(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
                                 interaction.followUp({ content: `> Done✅.Your New Premium Key Has Been Activated.` })
                             }
                         } else {
-                            await used.push(`premium.keys`, `${enteredkey}`)
+                            await used.push(`premium`, `${enteredkey}`)
                             await activatedkey.set(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
-                            await keys.set(`premium.keys`, `${filteredKeys}`)
+                            await keys.set(`premium`, `${filteredKeys}`)
                             interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
                         }
                     }
