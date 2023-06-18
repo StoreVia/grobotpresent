@@ -8,7 +8,7 @@ module.exports = class Fact extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('fact')
-				.setDescription('Gives A Random Fact.')
+				.setDescription('Gives A Random Fact.(premium)')
 				.setDMPermission(true),
 			usage: 'fact',
 			category: 'utility',

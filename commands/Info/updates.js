@@ -20,7 +20,7 @@ module.exports = class Updates extends Command {
 		let updatetext = null;
 		let id = null;
 		if(!updateget) updatetext = "None"
-		if(updateget) [updatetext, id] = updateget[0].textandid.split(',')
+		if(updateget) [updatetext, id] = updateget.textandid.split(',')
 		 
 
 		await interaction.deferReply();

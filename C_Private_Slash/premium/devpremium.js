@@ -52,9 +52,10 @@ module.exports = class Update extends Command {
 
         if(subcommand === "active-keys"){
             let activekeys = await keys.get(`premium`);
-
+            let usedkeys1 = await usedkeys.get(`premium`)
+            let filter = activekeys.filter(key => !usedkeys1.includes(key));
             await interaction.deferReply()
-            interaction.followUp({ content: `**AcitveKeys: **\n${activekeys ? activekeys.join(`\n`) : "None"}` })
+            interaction.followUp({ content: `**AcitveKeys: **\n${filter.join(`\n`)}` })
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

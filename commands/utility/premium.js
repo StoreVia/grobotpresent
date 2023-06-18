@@ -61,7 +61,6 @@ module.exports = class Ping extends Command {
                         } else {
                             await used.push(`premium`, `${enteredkey}`)
                             await activatedkey.set(`${interaction.user.id}`, {keyandtime:`${enteredkey}, ${Date.now()}`} )
-                            await keys.set(`premium`, `${filteredKeys}`)
                             interaction.followUp({ content: `> Done✅.Your Premium Key Has Been Activated.` })
                         }
                     }
@@ -88,10 +87,10 @@ module.exports = class Ping extends Command {
                         .setColor(`${process.env.ec}`);
                     return interaction.followUp({ embeds: [embed] })
                 } else if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
-                    return interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
+                    return interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It By Using "/premium buy" Command.(Applied Charges)` })
                 }
             } else if(!activatedfetch){
-                return interaction.followUp({ content: `> There Is No Recent Premium Subscription In Your Account.` })
+                return interaction.followUp({ content: `> There Is No Registered Premium Subscription In Your Account.` })
             }
             
         }

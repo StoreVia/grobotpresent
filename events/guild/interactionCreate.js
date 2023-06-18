@@ -35,19 +35,18 @@ module.exports = class InteractionCreate extends Event {
 				let userpremiumcheck = await activatedkey.get(`${interaction.user.id}`)
 				if(command.description.includes(`premium`)){
 					if(userpremiumcheck){
-						let [key, time] = userpremiumcheck[0].keyandtime.split(',');
+						let [key, time] = userpremiumcheck.keyandtime.split(',');
 						if(process.env.premium_timeout - (Date.now() - time.trim()) < 0){
 							await interaction.deferReply({ ephemeral: true })
 							interaction.followUp({ content: `> Your Premium Subscription Is Expired. Renew It Buy Using "/premium buy" Command.(Applied Charges)` })
 						} else {
 							let updatedb = client.db.table(`updates`)
 							let update = await client.db.get(`update`)
-							let [text, id] = update[0].textandid.split(',');
 							let updatecheck = await updatedb.get(`${interaction.user.id}`)
 							if(!update){
 								command.run(client, interaction);
 							} else if(update){
-								let [text, id] = update[0].textandid.split(',');
+								let [text, id] = update.textandid.split(',');
 								if(updatecheck != id.trim()){
 									interaction.channel.send({ content: `${interaction.user}, You Have A Unread Message. Use "/updates" Command To Check The Message.` })
 									command.run(client, interaction);

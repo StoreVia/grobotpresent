@@ -81,16 +81,6 @@ module.exports = class ReadyEvent extends Event {
 		await client.player.extractors.register(SoundCloudExtractor);
 		await client.player.extractors.register(AppleMusicExtractor);
 		await client.player.extractors.register(YouTubeExtractor);
-
-		await client.db.table(`premiumactivated`).set(`1`, {keyandtime: `123, ${Date.now()}`})
-		await client.db.table(`updates`).set(`1`, `123`)
-		await client.db.table(`ticket`).set(`1`, {details:{channel: `123`, category: `123`, ticketLogs: `123`, supportRole: `123`}})
-		await client.db.table(`ticketembed`).set(`1`,{title: `123`, description: `123`, thumbnail: `123`})
-		await client.db.table(`ticketblock`).set(`1`, [`123`])
-		await client.db.table(`chatbot`).set(`1`, `123`)
-		await client.db.table(`chatbotdisable`).set(`1`, `123`)
-
-		if(await client.db.table('premiumused').get(`premium`) !== null) { return; } else { await client.db.table(`premiumused`).push(`premium`, `123`)}
 	
 		console.log(colors.red(`Discord Bot Is Now Online With ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)} Users And ${client.guilds.cache.size} Servers.`));
 	}
