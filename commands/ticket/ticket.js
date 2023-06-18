@@ -119,8 +119,7 @@ module.exports = class Ticker extends Command {
         const ticketdb = client.db.table(`ticket`)
         const ticketembeddb = client.db.table(`ticketembed`)
         const ticketblockdb = client.db.table(`ticketblock`)
-        const chatbotdisable = client.db.table(`ticketdisable`)
-        const checkdisable = await chatbotdisable.get(`${interaction.guild.id}`);
+        const ticketdisable = client.db.table(`ticketdisable`)
         let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
         let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
         let subcommand = interaction.options.getSubcommand();
@@ -153,21 +152,22 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "dashboard"){
-            const checkchannel = db.fetch(`ticketchannel_${interaction.guild.id}`);
-            const checkdisable = db.fetch(`ticketdisable_${interaction.guild.id}`);
+            const checkchannel = await ticketdb.get(`${interaction.guild.id}`);
+            const checkdisable = await ticketdisable.get(`${interaction.guild.id}`);
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Ticket System Is Enabled.`})
             } else if(checkchannel){
+                let channel = checkchannel.details.channel;
                 if(checkdisable){
                     await interaction.deferReply();
                     buttonRow.components[1].setDisabled(true)
-                    const msg = await interaction.followUp({ embeds: [embed("Disabled", `<#${checkchannel}>`)], components: [buttonRow]})
+                    const msg = await interaction.followUp({ embeds: [embed("Disabled", `<#${channel}>`)], components: [buttonRow]})
                     dashCollector(msg);
                 } else if(!checkdisable){
                     await interaction.deferReply();
                     buttonRow.components[0].setDisabled(true)
-                    const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${channel}>`)], components: [buttonRow]})
                     dashCollector(msg);
                 }
             }
@@ -588,20 +588,29 @@ module.exports = class Ticker extends Command {
             const filter = i => i.customId;
 		    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
             collector.on('collect', async i => {
-                const checkchannel = db.fetch(`ticketchannel_${interaction.guild.id}`);
-                const checkdisable = db.fetch(`ticketdisable_${interaction.guild.id}`);
+                const checkchannel = await ticketdb.get(`${interaction.guild.id}`);
 			    if (i.user.id != interaction.user.id) {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "tienable") {
-                    db.delete(`ticketdisable_${interaction.guild.id}`);
-                    buttonRow.components[0].setDisabled(true)
-                    buttonRow.components[1].setDisabled(false)
-                    await i.update({ embeds: [embed(`Enabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    if(!checkchannel){
+                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
+                    } else {
+                        let channel = checkchannel.details.channel;
+                        ticketdisable.delete(`${interaction.guild.id}`);
+                        buttonRow.components[0].setDisabled(true)
+                        buttonRow.components[1].setDisabled(false)
+                        await i.update({ embeds: [embed(`Enabled`, `<#${channel}>`)], components: [buttonRow]})
+                    }
                 } else if(i.customId === "tidisable"){
-                    db.set(`ticketdisable_${interaction.guild.id}`, "true");
-                    buttonRow.components[1].setDisabled(true)
-                    buttonRow.components[0].setDisabled(false)
-                    await i.update({ embeds: [embed(`Disabled`, `<#${checkchannel}>`)], components: [buttonRow]})
+                    if(!checkchannel){
+                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
+                    } else {
+                        let channel = checkchannel.details.channel;
+                        ticketdisable.set(`${interaction.guild.id}`, checkchannel);
+                        buttonRow.components[1].setDisabled(true)
+                        buttonRow.components[0].setDisabled(false)
+                        await i.update({ embeds: [embed(`Disabled`, `<#${channel}>`)], components: [buttonRow]})
+                    }
                 } else if(i.customId === "ticstop"){
                     buttonRow.components.map(component=> component.setDisabled(true));
                     await i.update({ components: [buttonRow]})

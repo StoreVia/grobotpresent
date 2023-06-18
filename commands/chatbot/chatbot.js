@@ -165,7 +165,6 @@ module.exports = class ChatBot extends Command {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "chenable") {
                     if(!checkchannel){
-                        console.log(`1`)
                         await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
                     } else {
                         chatbotdisable.delete(`${interaction.guild.id}`);

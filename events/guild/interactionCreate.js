@@ -379,7 +379,6 @@ module.exports = class InteractionCreate extends Event {
 					}
 				}
 			} catch(e) {
-				console.log(e)
 				if(channelcheck){
 					await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
 				} else {
