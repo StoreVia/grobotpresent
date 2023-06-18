@@ -38,11 +38,11 @@ module.exports = class Ping extends Command {
             let enteredkey = interaction.options.getString(`redeem_code`);
             let avilablekeys = await keys.get(`premium`)
             let usedkeys = await used.get(`premium`);
-            let filteredKeys = avilablekeys.filter(key => !usedkeys.includes(key));
             try{
+                let filteredKeys = avilablekeys.filter(key => !usedkeys.includes(key));
                 let check = avilablekeys.some(value => value === enteredkey)
                 if(!check){
-                    interaction.followUp({ content: `> Premium Key Not Found.1` })
+                    interaction.followUp({ content: `> Premium Key Not Found.` })
                 } if(check){
                     if(!filteredKeys.includes(`${enteredkey}`)){
                         return interaction.followUp({ content: `> Premium Key Already Used.` })
@@ -66,7 +66,6 @@ module.exports = class Ping extends Command {
                     }
                 }
             } catch(e) {
-                console.log(e)
                 return interaction.followUp({ content: `> Premium Key Not Found.` })
             }
         }
@@ -92,7 +91,6 @@ module.exports = class Ping extends Command {
             } else if(!activatedfetch){
                 return interaction.followUp({ content: `> There Is No Registered Premium Subscription In Your Account.` })
             }
-            
         }
 
         

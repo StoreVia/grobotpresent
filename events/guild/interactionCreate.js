@@ -191,13 +191,6 @@ module.exports = class InteractionCreate extends Event {
 		let ticketblockarray = Array.isArray(ticketblockcheck) ? ticketblockcheck : [];
 
 		if(interaction.customId === 'ticketopen') {
-			const role = ticketcheck.details.supportRole;
-		const category1 = ticketcheck.details.category;
-		const category = client.channels.cache.get(category1)
-		const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-		const logs = ticketcheck.details.ticketLogs;
-		const guild = client.guilds.cache.get(interaction.guild.id);
-		const logschannel = guild.channels.cache.get(logs);
 			if(checkdisabledcheck){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
 					await interaction.deferReply({ ephemeral: true })
@@ -222,6 +215,13 @@ module.exports = class InteractionCreate extends Event {
 		}
   
 		if(interaction.customId === "closeticket"){
+			const role = ticketcheck.details.supportRole;
+			const category1 = ticketcheck.details.category;
+			const category = client.channels.cache.get(category1)
+			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
+			const logs = ticketcheck.details.ticketLogs;
+			const guild = client.guilds.cache.get(interaction.guild.id);
+			const logschannel = guild.channels.cache.get(logs);
 			const row = new Discord.ActionRowBuilder()
 				.addComponents(
 		 			new Discord.ButtonBuilder()
@@ -240,6 +240,13 @@ module.exports = class InteractionCreate extends Event {
   		}
 
 		if(interaction.customId === "ticontinue"){
+			const role = ticketcheck.details.supportRole;
+			const category1 = ticketcheck.details.category;
+			const category = client.channels.cache.get(category1)
+			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
+			const logs = ticketcheck.details.ticketLogs;
+			const guild = client.guilds.cache.get(interaction.guild.id);
+			const logschannel = guild.channels.cache.get(logs);
 			if(!interaction.member.roles.cache.has(`${role}`)){
 				await interaction.deferReply({ ephemeral: true })
 				await interaction.followUp({ content: `> You Don't Have Permission\n> Require <@&${role}>.` })
@@ -311,6 +318,14 @@ module.exports = class InteractionCreate extends Event {
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 		async function ticketOpen() {
+			await interaction.deferReply({ ephemeral: true })
+			const role = ticketcheck.details.supportRole;
+			const category1 = ticketcheck.details.category;
+			const category = client.channels.cache.get(category1)
+			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
+			const logs = ticketcheck.details.ticketLogs;
+			const guild = client.guilds.cache.get(interaction.guild.id);
+			const logschannel = guild.channels.cache.get(logs);
 			try{
 				if(ticketblockcheck.includes(`${interaction.user.id}`)){
 					await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
@@ -364,6 +379,7 @@ module.exports = class InteractionCreate extends Event {
 					}
 				}
 			} catch(e) {
+				console.log(e)
 				if(channelcheck){
 					await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
 				} else {
