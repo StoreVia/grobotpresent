@@ -38,7 +38,7 @@ module.exports = class Botinfo extends Command {
 			.setDescription(`**Please Support Us By Voting On Top.gg**`)
             .setThumbnail(`${process.env.iconurl}`)
             .addFields(
-                { name: '**✉️ InviteMe : **', value: `> [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
+                { name: '**✉️ InviteMe : **', value: `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
                 { name: '**🟢 Api: **', value: `> ┕\`${Math.round(client.ws.ping)}ms\``, inline: true },
 				{ name: '**🏓 Latency: **', value: `> ┕\`0ms\``, inline: true },
             	{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
@@ -57,7 +57,7 @@ module.exports = class Botinfo extends Command {
 				.setDescription(`**Please Support Us By Voting On Top.gg**`)
             	.setThumbnail(`${process.env.iconurl}`)
             	.addFields(
-                	{ name: '**✉️ InviteMe : **', value: `> [inviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
+                	{ name: '**✉️ InviteMe : **', value: `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
                 	{ name: '**🟢 Api: **', value: `> \`${Math.round(client.ws.ping)} ms\``, inline: true },
 					{ name: '**🏓 Latency: **', value: `> \`${msg.createdTimestamp - interaction.createdTimestamp} ms\``, inline: true },
             		{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },

@@ -23,7 +23,7 @@ module.exports = class Google extends Command {
 
         const embed = new EmbedBuilder()
         	.setTitle(`${query}`)
-        	.setThumbnail(`https://cdn.discordapp.com/attachments/1042676003291533365/1060935267164364841/Google__G__Logo.svg.webp`)
+        	.setThumbnail(`https://cdn.discordapp.com/attachments/1103298159700103178/1121099172062429256/download.png`)
         	.setDescription(`**Searched for: **\n${query} \n\n**Result: **\n[Here's What I found](https://google.com/search?q=${query})`)
         	.setColor(`${process.env.ec}`)
         	.setFooter({

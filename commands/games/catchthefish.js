@@ -9,7 +9,7 @@ module.exports = class CatchTheFish extends Command {
 				.setDescription('Play Catch The Fish Game.')
         .addNumberOption(option =>
           option.setName(`count`)
-            .setDescription(`Give Number Of Fishes You Want To Catch.(enter number less than 25)`)
+            .setDescription(`Give Number Of Fishes You Want To Catch.(enter number less than or equal to 10)`)
             .setRequired(true)),
 			usage: 'catchthefish',
 			category: 'Games',

@@ -1,3 +1,4 @@
+const { useMetadata } = require('discord-player');
 const Command = require('../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { P } = require('flip-text/lib/chars');
@@ -39,7 +40,7 @@ module.exports = class Ping extends Command {
             let avilablekeys = await keys.get(`premium`)
             let usedkeys = await used.get(`premium`);
             try{
-                let filteredKeys = avilablekeys.filter(key => !usedkeys.includes(key));
+                let filteredKeys = avilablekeys.filter(key => !key.includes(usedkeys));
                 let check = avilablekeys.some(value => value === enteredkey)
                 if(!check){
                     interaction.followUp({ content: `> Premium Key Not Found.` })
@@ -66,6 +67,7 @@ module.exports = class Ping extends Command {
                     }
                 }
             } catch(e) {
+                console.log(e)
                 return interaction.followUp({ content: `> Premium Key Not Found.` })
             }
         }

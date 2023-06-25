@@ -106,8 +106,8 @@ module.exports = class Ticker extends Command {
                                     .setDescription(`Select User You Want To UnBlock.`)
                                     .setRequired(true)))
                     .addSubcommand(subcommand =>
-                         subcommand.setName(`dashboard`)
-                            .setDescription(`Get Chatbot Dashboard.`)),
+                         subcommand.setName(`delete`)
+                            .setDescription(`Delete Ticket System.`)),
 			usage: 'ticket',
 			category: 'ticket',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
@@ -119,58 +119,15 @@ module.exports = class Ticker extends Command {
         const ticketdb = client.db.table(`ticket`)
         const ticketembeddb = client.db.table(`ticketembed`)
         const ticketblockdb = client.db.table(`ticketblock`)
-        const ticketdisable = client.db.table(`ticketdisable`)
         let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
         let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
         let subcommand = interaction.options.getSubcommand();
 
-///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
-
-        let buttonRow = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setLabel(`Enable`)
-                        .setStyle(ButtonStyle.Success)
-                        .setCustomId(`tienable`),
-                    new ButtonBuilder()
-                        .setLabel(`Disable`)
-                        .setStyle(ButtonStyle.Danger)
-                        .setCustomId(`tidisable`),
-                    new ButtonBuilder()
-                        .setLabel(`Stop`)
-                        .setStyle(ButtonStyle.Danger)
-                        .setCustomId(`ticstop`),
-                )
-
-///////////////////////////////////////////////{Dash_Buttons}//////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
             await interaction.deferReply({ ephemeral: true })
             await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
-        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if(subcommand === "dashboard"){
-            const checkchannel = await ticketdb.get(`${interaction.guild.id}`);
-            const checkdisable = await ticketdisable.get(`${interaction.guild.id}`);
-            if(!checkchannel){
-                await interaction.deferReply({ ephemeral: true });
-                return await interaction.followUp({ content: `> Dashboard Is Only Accessable When Ticket System Is Enabled.`})
-            } else if(checkchannel){
-                let channel = checkchannel.details.channel;
-                if(checkdisable){
-                    await interaction.deferReply();
-                    buttonRow.components[1].setDisabled(true)
-                    const msg = await interaction.followUp({ embeds: [embed("Disabled", `<#${channel}>`)], components: [buttonRow]})
-                    dashCollector(msg);
-                } else if(!checkdisable){
-                    await interaction.deferReply();
-                    buttonRow.components[0].setDisabled(true)
-                    const msg = await interaction.followUp({ embeds: [embed(`Enabled`, `<#${channel}>`)], components: [buttonRow]})
-                    dashCollector(msg);
-                }
-            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,6 +218,19 @@ module.exports = class Ticker extends Command {
 				        return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
                     }
                 }
+            }
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if(subcommand === "delete"){
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Ticket System Was Not Setup In Your Guild.`})
+            } else if(ticketcheck){
+                await interaction.deferReply({ ephemeral: true });
+                await ticketdb.delete(`${interaction.guild.id}`);
+                return await interaction.followUp({ content: `> Ticket System Was Not Deleted In Your Guild.`})
             }
         }
 
@@ -567,61 +537,6 @@ module.exports = class Ticker extends Command {
         function isValidURL(url){
             const pattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
             return pattern.test(url);
-        }
-        function embed(field1, field3){
-            let embed = new EmbedBuilder()
-                .setTitle(`Ticket Dashboard`)
-                .setDescription(`**Control Ticket System With Buttons.**`)
-                .addFields(
-                    { name: `**Status: **`, value: `\`${field1}\``, inline: true },
-                    { name: `\u200b`, value: `\u200b`, inline: true },
-                    { name: `**Channel: **`, value: `${field3}`, inline: true },
-                )
-                .setColor(`${process.env.ec}`)
-                .setFooter({
-                    text: `${client.user.username} - ${process.env.year} ©`, 
-                    iconURL: process.env.iconurl
-                });
-            return embed;
-        }
-        function dashCollector(msg){
-            const filter = i => i.customId;
-		    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
-            collector.on('collect', async i => {
-                const checkchannel = await ticketdb.get(`${interaction.guild.id}`);
-			    if (i.user.id != interaction.user.id) {
-				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			    } else if(i.customId === "tienable") {
-                    if(!checkchannel){
-                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
-                    } else {
-                        let channel = checkchannel.details.channel;
-                        ticketdisable.delete(`${interaction.guild.id}`);
-                        buttonRow.components[0].setDisabled(true)
-                        buttonRow.components[1].setDisabled(false)
-                        await i.update({ embeds: [embed(`Enabled`, `<#${channel}>`)], components: [buttonRow]})
-                    }
-                } else if(i.customId === "tidisable"){
-                    if(!checkchannel){
-                        await i.update({ embeds: [], content:`Dashboard Is Only Accessable When Chatbot Is Enabled.`, components: []})
-                    } else {
-                        let channel = checkchannel.details.channel;
-                        ticketdisable.set(`${interaction.guild.id}`, checkchannel);
-                        buttonRow.components[1].setDisabled(true)
-                        buttonRow.components[0].setDisabled(false)
-                        await i.update({ embeds: [embed(`Disabled`, `<#${channel}>`)], components: [buttonRow]})
-                    }
-                } else if(i.customId === "ticstop"){
-                    buttonRow.components.map(component=> component.setDisabled(true));
-                    await i.update({ components: [buttonRow]})
-                }
-		    })
-		    collector.on('end', async (_, reason) => {
-			    if (reason === 'idle' || reason === 'user') {
-                    buttonRow.components.map(component=> component.setDisabled(true));
-				    return await interaction.editReply({ components: [buttonRow] });
-			    }
-		    });
         }
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////

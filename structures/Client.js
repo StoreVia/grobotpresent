@@ -3,6 +3,7 @@ const { Collection } = require('@discordjs/collection');
 const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
 const { QuickDB } = require("quick.db");
+const { DiscordTogether } = require('../B_Gro_Modules/discord-together');
 
 module.exports = class BotClient extends Client {
 	constructor(...opt) {
@@ -39,6 +40,7 @@ module.exports = class BotClient extends Client {
 		this.commands = new Collection();
 		this.events = new Collection();
 		this.db = new QuickDB();
+		this.discordTogether = new DiscordTogether(this);
 
 		new EventHandler(this).build('../events');
 		new CommandHandler(this).build('../commands');
