@@ -17,18 +17,12 @@
 const Client = require('./structures/Client');
 require('dotenv').config();
 const Discord = require(`discord.js`)
-const version = require(`./package.json`).version;
-const { GiveawaysManager } = require("./B_Gro_Modules/discord-giveaways");
 const client = new Client();
-const moment = require('moment');
 const { readdirSync } = require("fs");
 const colors = require("colors");
-const fetch = require(`node-fetch`);
-const { Player } = require('discord-player');
 //packagesend
 
-//clientextensionsstart
-client.player = new Player(client);
+//clientstart
 client.commands = new Discord.Collection();
 client.categories = require("fs").readdirSync(`./commands`);
 ["Command", "Event", "RegisterSlash"]
@@ -36,17 +30,7 @@ client.categories = require("fs").readdirSync(`./commands`);
 .forEach(h => {
   require(`./handler/${h}`);
 })
-client.giveawaysManager = new GiveawaysManager(client, {
-  storage: "./giveaway_utility/giveaways.json",
-  updateCountdownEvery: 5000,
-  default: {
-    botsCanWin: false,
-    embedColor: process.env.ec,
-    embedColorEnd: process.env.ec,
-    reaction: "🎉"
-  }
-});
-//clientextensionsend
+//clientend
 
 //consoleloggingstart
 try {

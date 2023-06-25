@@ -143,26 +143,6 @@ module.exports = class InteractionCreate extends Event {
 				db.set(`leavetext_${interaction.guild.id}`, text1)
 			})
 		}
-		if(interaction.customId === "myModalDescription"){
-			const description = interaction.fields.getTextInputValue('text');
-			const ticketdb = client.db.table(`ticket`)
-        	const ticketembeddb = client.db.table(`ticketembed`)
-        	let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
-        	let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
-            if(!ticketcheck){
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
-            } else {
-				let title1 = ticketembedcheck?.title || null;
-				let thumbnail12 = ticketembedcheck?.thumbnail || null;
-                ticketembeddb.set(`${interaction.guild.id}`, {
-                    title: title1,
-                    description: description,
-                    thumbnail: thumbnail12
-                })
-                return await interaction.reply({ content: `> Done✅. Ticket Panel Description Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.`, ephemeral: true })
-            }
-		}
 //welcomeend
 
 //privateslashstart
@@ -199,13 +179,6 @@ module.exports = class InteractionCreate extends Event {
 				}
 			 } else if(ticketcheck){
 				await interaction.deferReply({ ephemeral: true })
-				const role = ticketcheck.details.supportRole;
-				const category1 = ticketcheck.details.category;
-				const category = client.channels.cache.get(category1)
-				const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-				const logs = ticketcheck.details.ticketLogs;
-				const guild = client.guilds.cache.get(interaction.guild.id);
-				const logschannel = guild.channels.cache.get(logs);
 				try{
 					if(ticketblockcheck.includes(`${interaction.user.id}`)){
 						await interaction.followUp({ content: `> You Are Blocked From Creating Ticket.` })
@@ -217,15 +190,8 @@ module.exports = class InteractionCreate extends Event {
 				}
 			}
 		}
-  
 		if(interaction.customId === "closeticket"){
 			const role = ticketcheck.details.supportRole;
-			const category1 = ticketcheck.details.category;
-			const category = client.channels.cache.get(category1)
-			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-			const logs = ticketcheck.details.ticketLogs;
-			const guild = client.guilds.cache.get(interaction.guild.id);
-			const logschannel = guild.channels.cache.get(logs);
 			const row = new Discord.ActionRowBuilder()
 				.addComponents(
 		 			new Discord.ButtonBuilder()
@@ -242,12 +208,8 @@ module.exports = class InteractionCreate extends Event {
 			await interaction.deferReply()
 			await interaction.followUp({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   		}
-
 		if(interaction.customId === "ticontinue"){
 			const role = ticketcheck.details.supportRole;
-			const category1 = ticketcheck.details.category;
-			const category = client.channels.cache.get(category1)
-			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
 			const logs = ticketcheck.details.ticketLogs;
 			const guild = client.guilds.cache.get(interaction.guild.id);
 			const logschannel = guild.channels.cache.get(logs);
@@ -313,9 +275,28 @@ module.exports = class InteractionCreate extends Event {
 				}
 		  	}
   		}
-
 		if(interaction.customId === "tistop"){
 			interaction.message.delete();
+		}
+		if(interaction.customId === "myModalDescription"){
+			const description = interaction.fields.getTextInputValue('text');
+			const ticketdb = client.db.table(`ticket`)
+        	const ticketembeddb = client.db.table(`ticketembed`)
+        	let ticketcheck = await ticketdb.get(`${interaction.guild.id}`)
+        	let ticketembedcheck = await ticketembeddb.get(`${interaction.guild.id}`)
+            if(!ticketcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+            } else {
+				let title1 = ticketembedcheck?.title || null;
+				let thumbnail12 = ticketembedcheck?.thumbnail || null;
+                ticketembeddb.set(`${interaction.guild.id}`, {
+                    title: title1,
+                    description: description,
+                    thumbnail: thumbnail12
+                })
+                return await interaction.reply({ content: `> Done✅. Ticket Panel Description Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.`, ephemeral: true })
+            }
 		}
 //ticketend
 		
@@ -327,9 +308,6 @@ module.exports = class InteractionCreate extends Event {
 			const category1 = ticketcheck.details.category;
 			const category = client.channels.cache.get(category1)
 			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-			const logs = ticketcheck.details.ticketLogs;
-			const guild = client.guilds.cache.get(interaction.guild.id);
-			const logschannel = guild.channels.cache.get(logs);
 			if(channelcheck){
 				await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
 			} else {

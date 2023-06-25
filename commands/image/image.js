@@ -60,7 +60,7 @@ module.exports = class Image extends Command {
 
             if(StringOption == "img_gay"){
                 const gay_user = UserOption.displayAvatarURL({ extension: 'png' });
-                return await interaction.followUp({ files : [{ attachment: `https://some-random-api.com/canvas/Gay?avatar=${gay_user}`, name: 'image.png' }]});
+                return await interaction.followUp({ files : [{ attachment: `${process.env.srapi}Gay?avatar=${gay_user}`, name: 'image.png' }]});
             }
 
             if(StringOption == "img_greyscale"){
@@ -104,7 +104,7 @@ module.exports = class Image extends Command {
             const youtubeuseravatar = UserOption.displayAvatarURL({ extension: 'png' });
             const youtubeusername = UserOption.username;
             const comment = interaction.options.getString(`text`);
-            return await interaction.followUp({ files : [{ attachment: `https://some-random-api.com/canvas/youtube-comment?avatar=${youtubeuseravatar}&username=${youtubeusername}&comment=${comment}`, name: 'image.png' }]});
+            return await interaction.followUp({ files : [{ attachment: `${process.env.srapi}youtube-comment?avatar=${youtubeuseravatar}&username=${youtubeusername}&comment=${comment}`, name: 'image.png' }]});
         }
 	}
 };

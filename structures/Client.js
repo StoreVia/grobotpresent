@@ -4,6 +4,8 @@ const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
 const { QuickDB } = require("quick.db");
 const { DiscordTogether } = require('../B_Gro_Modules/discord-together');
+const { GiveawaysManager } = require("../B_Gro_Modules/discord-giveaways");
+const { Player } = require('discord-player');
 
 module.exports = class BotClient extends Client {
 	constructor(...opt) {
@@ -41,6 +43,17 @@ module.exports = class BotClient extends Client {
 		this.events = new Collection();
 		this.db = new QuickDB();
 		this.discordTogether = new DiscordTogether(this);
+		this.player = new Player(this);
+		this.giveawaysManager = new GiveawaysManager(this, {
+			storage: "../giveaway_utility/giveaways.json",
+			updateCountdownEvery: 5000,
+			default: {
+			  botsCanWin: false,
+			  embedColor: process.env.ec,
+			  embedColorEnd: process.env.ec,
+			  reaction: "🎉"
+			}
+		});
 
 		new EventHandler(this).build('../events');
 		new CommandHandler(this).build('../commands');
