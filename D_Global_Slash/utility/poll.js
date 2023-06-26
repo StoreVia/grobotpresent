@@ -62,11 +62,11 @@ module.exports = class Ping extends Command {
 
             collector.on('collect', async i => {
                 if (i.user.id === interaction.user.id) {
-                    if (client.votedUsers.has(i.user.id)) {
+                    if (this.votedUsers.has(i.user.id)) {
                         await i.reply({ content: `You Have Already Voted.`, ephemeral: true });
                         return;
                     }
-                    client.votedUsers.add(i.user.id);
+                    this.votedUsers.add(i.user.id);
                     if(i.customId === "pchoice1") {
                         Choice1Votes++;
                     } else if(i.customId === "pchoice2"){
