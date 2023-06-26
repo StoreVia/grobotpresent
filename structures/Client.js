@@ -45,7 +45,7 @@ module.exports = class BotClient extends Client {
 		this.discordTogether = new DiscordTogether(this);
 		this.player = new Player(this);
 		this.giveawaysManager = new GiveawaysManager(this, {
-			storage: "../giveaway_utility/giveaways.json",
+			storage: "./giveaway_utility/giveaways.json",
 			updateCountdownEvery: 5000,
 			default: {
 			  botsCanWin: false,
@@ -56,7 +56,7 @@ module.exports = class BotClient extends Client {
 		});
 
 		new EventHandler(this).build('../events');
-		new CommandHandler(this).build('../commands');
+		new CommandHandler(this).build('../D_Global_Slash');
 		new CommandHandler(this).build('../C_Private_Slash');
 	}
 

@@ -24,7 +24,7 @@ const colors = require("colors");
 
 //clientstart
 client.commands = new Discord.Collection();
-client.categories = require("fs").readdirSync(`./commands`);
+client.categories = require("fs").readdirSync(`./D_Global_Slash`);
 ["Command", "Event", "RegisterSlash"]
 .filter(Boolean)
 .forEach(h => {
@@ -42,10 +42,10 @@ try {
   console.log(`     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`.bold.brightGreen)
 
   let amount = 0;
-  readdirSync("./commands/").forEach((dir) => {
-  const commands = readdirSync(`./commands/${dir}/`).filter((file) => file.endsWith(".js"));
+  readdirSync("./D_Global_Slash/").forEach((dir) => {
+  const commands = readdirSync(`./D_Global_Slash/${dir}/`).filter((file) => file.endsWith(".js"));
     for (let file of commands) {
-      let pull = require(`./commands/${dir}/${file}`);
+      let pull = require(`./D_Global_Slash/${dir}/${file}`);
       console.log( 
         colors.red(`Slash : `) + colors.green(`${dir} : `) + colors.yellow(file + " - " + "File Was Loaded")
       );

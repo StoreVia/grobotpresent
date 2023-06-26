@@ -62,12 +62,10 @@ module.exports = class Avatar extends Command {
         
         if(subcommand === "delete"){
             if(!automemecheck){
-                await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Automeme Was Not Bounded To Any Channel.`})
             } else if(automemecheck){
-                await interaction.deferReply({ ephemeral: true });
-                await automemecheck.delete(`${interaction.guild.id}`);
-                return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
+                await automemedb.delete(`${interaction.guild.id}`);
+                return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${automemecheck}>.`})
             }
         }  
 
