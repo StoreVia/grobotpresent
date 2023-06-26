@@ -24,8 +24,12 @@ const colors = require("colors");
 
 //clientstart
 client.commands = new Discord.Collection();
+client.messagecommands = new Discord.Collection();
+client.cooldowns = new Discord.Collection();
+client.aliases = new Discord.Collection();
 client.categories = require("fs").readdirSync(`./D_Global_Slash`);
-["Command", "Event", "RegisterSlash"]
+client.messagecategories = require("fs").readdirSync(`./E_Global_Message`);
+["Command", "Event", "RegisterSlash", "AntiCrash"]
 .filter(Boolean)
 .forEach(h => {
   require(`./handler/${h}`);
