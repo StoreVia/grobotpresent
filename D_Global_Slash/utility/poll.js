@@ -61,28 +61,22 @@ module.exports = class Ping extends Command {
 		    const collector = message.createMessageComponentCollector({ filter, idle: 300000 });
 
             collector.on('collect', async i => {
-                if (i.user.id === interaction.user.id) {
-                    if (this.votedUsers.has(i.user.id)) {
-                        await i.reply({ content: `You Have Already Voted.`, ephemeral: true });
-                        return;
-                    }
-                    this.votedUsers.add(i.user.id);
                     if(i.customId === "pchoice1") {
                         Choice1Votes++;
                     } else if(i.customId === "pchoice2"){
                         Choice2Votes++
                     }
                     const Total = Choice1Votes + Choice2Votes;
-                    const Percentage1 = (Choice1Votes / totalVotes) * 100 || 0;
-				    const Percentage2 = (Choice2Votes / totalVotes) * 100 || 0;
+                    const Percentage1 = (Choice1Votes / Total) * 100 || 0;
+				    const Percentage2 = (Choice2Votes / Total) * 100 || 0;
 
-                    embed.addFields(
-                        { name: `**Choice1: **`, value:`> ${Percentage1}`, inline: true },
-                        { name: `**Choice2: **`, value:`> ${Percentage2}`, inline: true },
+                    embed.setFields(
+                        { name: `**Choice1: **`, value:`> ${Math.floor(Percentage1)}%`, inline: true },
+                        { name: `**Choice2: **`, value:`> ${Math.floor(Percentage2)}%`, inline: true },
                         { name: `**Total: **`, value:`> ${Total}`, inline: true }
                     )
                     await i.update({ embeds: [embed] })
-                }
+                
             })
     
             collector.on('end', async (_, reason) => {
