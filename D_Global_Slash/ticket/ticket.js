@@ -142,12 +142,10 @@ module.exports = class Ticker extends Command {
             if(!ticketcheck){
                 return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` }).then(() => {
                     ticketdb.set(interaction.guild.id, {
-                        details: {
-                          channel: channel1.id,
-                          category: category.id,
-                          ticketLogs: ticketlogs.id,
-                          supportRole: supportrole.id
-                        }
+                        channel: channel1.id,
+                        category: category.id,
+                        ticketLogs: ticketlogs.id,
+                        supportRole: supportrole.id
                     });
                 })
             } else if(ticketcheck){
@@ -170,7 +168,7 @@ module.exports = class Ticker extends Command {
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
-                let [channel, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let [channel, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
                 let channel1 = interaction.guild.channels.cache.get(channel)
                 if(!ticketembedcheck){
                     const embed = new EmbedBuilder()
@@ -242,7 +240,7 @@ module.exports = class Ticker extends Command {
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
-                let [channel, category, logs, role2] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let [channel, category, logs, role2] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
                 let role1 = role(`support_role`);
                 if(role1.id === role2){
                     await interaction.followUp({ content: `> You Should Provide New Role Inorder To Change Old Role.` })
@@ -280,7 +278,7 @@ module.exports = class Ticker extends Command {
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
-                let [channel2, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let [channel2, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
                 let channel1 = channel(`select_channel`);
                 if(channel1.id === channel2){
                     await interaction.followUp({ content: `> You Should Provide New Channel Inorder To Change Old Channel.` })
@@ -318,7 +316,7 @@ module.exports = class Ticker extends Command {
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
-                let [channel2, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let [channel2, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
                 let channel1 = channel(`select_category`);
                 if(channel1.id === category){
                     await interaction.followUp({ content: `> You Should Provide New Category Inorder To Change Old Category.` })
@@ -356,7 +354,7 @@ module.exports = class Ticker extends Command {
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
-                let [channel2, category, logs, role] = [ticketcheck.details.channel, ticketcheck.details.category, ticketcheck.details.ticketLogs, ticketcheck.details.supportRole];
+                let [channel2, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
                 let channel1 = channel(`select_logs_channel`);
                 if(channel1.id === logs){
                     await interaction.followUp({ content: `> You Should Provide New Logs Channel Inorder To Change Old Logs Channel.` })
