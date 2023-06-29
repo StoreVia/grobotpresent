@@ -40,28 +40,24 @@ module.exports = class Welcome extends Command {
                                         .setDescription(`Enter Background Url For Welcome Message.`)
                                         .setRequired(true))))
                 .addSubcommandGroup(group =>
-                    group.setName(`dm`)
-                        .setDescription(`Dm's User When Joined Server.`)
+                    group.setName(`dm-user`)
+                        .setDescription(`Edit User's Dm Welcome Message When That User Join's Server.`)
                         .addSubcommand(subcommand =>
-                            subcommand.setName(`user`)
-                                .setDescription(`Dm's User When Joined Server.`)
+                            subcommand.setName(`text-edit`)
+                                .setDescription(`Edit User's Dm Welcome Message When That User Join's Server.`))
+                        .addSubcommand(subcommand =>
+                            subcommand.setName(`dset`)
+                                .setDescription(`Dm's User When Joined Server.`))
+                        .addSubcommand(subcommand => 
+                            subcommand.setName(`guide`)
+                                .setDescription(`Get Guidence About Setting Welcome System.`)
                                 .addStringOption(option =>
                                     option.setName(`set`)
                                         .setDescription(`Dm's User When Joined Server Settings.`)
                                         .setRequired(true)
                                         .addChoices(
                                             { name: 'On', value: 'on'},
-                                            { name: 'Off', value: 'off'}
-                                        ))))
-                .addSubcommandGroup(group =>
-                    group.setName(`dm-user`)
-                        .setDescription(`Edit User's Dm Welcome Message When That User Join's Server.`)
-                        .addSubcommand(subcommand =>
-                            subcommand.setName(`text-edit`)
-                                .setDescription(`Edit User's Dm Welcome Message When That User Join's Server.`)))
-                .addSubcommand(subcommand => 
-                    subcommand.setName(`guide`)
-                        .setDescription(`Get Guidence About Setting Welcome System.`)),
+                                            { name: 'Off', value: 'off'})))),
 			usage: 'welcome',
 			category: 'welcome',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
@@ -121,7 +117,7 @@ module.exports = class Welcome extends Command {
             let validurl = isValidURL(background)
             if(!welcomesetcheck){
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> You Have Not Setup Welcome System Yet. Use "/welcome set" Command To Setup Welcome System.` })
+                return await interaction.followUp({ content: `> You Have Not Setup Welcome System Yet. Use "/welcome channel set" Command To Setup Welcome System.` })
             } else {
                 if(validurl === false){
                     await interaction.deferReply({ ephemeral: true })
@@ -174,7 +170,7 @@ module.exports = class Welcome extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(subcommand === "user"){
+        if(subcommand === "dset"){
             const set = string("set");
             const userdmoncheck = db.fetch(`welcomedm_${interaction.guild.id}`, "on")
             const userdmoffcheck = db.fetch(`welcomedm_${interaction.guild.id}`, "off")
@@ -279,21 +275,6 @@ module.exports = class Welcome extends Command {
                         ]   
                     ),
                 );
-            const disabled = new ActionRowBuilder()
-			    .addComponents(
-				    new StringSelectMenuBuilder()
-					    .setPlaceholder('Select An Option')
-					    .setCustomId('colors1')
-					    .setDisabled(true)
-                	    .setOptions([
-						    {
-							    label: 'GroBot',
-							    value: 'grobot',
-							    emoji: '🤖',
-						    }, 
-                        ]
-                    )
-			    );
             const embed = new EmbedBuilder()
                 .setTitle(`Select The Color`)
                 .setColor(`${process.env.ec}`)

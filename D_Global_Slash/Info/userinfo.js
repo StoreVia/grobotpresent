@@ -48,7 +48,7 @@ module.exports = class Userinfo extends Command {
         let target = await interaction.guild.members.fetch(UserOption.id)
         let userFlags = UserOption.flags.toArray();
         let filteredFlags = userFlags.filter(f => f in flag);
-		let flog = filteredFlags.length ? formattor.format(filteredFlags.map(flags => flag[flags])) : "None" ;
+		let flog = await filteredFlags.length ? formattor.format(filteredFlags.map(flags => flag[flags])) : "None" ;
 
         const userEmbed = new EmbedBuilder()
             .setAuthor({ 
@@ -61,19 +61,19 @@ module.exports = class Userinfo extends Command {
             .addFields(
 		        { name: '**Username: **', value: `> ${UserOption.username}`, inline: true },
 		        { name: '**Tag: **', value: `> #${UserOption.discriminator}`,inline: true },
-		        { name: '**ID: **', value: `> ${UserOption.id}`, inline: true },       
+		        { name: '**Id: **', value: `> ${UserOption.id}`, inline: true },       
                 { name: '**Avatar: **', value: `> [ClickHere](${UserOption.displayAvatarURL({ size: 4096, dynamic: true, format: "png" })})`,inline: true },
                 { name: '**Bot: **', value: `> ${UserOption.bot ? "\`✅\`" : "\`❌\`"}`, inline: true },
-                { name: `**Status: **`, value: `\`${statuses[UserOption1.presence ? UserOption1.presence.status : "offline"]}\``, inline: true },
+                { name: `**Status: **`, value: `> \`${statuses[UserOption1.presence ? UserOption1.presence.status : "offline"]}\``, inline: true },
                 { name: '**Roles: **', value: `> ${target.roles.cache.map(r => r).join(' ').replace("@everyone", "") || "NONE"}`, inline: false },
-                { name: '**Discord User Since: **', value: `\`\`\`> ${moment(UserOption.createdAt).format(`DD-MM-YYYY`)}\`\`\``,inline: true },
-                { name: '**Server Joined: **', value: `\`\`\`> ${moment(UserOption1.joinedAt).format(`DD-MM-YYYY`)}\`\`\``, inline: true },
+                { name: '**DiscordUserSince: **', value: `\`\`\`> ${moment(UserOption.createdAt).format(`DD-MM-YYYY`)}\`\`\``,inline: true },
+                { name: '**ServerJoined: **', value: `\`\`\`> ${moment(UserOption1.joinedAt).format(`DD-MM-YYYY`)}\`\`\``, inline: true },
                 { name: '**Flages: **', value: `\`\`\`> ${flog.replace(`, `, `\n> `)}\`\`\``, inline: false },
 	        )
             .setFooter({
                 text: `${client.user.username} - ${process.env.year} ©`, 
                 iconURL: process.env.iconurl
             });
-        return await interaction.followUp({ embeds: [userEmbed] })
+        return await interaction.followUp({ content: `**DiscordUserSince: **<t:${Math.floor((UserOption.createdAt)/1000)}:R>\n**ServerJoined: ** <t:${Math.floor((UserOption1.joinedAt)/1000)}:R>`, embeds: [userEmbed] })
 	}
 };
