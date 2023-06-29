@@ -86,21 +86,18 @@ module.exports = class InteractionCreate extends Event {
 //commandruneventend
 
 //welcomestart
-		if(interaction.customId === 'myModalWelcomeNew') {
-    		await interaction.reply({ content: `> Done✅. Welcome Channel Was Now Set.`, ephemeral: true })
+		const welcomedb = client.db.table(`welcome`);
+		const welcomecheck = await welcomedb.get(`${interaction.guild.id}`);
+
+		if(interaction.customId === 'WelcomeTextSet') {
+    		await interaction.reply({ content: `> Done✅. Welcome Channel Was Now Set And Text Updated.`, ephemeral: true })
     		.then(() => {
       			const text = interaction.fields.getTextInputValue('text');
-      			db.set(`welcometext_${interaction.guild.id}`, text)
+      			welcomedb.set(`${interaction.guild.id}`, {
+					
+				})
     		})
   		}
-		if(interaction.customId === 'myModalWelcomeOld') {
-			await interaction.reply({ content: `> Done✅. Welcome Channel Was Now Updated.`, ephemeral: true })
-			.then(() => {
-				const text = interaction.fields.getTextInputValue('text');
-				db.set(`welcometext_${interaction.guild.id}`, text)
-			})
-		}
-		
 		if(interaction.customId === 'myModalWelcomeTextEdit') {
 			await interaction.reply({ content: `> Done✅. Welcome Channel Text Now Updated.`, ephemeral: true })
 			.then(() => {

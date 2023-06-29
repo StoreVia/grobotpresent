@@ -23,23 +23,22 @@ module.exports = class Welcome extends Command {
                         .addSubcommand(subcommand =>
                             subcommand.setName('delete')
                                 .setDescription('Delete Welcome Channel.')))
-                .addSubcommand(subcommand => 
-                    subcommand
-                        .setName(`background`)
-                        .setDescription(`Set Photo Background When A User Join's Server.`)
-                        .addStringOption(option =>
-                            option.setName('url')
-                                .setDescription(`Enter Background Url For Welcome Message.`)
-                                .setRequired(true)))
                 .addSubcommandGroup(group =>
-                    group.setName(`text`)
-                        .setDescription(`Customize Texts.`)
+                    group.setName(`edit`)
+                        .setDescription(`Welcome System Configuration.`)
                         .addSubcommand(subcommand =>
-                            subcommand.setName(`edit`)
-                                .setDescription(`Edit Welcome Message When A User Join's Server.`))
+                            subcommand.setName(`text`)
+                                .setDescription(`Edit Text Welcome Message When A User Join's Server.`))
                         .addSubcommand(subcommand =>
                             subcommand.setName(`color`)
-                                    .setDescription(`Edit Text Color In Welcome Image.`)))
+                                    .setDescription(`Edit Text Color In Welcome Image.`))
+                        .addSubcommand(subcommand =>
+                            subcommand.setName(`background`)
+                                .setDescription(`Edit Welcome Image Background.`)
+                                .addStringOption(option =>
+                                    option.setName('url')
+                                        .setDescription(`Enter Background Url For Welcome Message.`)
+                                        .setRequired(true))))
                 .addSubcommandGroup(group =>
                     group.setName(`dm`)
                         .setDescription(`Dm's User When Joined Server.`)
@@ -70,6 +69,12 @@ module.exports = class Welcome extends Command {
 	}
 	async run(client, interaction) {
 
+        const welcomesetdb = client.db.table(`welcome`);
+        const welcomeconfirgurationdb = client.db.table(`welcomeconfiguration`);
+        const welcomedmdb = client.db.table(`welcomedm`);
+        const welcomesetcheck = await welcomesetdb.get(`${interaction.guild.id}`);
+        const welcomeconfirgurationcheck = await welcomeconfirgurationdb.get(`${interaction.guild.id}`);
+        const welcomedmcheck = await welcomedmdb.get(`${interaction.guild.id}`);
         let subcommand = interaction.options.getSubcommand();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,45 +87,30 @@ module.exports = class Welcome extends Command {
 
         if (subcommand === 'set') {
             const channel1 = channel('channel');
-            const channelcheck = db.fetch(`welcome_${interaction.guild.id}`, channel1.id)
-            if(!channelcheck){
-                const welcomenew = new ModalBuilder()
-                    .setCustomId('myModalWelcomeNew')
-                    .setTitle('Welcome System Configuration.');
-                const welcomenew1 = new TextInputBuilder()
-                    .setCustomId('text')
-                    .setLabel("Send's This Text When Some One Join Server.")
-                    .setStyle(TextInputStyle.Paragraph);
-                const welcome0 = new ActionRowBuilder().addComponents(welcomenew1);
-                welcomenew.addComponents(welcome0);
-                db.set(`welcome_${interaction.guild.id}`, channel1.id);
-                await interaction.showModal(welcomenew);
-            } else if(channelcheck){
-                const welcomeold = new ModalBuilder()
-                    .setCustomId('myModalWelcomeOld')
-                    .setTitle('Welcome System Configuration.');
-                const welcomeold1 = new TextInputBuilder()
-                    .setCustomId('text')
-                    .setLabel("Send's This Text When Some One Join Server.")
-                    .setStyle(TextInputStyle.Paragraph);
-                const welcomeold0 = new ActionRowBuilder().addComponents(welcomeold1);
-                welcomeold.addComponents(welcomeold0);
-			    db.set(`welcome_${interaction.guild.id}`, channel1.id);
-                await interaction.showModal(welcomeold);
+            if(!welcomesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                await welcomesetdb.set(`${interaction.guild.id}`, channel1.id);
+                return await interaction.followUp({ content: `> Welcome System Was Now Bounded To ${channel1}.`})
+            } else if(channel1.id === welcomesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Welcome System Was Already Linked To ${channel1}.`})
+            } else if(channel1.id != welcomesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                await welcomesetdb.set(`${interaction.guild.id}`, channel1.id);
+                return await interaction.followUp({ content: `> Welcome System Was Now Updated To ${channel1}.`})
             }
         }
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "delete"){
-            let welcomecheck = db.fetch(`welcome_${interaction.guild.id}`)
-            if(!welcomecheck){
-                await interaction.deferReply({ ephemeral: true })
-                await interaction.followUp({ content: `> Welcome Message System Was Not Linked In This Server To Delete.`, ephemeral: true})
-            } else if(welcomecheck){
-                db.delete(`welcome_${interaction.guild.id}`);
-                await interaction.deferReply({ ephemeral: true })
-                await interaction.followUp({ content: `> Welcome Message System Was Now Deleted In This Server.`, ephemeral: true})
+            if(!welcomesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Welcome System Was Not Bounded To Any Channel.`})
+            } else if(welcomesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                await welcomesetdb.delete(`${interaction.guild.id}`);
+                return await interaction.followUp({ content: `> Welcome System Was Now Deleted In <#${welcomesetcheck}>.`})
             }
         }
 
@@ -128,14 +118,25 @@ module.exports = class Welcome extends Command {
 
         if (subcommand === 'background') {
             const background = string('url');
-            const backgoundcheck = db.fetch(`welcomebg_${interaction.guild.id}`)
-            if(!backgoundcheck){
-                db.set(`welcomebg_${interaction.guild.id}`, background);
-                await interaction.reply({ content: `> Done✅. Welcome Background Was Now Set.`, ephemeral: true})
-            }
-            if(backgoundcheck){
-                db.set(`welcomebg_${interaction.guild.id}`, background);
-                await interaction.reply({ content: `> Done✅. Welcome Background Was Now Updated.`, ephemeral: true})
+            let validurl = isValidURL(background)
+            if(!welcomesetcheck){
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> You Have Not Setup Welcome System Yet. Use "/welcome set" Command To Setup Welcome System.` })
+            } else {
+                if(validurl === false){
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Invlaid Url.` })
+                } else if(validurl === true){
+                    let text1 = welcomeconfirgurationcheck?.text || null;
+				    let color1 = welcomeconfirgurationcheck?.color || null;
+                    welcomeconfirgurationdb.set(`${interaction.guild.id}`, {
+                        text: text1,
+                        color: color1,
+                        thumbnail: background 
+                    })
+                    await interaction.deferReply({ ephemeral: true })
+                    return await interaction.followUp({ content: `> Done✅. Welcome Image Background Was Updated.` })
+                }
             }
         }
 
@@ -453,7 +454,27 @@ module.exports = class Welcome extends Command {
             let rleInput = interaction.options.getRole(rle);
             return rleInput;
         }
+        function isValidURL(url){
+            const pattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
+            return pattern.test(url);
+        }
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+        if(subcommand === "123"){
+            /**const welcome = new ModalBuilder()
+                .setCustomId('WelcomeTextSet')
+                .setTitle('Welcome System Configuration.')
+                .addComponents(
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new TextInputBuilder()
+                                .setCustomId('text')
+                                .setLabel("Send's This Text When Some One Join Server.")
+                                .setStyle(TextInputStyle.Paragraph)
+                        )
+                )
+            */
+        }
 	}
 };
+

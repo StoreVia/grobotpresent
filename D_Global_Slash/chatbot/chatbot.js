@@ -26,8 +26,8 @@ module.exports = class ChatBot extends Command {
 	}
 	async run(client, interaction) {
 
-        const chatbot = client.db.table(`chatbot`)
-        const checkchannel = await chatbot.get(`${interaction.guild.id}`);
+        const chatbotdb = client.db.table(`chatbot`)
+        const checkchannel = await chatbotdb.get(`${interaction.guild.id}`);
         let subcommand = interaction.options.getSubcommand();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,16 +42,16 @@ module.exports = class ChatBot extends Command {
             const channel1 = channel('channel');
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                await chatbot.set(`${interaction.guild.id}`, channel1.id);
+                await chatbotdb.set(`${interaction.guild.id}`, channel1.id);
                 return await interaction.followUp({ content: `> Chatbot Was Now Bounded To ${channel1}.`})
             } else if(channel1.id === checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Chatbot Was Already Linked To ${channel1}.`})
             } else if(channel1.id != checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                await chatbot.set(`${interaction.guild.id}`, channel1.id);
+                await chatbotdb.set(`${interaction.guild.id}`, channel1.id);
                 return await interaction.followUp({ content: `> Chatbot Was Now Updated To ${channel1}.`})
-            }   
+            }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ module.exports = class ChatBot extends Command {
                 return await interaction.followUp({ content: `> Chatbot Was Not Bounded To Any Channel.`})
             } else if(checkchannel){
                 await interaction.deferReply({ ephemeral: true });
-                await chatbot.delete(`${interaction.guild.id}`);
+                await chatbotdb.delete(`${interaction.guild.id}`);
                 return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
             }
         }

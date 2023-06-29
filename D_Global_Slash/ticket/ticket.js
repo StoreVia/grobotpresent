@@ -467,7 +467,7 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "description"){
-            const descriptionold = new ModalBuilder()
+            const description = new ModalBuilder()
                 .setCustomId('myModalDescription')
                 .setTitle('Ticket System Configuration.')
                 .addComponents(
@@ -479,7 +479,7 @@ module.exports = class Ticker extends Command {
                                 .setStyle(TextInputStyle.Paragraph)
                         )
                 )
-            await interaction.showModal(descriptionold);
+            await interaction.showModal(description);
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
