@@ -8,11 +8,11 @@ module.exports = class Command {
         this.permissions = meta.permissions || ['Use Application Commands', 'Send Messages', 'Embed Links'];
     }
 
-    async autocomplete(client, interaction) {
+    async autocomplete() {
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Autocomplete Method.`);
     }
 
-    async run(client, interaction) {
+    async run() {
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Run Method.`);
     }
 };

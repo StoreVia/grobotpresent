@@ -1,20 +1,20 @@
 const PlayerEvent = require('../../structures/PlayerEventClass');
 const Discord = require(`discord.js`);
 
-module.exports = class PlayerStart extends PlayerEvent {
+module.exports = class AudioTrackAdd extends PlayerEvent {
 	constructor(client) {
 		super(client, {
-			name: 'playerStart',
+			name: 'audioTrackAdd',
 			category: 'player',
 		});
 	}
 	async run(queue, track) {
-
+        
 		const client = this.client;
 
         let embed = new Discord.EmbedBuilder()
             .setAuthor({
-                name: `Now Playing ♪`,
+                name: `Added Song To Queue!`,
                 iconURL: process.env.music_iconurl
             })
             .setThumbnail(`${track.thumbnail}`)
@@ -29,6 +29,6 @@ module.exports = class PlayerStart extends PlayerEvent {
                 text: `${client.user.username} - ${process.env.year} ©`,
                 iconURL: process.env.iconurl
             })
-        queue.metadata.channel.send({ embeds: [embed] });        
+        queue.metadata.channel.send({ embeds: [embed] });     
 	}
 };
