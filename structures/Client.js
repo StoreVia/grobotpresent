@@ -6,6 +6,7 @@ const { QuickDB } = require("quick.db");
 const { DiscordTogether } = require('../B_Gro_Modules/discord-together');
 const { GiveawaysManager } = require("../B_Gro_Modules/discord-giveaways");
 const { Player } = require('discord-player');
+require('dotenv').config();
 
 module.exports = class BotClient extends Client {
 	constructor(...opt) {
@@ -38,6 +39,13 @@ module.exports = class BotClient extends Client {
 			],
 		});
 		
+		this.commands = new Collection();
+		this.categories = require("fs").readdirSync(`./D_Global_Slash`);
+		["Command", "Event", "RegisterSlash", "Logs", "AntiCrash"]
+		.filter(Boolean)
+		.forEach(h => {
+  			require(`../handler/${h}`);
+		})
 		this.events = new Collection();
 		this.db = new QuickDB();
 		this.discordTogether = new DiscordTogether(this);
