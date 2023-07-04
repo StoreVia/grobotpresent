@@ -53,7 +53,7 @@ module.exports = class Avatar extends Command {
 
     	const userEmbed = new EmbedBuilder()
     		.setTitle(`${UserOption.username}'s Avatar`)
-        	.setDescription(`> Click One Of The Formats You Like.\n> PNG(Recommended)`)
+        	.setDescription(`> Click One Of The Formats You Like.\n> PNG(Recommended)123`)
         	.setImage(UserOption.displayAvatarURL({ size: 4096, dynamic: true, extension: "png" }))
         	.setColor(`${process.env.ec}`)
   			.setFooter({

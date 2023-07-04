@@ -33,14 +33,18 @@ module.exports = class Botinfo extends Command {
 					.setURL(`https://top.gg/bot/${client.user.id}`),
 			);
 
-        const embed = new EmbedBuilder()
+        
+		interaction.followUp({ embeds: [embed("-", "-")], components: [buttonRow] }).then((msg) =>  { msg.edit({ embeds: [embed(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp)] })})
+
+		function embed(api, latency){
+			const embed = new EmbedBuilder()
             .setTitle(`🤖 Bot Info - \`${client.user.username}\``)
 			.setDescription(`**Please Support Us By Voting On Top.gg**`)
             .setThumbnail(`${process.env.iconurl}`)
             .addFields(
                 { name: '**✉️ InviteMe : **', value: `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
-                { name: '**🟢 Api: **', value: `> ┕\`${Math.round(client.ws.ping)}ms\``, inline: true },
-				{ name: '**🏓 Latency: **', value: `> ┕\`0ms\``, inline: true },
+                { name: '**🟢 Api: **', value: `> ┕\`${api} ms\``, inline: true },
+				{ name: '**🏓 Latency: **', value: `> ┕\`${latency} ms\``, inline: true },
             	{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
              	{ name: '**👥 Users: **', value: `> ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}`, inline: true },
             	{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
@@ -51,26 +55,8 @@ module.exports = class Botinfo extends Command {
             	text: `${client.user.username} - ${process.env.year} ©`, 
             	iconURL: process.env.iconurl
           	});
-		interaction.followUp({ embeds: [embed], components: [buttonRow] }).then((msg) =>  {
-			const embed = new EmbedBuilder()
-            	.setTitle(`🤖 Bot Info - \`${client.user.username}\``)
-				.setDescription(`**Please Support Us By Voting On Top.gg**`)
-            	.setThumbnail(`${process.env.iconurl}`)
-            	.addFields(
-                	{ name: '**✉️ InviteMe : **', value: `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
-                	{ name: '**🟢 Api: **', value: `> \`${Math.round(client.ws.ping)} ms\``, inline: true },
-					{ name: '**🏓 Latency: **', value: `> \`${msg.createdTimestamp - interaction.createdTimestamp} ms\``, inline: true },
-            		{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
-             		{ name: '**👥 Users: **', value: `> ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}`, inline: true },
-            		{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
-					{ name: '**🤖 Version: **', value: `\`\`\`> v${version}\`\`\``,inline: true },
-            	)
-            	.setColor(`${process.env.ec}`)
-            	.setFooter({
-            		text: `${client.user.username} - ${process.env.year} ©`, 
-            		iconURL: process.env.iconurl
-          		});
-			msg.edit({ embeds: [embed] })
-		})
+			return embed;
+		}
+
 	}
 };

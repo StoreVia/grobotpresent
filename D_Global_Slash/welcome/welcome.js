@@ -47,17 +47,17 @@ module.exports = class Welcome extends Command {
                                 .setDescription(`Edit User's Dm Welcome Message When That User Join's Server.`))
                         .addSubcommand(subcommand =>
                             subcommand.setName(`dset`)
-                                .setDescription(`Dm's User When Joined Server.`))
-                        .addSubcommand(subcommand => 
-                            subcommand.setName(`guide`)
-                                .setDescription(`Get Guidence About Setting Welcome System.`)
+                                .setDescription(`Dm's User When Joined Server.`)
                                 .addStringOption(option =>
                                     option.setName(`set`)
                                         .setDescription(`Dm's User When Joined Server Settings.`)
                                         .setRequired(true)
                                         .addChoices(
                                             { name: 'On', value: 'on'},
-                                            { name: 'Off', value: 'off'})))),
+                                            { name: 'Off', value: 'off'}))))
+                .addSubcommand(subcommand => 
+                    subcommand.setName(`guide`)
+                        .setDescription(`Get Guidence About Setting Welcome System.`)),
 			usage: 'welcome',
 			category: 'welcome',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
@@ -141,7 +141,7 @@ module.exports = class Welcome extends Command {
         if(subcommand === "guide"){
             const embed = new EmbedBuilder()
                 .setTitle(`GroBot Welcome System Guide `)
-                .setDescription(`> **Note: **Use \`:emoji_name:\` To Use Emoji In Welcome Message,Use \`<a:emoji_name:emoji_id>\` To Use Emoji Gif In Welcome Message & This Message Also Inlcudes For Dm Messages.`)
+                .setDescription(`> **Note: ** Use \`:emoji_name:\` To Use Emoji In Welcome Message, Use \`<a:emoji_name:emoji_id>\` To Use Emoji Gif In Welcome Message & This Message Also Inlcudes For Dm Messages.`)
                 .setImage(`https://i.imgur.com/YvxM0bc.png`)
                 .setColor(`${process.env.ec}`)
                 .setFooter({

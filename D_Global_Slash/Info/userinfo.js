@@ -4,7 +4,7 @@ const moment = require('moment');
 const formattor = new Intl.ListFormat(`en-GB`, { style: `narrow`, type: `conjunction` })
 const statuses = {
     "online" : "🟢",
-    "idle" : "🟠",
+    "idle" : "🌙",
     "dnd" : "🔴",
     "offline" : "⚫️",
   }  
@@ -49,10 +49,11 @@ module.exports = class Userinfo extends Command {
         let userFlags = UserOption.flags.toArray();
         let filteredFlags = userFlags.filter(f => f in flag);
 		let flog = await filteredFlags.length ? formattor.format(filteredFlags.map(flags => flag[flags])) : "None" ;
+        let discriminator = UserOption.discriminator === "0" ? "`DNU`" : `#${UserOption.discriminator}`;
 
         const userEmbed = new EmbedBuilder()
             .setAuthor({ 
-                name: `${UserOption.tag}`, 
+                name: `${UserOption.username}`, 
                 iconURL: UserOption.displayAvatarURL({dynamic: true, size: 2048})
             })
             .setTitle(`Userinfo of \`${UserOption.username}\``) 
@@ -60,7 +61,7 @@ module.exports = class Userinfo extends Command {
             .setColor(`${process.env.ec}`)
             .addFields(
 		        { name: '**Username: **', value: `> ${UserOption.username}`, inline: true },
-		        { name: '**Tag: **', value: `> #${UserOption.discriminator}`,inline: true },
+		        { name: '**Tag: **', value: `> ${discriminator}`,inline: true },
 		        { name: '**Id: **', value: `> ${UserOption.id}`, inline: true },       
                 { name: '**Avatar: **', value: `> [ClickHere](${UserOption.displayAvatarURL({ size: 4096, dynamic: true, format: "png" })})`,inline: true },
                 { name: '**Bot: **', value: `> ${UserOption.bot ? "\`✅\`" : "\`❌\`"}`, inline: true },

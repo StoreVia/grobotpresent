@@ -34,12 +34,10 @@ module.exports = class BotClient extends Client {
 				GatewayIntentBits.DirectMessageTyping,
 				GatewayIntentBits.DirectMessageTyping,
 				GatewayIntentBits.GuildMessageReactions,
-				GatewayIntentBits.GuildBans,
 				GatewayIntentBits.GuildVoiceStates,
 			],
 		});
 		
-		this.commands = new Collection();
 		this.events = new Collection();
 		this.db = new QuickDB();
 		this.discordTogether = new DiscordTogether(this);

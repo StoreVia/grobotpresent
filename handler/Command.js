@@ -32,6 +32,7 @@ module.exports = class CommandClass {
 						usage: cmd.usage,
 						category: cmd.category,
 						permissions: cmd.permissions,
+						autocomplete: cmd.autocomplete,
 						run: cmd.run,
 					};
 

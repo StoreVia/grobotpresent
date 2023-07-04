@@ -82,7 +82,20 @@ module.exports = class InteractionCreate extends Event {
 				await interaction.deferReply({ ephemeral: true });
 				return await interaction.followUp({ content: `> An Error Has Occured.` });
 			}
+		} else if (interaction.isAutocomplete()) {
+			const command = interaction.client.commands.get(interaction.commandName);
+	
+			if (!command) {
+				console.error(`No command matching ${interaction.commandName} was found.`);
+				return;
+			}
+			try {
+				await command.autocomplete(client, interaction);
+			} catch (error) {
+				console.error(error);
+			}
 		}
+	
 //commandruneventend
 
 //welcomestart

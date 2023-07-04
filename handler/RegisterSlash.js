@@ -47,13 +47,13 @@ const deploy = async () => {
 			Routes.applicationCommands(clientId),
 			{ body: commandData },
 		).then(() => {
-			console.log(`Slash Commands Are Now Ready To Use.`.brightGreen);
+			console.log(`Slash Commands Registered.`.brightGreen);
 		});
 		await rest.put(
 			Routes.applicationGuildCommands(clientId, psid),
 			{ body: privateData },
 		).then(() => {
-			console.log(`Private Slash Commands Are Now Ready To Use.`.brightGreen);
+			console.log(`Private Slash Registered.`.brightGreen);
 		});
 	}
 	catch (e) {
