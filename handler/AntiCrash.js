@@ -1,6 +1,3 @@
-const { readdirSync } = require("fs");
-const colors = require("colors");
-
 const anticrash = async () => {
     process.on('unhandledRejection', (reason, p) => {
         console.log(' [ AntiCrashDetection ]:- Unhandled Rejection/Catch');

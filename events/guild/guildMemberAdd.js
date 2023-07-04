@@ -2,7 +2,6 @@ const Event = require('../../structures/EventClass');
 const { InteractionType, EmbedBuilder } = require('discord.js');
 const db = require(`quick.db`);
 const Discord = require(`discord.js`);
-const version = require(`../../package.json`).version;
 
 module.exports = class GuildMemberAdd extends Event {
 	constructor(client) {

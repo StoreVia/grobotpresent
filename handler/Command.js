@@ -1,6 +1,8 @@
 const BaseCommand = require('../structures/CommandClass');
+const MessageCommand = require('../structures/MessageCommandClass');
 const path = require('path');
-const { readdirSync, readdir, lstat } = require('fs').promises;
+const { readdir, lstat } = require('fs').promises;
+const { readdirSync } = require('fs');
 const colors = require("colors");
 
 module.exports = class CommandClass {
@@ -11,18 +13,14 @@ module.exports = class CommandClass {
 	async build(dir) {
 		const filePath = path.join(__dirname, dir);
 		const files = await readdir(filePath);
-
-		for (const file of files) {
+		for(const file of files) {
 			const stat = await lstat(path.join(filePath, file));
-			if (stat.isDirectory()) this.build(path.join(dir, file));
-			if (file.endsWith('.js')) {
+			if(stat.isDirectory()) this.build(path.join(dir, file));
+			if(file.endsWith('.js')) {
 				const Command = require(path.join(filePath, file));
-
-				if (Command.prototype instanceof BaseCommand) {
+				if(Command.prototype instanceof BaseCommand) {
 					const cmd = new Command(this.client);
-
 					const cmdData = cmd.data.toJSON();
-
 					const cmdSet = {
 						name: cmdData.name,
 						description: cmdData.description,
@@ -35,8 +33,16 @@ module.exports = class CommandClass {
 						autocomplete: cmd.autocomplete,
 						run: cmd.run,
 					};
-
 					this.client.commands.set(cmdSet.name, cmdSet);
+				} else if(Command.prototype instanceof MessageCommand) {
+					const cmd = new Command(this.client);
+					const cmdSet = {
+						name: cmd.name,
+						category: cmd.category,
+						run: cmd.run,
+					};
+					this.client.messagecommands.set(cmdSet.name, cmdSet);
+					if(cmd.alias && Array.isArray(cmd.alias)) cmd.alias.forEach((alias) => this.client.aliases.set(alias, cmd.name));
 				}
 			}
 		}

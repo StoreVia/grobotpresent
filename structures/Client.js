@@ -40,7 +40,11 @@ module.exports = class BotClient extends Client {
 		});
 		
 		this.commands = new Collection();
-		this.categories = require("fs").readdirSync(`./D_Global_Slash`);
+		this.messagecommands = new Collection();
+		this.aliases = new Collection();
+		this.cooldowns = new Collection();
+		this.messagecategories = new Collection();
+		this.categories = require("fs").readdirSync(`./commands/slash`);
 		["Command", "Event", "RegisterSlash", "Logs", "AntiCrash"]
 		.filter(Boolean)
 		.forEach(h => {
@@ -62,7 +66,8 @@ module.exports = class BotClient extends Client {
 		});
 
 		new EventHandler(this).build('../events');
-		new CommandHandler(this).build('../D_Global_Slash');
+		new CommandHandler(this).build('../commands/slash');
+		new CommandHandler(this).build('../commands/message');
 		new CommandHandler(this).build('../C_Private_Slash');
 	}
 

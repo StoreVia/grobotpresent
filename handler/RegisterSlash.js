@@ -12,11 +12,11 @@ const deploy = async () => {
 	const commandData = [];
 	const privateData = [];
 
-	fs.readdirSync('./D_Global_Slash/').forEach(async category => {
-		const commands = fs.readdirSync(`./D_Global_Slash/${category}/`).filter(cmd => cmd.endsWith('.js'));
+	fs.readdirSync('./commands/slash').forEach(async category => {
+		const commands = fs.readdirSync(`./commands/slash/${category}/`).filter(cmd => cmd.endsWith('.js'));
 
 		for (const command of commands) {
-			const Command = require(`../D_Global_Slash/${category}/${command}`);
+			const Command = require(`../commands/slash/${category}/${command}`);
 
 			const cmd = new Command();
 
