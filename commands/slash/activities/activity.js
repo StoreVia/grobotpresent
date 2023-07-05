@@ -40,8 +40,7 @@ module.exports = class Activity extends Command {
         if(!channel){
             await interaction.deferReply({ ephemeral: true });
             interaction.followUp({ content: `> Please Make Sure You Are In A Voice Channel.`})
-        } else
-        if(channel) {
+        } else if(channel) {
             await interaction.deferReply();
             client.discordTogether.createTogetherCode(interaction.member.voice.channel.id, `${activity}`).then(async invite => {
                 let embed = new EmbedBuilder()

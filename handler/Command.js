@@ -24,12 +24,8 @@ module.exports = class CommandClass {
 					const cmdSet = {
 						name: cmdData.name,
 						description: cmdData.description,
-						options: cmdData.options,
-						defaultPermission: cmdData.default_permission,
-						contextDescription: cmd.contextDescription,
-						usage: cmd.usage,
 						category: cmd.category,
-						permissions: cmd.permissions,
+						options: cmdData.options,
 						autocomplete: cmd.autocomplete,
 						run: cmd.run,
 					};
@@ -38,6 +34,7 @@ module.exports = class CommandClass {
 					const cmd = new Command(this.client);
 					const cmdSet = {
 						name: cmd.name,
+						description: cmd.description,
 						category: cmd.category,
 						run: cmd.run,
 					};

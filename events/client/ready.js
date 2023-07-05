@@ -19,9 +19,11 @@ module.exports = class ReadyEvent extends Event {
 		let status = [
 			"/help | grobot.store",
 		]
-		client.user.setPresence({
-			activities: [{ name: `${status[Math.floor(Math.random() * status.length)]}`, type: ActivityType.Playing }]
-		});
+		if (client.shard.ids[0] === 0) {
+			client.user.setPresence({ activities: [{ name: `Shard 1`,  type: ActivityType.Playing}] });
+		} else if (client.shard.ids[0] === 1) {
+			client.user.setPresence({ activities: [{ name: `Shard 2`,  type: ActivityType.Playing}] });
+		}
 
 		setInterval(()=>{
 			let status = [

@@ -17,6 +17,11 @@ module.exports = class Botinfo extends Command {
 	async run(client, interaction) {
 		await interaction.deferReply();
 
+		const promises = [
+			client.shard.fetchClientValues('guilds.cache.size'),
+			client.shard.broadcastEval(c => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)),
+		];
+
 		const buttonRow = new ActionRowBuilder()
 			.addComponents(
                 new ButtonBuilder()
@@ -33,10 +38,13 @@ module.exports = class Botinfo extends Command {
 					.setURL(`https://top.gg/bot/${client.user.id}`),
 			);
 
-        
-		interaction.followUp({ embeds: [embed("-", "-")], components: [buttonRow] }).then((msg) =>  { msg.edit({ embeds: [embed(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp)] })})
-
-		function embed(api, latency){
+		let msg = await interaction.followUp({ embeds: [embed("-", "-", "-", "-")], components: [buttonRow] })
+		
+		Promise.all(promises)
+		.then(results => {
+			msg.edit({ embeds: [embed(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp, results[0].reduce((acc, guildCount) => acc + guildCount, 0), results[1].reduce((acc, memberCount) => acc + memberCount, 0))]})
+		})
+		function embed(api, latency, guilds, users){
 			const embed = new EmbedBuilder()
             .setTitle(`🤖 Bot Info - \`${client.user.username}\``)
 			.setDescription(`**Please Support Us By Voting On Top.gg**`)
@@ -45,8 +53,8 @@ module.exports = class Botinfo extends Command {
                 { name: '**✉️ InviteMe : **', value: `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, inline: true },
                 { name: '**🟢 Api: **', value: `> ┕\`${api} ms\``, inline: true },
 				{ name: '**🏓 Latency: **', value: `> ┕\`${latency} ms\``, inline: true },
-            	{ name: '**🏠 Guilds: **', value: `> ${client.guilds.cache.size}`,inline: true },
-             	{ name: '**👥 Users: **', value: `> ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}`, inline: true },
+            	{ name: '**🏠 Guilds: **', value: `> ${guilds}`,inline: true },
+             	{ name: '**👥 Users: **', value: `> ${users}`, inline: true },
             	{ name: '**🤖 TotalCmds: **', value: `> ${process.env.commands_count} Cmds`, inline: true },
 				{ name: '**🤖 Version: **', value: `\`\`\`> v${version}\`\`\``,inline: true },
             )
