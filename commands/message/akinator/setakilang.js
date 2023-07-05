@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessagePing extends Command {
@@ -27,18 +27,16 @@ module.exports = class MessagePing extends Command {
 					.setStyle(ButtonStyle.Secondary),
             )
 
-		await interaction.deferReply();
-
         if(!args){
             message.reply({ content: `> Enter Language Code To Set Your Akinator Language.\n**Click Below Button To View All Language Codes**`, components: [buttonRow] })
         } else {
             let langCodes = ["af", "am", "ar", "az", "be", "bg", "bn", "bs", "ca", "ceb", "co", "cs", "cy", "da", "de", "el", "eo", "es", "et", "eu", "fa", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "haw", "he", "hi", "hmm", "hr", "ht", "hu", "hy", "id", "ig", "is", "it", "iw", "ka", "kk", "km", "kn", "ko", "ku", "ky", "la", "lb", "lo", "lt", "lv", "mg", "mi", "mk", "ml", "mn", "mr", "ms", "mt", "my", "ne", "nl", "no", "ny", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "sm", "sn", "so", "sq", "sr", "st", "su", "sv", "sw", "ta", "te", "tg", "th", "tl", "tr", "uk", "ur", "uz", "vi", "xh", "yi", "yo", "zh-cn", "zh-tw", "zh", "zu"];
             if(langCodes.includes(`${string}`)){
                 if(langdbcheck){
-                    await langdb.set(string)
+                    await langdb.set(`${message.author.id}`, string)
                     message.reply({ content: `> Done✅. Your Akinator Language Was Now Updated.` })
                 } else {
-                    await langdb.set(string)
+                    await langdb.set(`${message.author.id}`, string)
                     message.reply({ content: `> Done✅. Your Akinator Language Was Now Set.` })
                 }
             } else {
