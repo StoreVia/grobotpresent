@@ -45,7 +45,7 @@ module.exports = class BotClient extends Client {
 		this.cooldowns = new Collection();
 		this.messagecategories = new Collection();
 		this.categories = require("fs").readdirSync(`./commands/slash`);
-		["Command", "Event", "RegisterSlash", "Logs", "AntiCrash"]
+		["Command", "Event", "RegisterSlash", "AntiCrash"]
 		.filter(Boolean)
 		.forEach(h => {
   			require(`../handler/${h}`);

@@ -14,25 +14,25 @@ module.exports = class MessageCreate extends Event {
 		const client = this.client;
 
 //commandruneventstart
-    if(!message.guild || !message.channel || message.author.bot) return;
-    if(message.channel.partial) await message.channel.fetch();
-    if(message.partial) await message.fetch();
-    const prefix = process.env.prefix;
-    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})`);
-    if(!prefixRegex.test(message.content)) return;
-    const [, mPrefix] = message.content.match(prefixRegex);
-    const args = message.content.slice(mPrefix.length).trim().split(/ +/).filter(Boolean);
-    const cmd = args.length > 0 ? args.shift().toLowerCase() : null;
-    let command = client.messagecommands.get(cmd);
-    if(!command) command = client.messagecommands.get(client.aliases.get(cmd));
-    if(command) command.run(client, message, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
+        if(!message.guild || !message.channel || message.author.bot) return;
+        if(message.channel.partial) await message.channel.fetch();
+        if(message.partial) await message.fetch();
+        const prefix = process.env.prefix;
+        const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})`);
+        if(!prefixRegex.test(message.content)) return;
+        const [, mPrefix] = message.content.match(prefixRegex);
+        const args = message.content.slice(mPrefix.length).trim().split(/ +/).filter(Boolean);
+        const cmd = args.length > 0 ? args.shift().toLowerCase() : null;
+        let command = client.messagecommands.get(cmd);
+        if(!command) command = client.messagecommands.get(client.aliases.get(cmd));
+        if(command) command.run(client, message, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
 
 //commandruneventend
 
 //clientmentionstart
         if(message.content.includes(`<@${client.user.id}>`)){
             let embed = new EmbedBuilder()
-                .setDescription(`To Get All Commands Please Type "/help".`)
+                .setDescription(`To Get All Commands Use "**/help**" (or) "**${process.env.prefix}help**".`)
                 .setColor(`${process.env.ec}`);
             message.reply({ embeds: [embed] })
         }
