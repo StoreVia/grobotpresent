@@ -46,15 +46,11 @@ const deploy = async () => {
 		await rest.put(
 			Routes.applicationCommands(clientId),
 			{ body: commandData },
-		).then(() => {
-			console.log(`Slash Commands Registered.`.brightGreen);
-		});
+		)
 		await rest.put(
 			Routes.applicationGuildCommands(clientId, psid),
 			{ body: privateData },
-		).then(() => {
-			console.log(`Private Slash Registered.`.brightGreen);
-		});
+		)
 	}
 	catch (e) {
 		console.error(e);

@@ -409,38 +409,8 @@ module.exports = class Welcome extends Command {
             });
         }
         
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        function string(text){
-            let stringInput = interaction.options.getString(text);
-            return stringInput;
-        }
-        function user(usr){
-            let usrInput = interaction.options.getUser(usr);
-            return usrInput;
-        }
-        function channel(chl){
-            let chlInput = interaction.options.getChannel(chl);
-            return chlInput;
-        }
-        function integer(int){
-            let intInput = interaction.options.getInteger(int);
-            return intInput;
-        }
-        function number(num){
-            let numInput = interaction.options.getNumber(num);
-            return numInput;
-        }
-        function role(rle){
-            let rleInput = interaction.options.getRole(rle);
-            return rleInput;
-        }
-        function isValidURL(url){
-            const pattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
-            return pattern.test(url);
-        }
-
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
         if(subcommand === "123"){
             /**const welcome = new ModalBuilder()
                 .setCustomId('WelcomeTextSet')

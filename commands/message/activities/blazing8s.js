@@ -20,7 +20,7 @@ module.exports = class MessagePing extends Command {
         if(!voicechannelcheck){
             return message.reply({ content: `> Please Make Sure You Are In A Voice Channel.` })
         } else {
-            client.discordTogether.createTogetherCode(message.member.voice.channel.id, `blazing8`).then(async invite => {
+            client.functions.discordActivity(message.member.voice.channel.id, `blazing8`).then(async invite => {
                 let embed = new EmbedBuilder()
                 	.setColor(`${process.env.ec}`)
                 	.addFields(

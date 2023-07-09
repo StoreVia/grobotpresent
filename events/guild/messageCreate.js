@@ -1,6 +1,7 @@
 const Event = require('../../structures/EventClass');
-const { InteractionType, EmbedBuilder, ChannelType } = require('discord.js');
-const titlecase = require(`titlecase`)
+const { InteractionType, EmbedBuilder, ChannelType, Collection } = require('discord.js');
+const { escapeRegex, cmdCoolDown } = require(`../../handler/Functions`)
+const titlecase = require(`titlecase`);
 
 module.exports = class MessageCreate extends Event {
 	constructor(client) {
@@ -25,7 +26,16 @@ module.exports = class MessageCreate extends Event {
         const cmd = args.length > 0 ? args.shift().toLowerCase() : null;
         let command = client.messagecommands.get(cmd);
         if(!command) command = client.messagecommands.get(client.aliases.get(cmd));
-        if(command) command.run(client, message, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
+        if(command){
+            if(cmdCoolDown(message, command)){
+                const embed = new EmbedBuilder()
+                    .setDescription(`\`\`\`Time Left: ${cmdCoolDown(message, command)}s\`\`\``)
+                    .setColor(`${process.env.ec}`)
+                return message.reply({ embeds: [embed] });
+            } else {
+                return command.run(client, message, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
+            }
+        }
 
 //commandruneventend
 
@@ -71,8 +81,6 @@ module.exports = class MessageCreate extends Event {
             }
         }
 //chatbotend
-function escapeRegex(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
-}
+        
 	}
 };

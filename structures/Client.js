@@ -3,7 +3,6 @@ const { Collection } = require('@discordjs/collection');
 const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
 const { QuickDB } = require("quick.db");
-const { DiscordTogether } = require('../B_Gro_Modules/discord-together');
 const { GiveawaysManager } = require("../B_Gro_Modules/discord-giveaways");
 const { Player } = require('discord-player');
 require('dotenv').config();
@@ -39,11 +38,12 @@ module.exports = class BotClient extends Client {
 			],
 		});
 		
+		
 		this.commands = new Collection();
 		this.messagecommands = new Collection();
 		this.aliases = new Collection();
 		this.cooldowns = new Collection();
-		this.messagecategories = new Collection();
+		this.messagecategories = require("fs").readdirSync(`./commands/message`);
 		this.categories = require("fs").readdirSync(`./commands/slash`);
 		["Command", "Event", "RegisterSlash", "AntiCrash"]
 		.filter(Boolean)
@@ -52,8 +52,8 @@ module.exports = class BotClient extends Client {
 		})
 		this.events = new Collection();
 		this.db = new QuickDB();
-		this.discordTogether = new DiscordTogether(this);
 		this.player = new Player(this);
+		this.functions = require(`../handler/Functions`)
 		this.giveawaysManager = new GiveawaysManager(this, {
 			storage: "./giveaway_utility/giveaways.json",
 			updateCountdownEvery: 5000,
@@ -81,7 +81,11 @@ module.exports = class BotClient extends Client {
 		this.destroy();
 	}
 
-	fetchCommand(cmd) {
+	fetchSlashCommand(cmd) {
 		return this.commands.get(cmd);
+	}
+
+	fetchMessageCommand(cmd) {
+		return this.messagecommands.get(cmd);
 	}
 };

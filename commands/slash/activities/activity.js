@@ -34,15 +34,15 @@ module.exports = class Activity extends Command {
 	}
 	async run(client, interaction) {
 
-        const activity = interaction.options.getString("name");
+        const activity = client.functions.getOptions(interaction).string("name");
         let channel = interaction.member.voice.channel;
 
         if(!channel){
             await interaction.deferReply({ ephemeral: true });
-            interaction.followUp({ content: `> Please Make Sure You Are In A Voice Channel.`})
-        } else if(channel) {
+            return interaction.followUp({ content: `> Please Make Sure You Are In A Voice Channel.`})
+        } else {
             await interaction.deferReply();
-            client.discordTogether.createTogetherCode(interaction.member.voice.channel.id, `${activity}`).then(async invite => {
+            client.functions.discordActivity(channel.id, `${activity}`, ).then(async (link) => {
                 let embed = new EmbedBuilder()
                 	.setColor(`${process.env.ec}`)
                 	.addFields(
@@ -50,9 +50,10 @@ module.exports = class Activity extends Command {
                     	{ name: `\u200b`, value: `\u200b`, inline: true },
                     	{ name: `**VoiceChannel: **`, value: `${interaction.member.voice.channel}`, inline: true }
 					)
-                interaction.followUp({ embeds: [embed] })
-                interaction.channel.send({content: `${invite.code}`})
+                interaction.followUp({ embeds: [embed] });
+                return interaction.channel.send({content: `${link}`})
             });
         }
+        
 	}
 };

@@ -2,8 +2,6 @@ const BaseCommand = require('../structures/CommandClass');
 const MessageCommand = require('../structures/MessageCommandClass');
 const path = require('path');
 const { readdir, lstat } = require('fs').promises;
-const { readdirSync } = require('fs');
-const colors = require("colors");
 
 module.exports = class CommandClass {
 	constructor(client) {
@@ -36,6 +34,7 @@ module.exports = class CommandClass {
 						name: cmd.name,
 						description: cmd.description,
 						category: cmd.category,
+						cooldown: cmd.cooldown,
 						run: cmd.run,
 					};
 					this.client.messagecommands.set(cmdSet.name, cmdSet);

@@ -18,7 +18,7 @@ module.exports = class MessagePing extends Command {
 		const query = args.join(" ");
 		
 		if(!query){
-			message.reply(`Enter Some Query To Search In Wikipedia.`)
+			message.reply({content: `Enter Some Query To Search In Wikipedia.`})
 		} else {
 			fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`)
 			.then((res) => res.json())
