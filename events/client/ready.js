@@ -1,6 +1,5 @@
 const Event = require('../../structures/EventClass');
 const colors = require(`colors`)
-const { ActivityType } = require('discord.js');
 const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor } = require('@discord-player/extractor');
 const fetch = require('node-fetch');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
@@ -16,22 +15,8 @@ module.exports = class ReadyEvent extends Event {
 	async run() {
 		
 		const client = this.client;
-		let status = [
-			"/help | grobot.store",
-		]
-		if(client.shard.ids[0] === 0) {
-			client.user.setPresence({ activities: [{ name: `Shard 1`,  type: ActivityType.Playing}] });
-		} else if(client.shard.ids[0] === 1) {
-			client.user.setPresence({ activities: [{ name: `Shard 2`,  type: ActivityType.Playing}] });
-		}
 
 		setInterval(()=>{
-			let status = [
-				"/help | grobot.store",
-			]
-			client.user.setPresence({
-				activities: [{ name: `${status[Math.floor(Math.random() * status.length)]}`, type: ActivityType.Playing }]
-			});
 			client.guilds.cache.forEach(async(x) => {
 				let automemedb = client.db.table(`automeme`)
 				let channel = await automemedb.get(`${x.id}`)

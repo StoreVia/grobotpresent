@@ -34,7 +34,7 @@ module.exports = class Activity extends Command {
 	}
 	async run(client, interaction) {
 
-        const activity = client.functions.getOptions(interaction).string("name");
+        const activity = interaction.options.getString("name");
         let channel = interaction.member.voice.channel;
 
         if(!channel){
@@ -48,7 +48,7 @@ module.exports = class Activity extends Command {
                 	.addFields(
                     	{ name: `**RequestedBy: **`, value: `${interaction.user}`, inline: true },
                     	{ name: `\u200b`, value: `\u200b`, inline: true },
-                    	{ name: `**VoiceChannel: **`, value: `${interaction.member.voice.channel}`, inline: true }
+                    	{ name: `**VoiceChannel: **`, value: `${channel}`, inline: true }
 					)
                 interaction.followUp({ embeds: [embed] });
                 return interaction.channel.send({content: `${link}`})

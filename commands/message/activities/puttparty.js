@@ -20,16 +20,16 @@ module.exports = class MessagePing extends Command {
         if(!voicechannelcheck){
             return message.reply({ content: `> Please Make Sure You Are In A Voice Channel.` })
         } else {
-            client.functions.discordACtivity(message.member.voice.channel.id, `puttparty`).then(async invite => {
+            client.functions.discordActivity(voicechannelcheck.id, `puttparty`).then(async (link) => {
                 let embed = new EmbedBuilder()
                 	.setColor(`${process.env.ec}`)
                 	.addFields(
                     	{ name: `**RequestedBy: **`, value: `${message.author}`, inline: true },
                     	{ name: `\u200b`, value: `\u200b`, inline: true },
-                    	{ name: `**VoiceChannel: **`, value: `${message.member.voice.channel}`, inline: true }
+                    	{ name: `**VoiceChannel: **`, value: `${voicechannelcheck}`, inline: true }
 					)
                 message.reply({ embeds: [embed] })
-                message.channel.send({content: `${invite.code}`})
+                message.channel.send({content: `${link}`})
             })
         }
 	}

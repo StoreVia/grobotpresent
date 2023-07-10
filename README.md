@@ -1,6 +1,7 @@
-# GroBot[v1.0]
-A StoreVia Product
-## GroBot[v1.0] Is The A Multifunctional Discord Bot With All In Features
+# GroBot[v1.0].
+A StoreVia Product.
+Note: **Bot Works Both In Slash And Message Command And It's Even Ready For Sharding.**
+## GroBot[v1.1] Is The A Multifunctional Discord Bot With All In One Features.
 
 #### User_Features:
 
