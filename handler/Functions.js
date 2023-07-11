@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection } = require("discord.js");
+const { EmbedBuilder, Collection } = require("discord.js");
 
 /////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
 
@@ -14,8 +14,55 @@ module.exports.voiceChannel = voiceChannel;
 
 /////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
 
-function escapeRegex(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
+function voiceChannel(){
+  function message(msg){
+    let channel = msg.member.voice.channel;
+    return channel;
+  }
+  function interaction(int){
+    let channel = int.member.voice.channel;
+    return channel;
+  }
+  return { message, interaction }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function activityInfoEmbed(vc, msg){
+  let embed = new EmbedBuilder()
+    .setColor(`${process.env.ec}`)
+    .addFields(
+      { name: `**RequestedBy: **`, value: `${msg.author}`, inline: true },
+      { name: `\u200b`, value: `\u200b`, inline: true },
+      { name: `**VoiceChannel: **`, value: `${vc}`, inline: true }
+    )
+  return embed;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function pingEmbed(api, latency){
+  let embed = new EmbedBuilder()
+    .setColor(`${process.env.ec}`)
+    .addFields(
+      { name: '**🟢 Api: **', value: `> \`${api} ms\``,inline: true },  
+      { name: '**🏓 Latency: **', value: `> \`${latency} ms\``, inline: true },
+    )
+  return embed;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function akilangEmbed(username) {
+  let embed = new EmbedBuilder()
+    .setTitle('All Language Codes')
+  	.setDescription(`**Usage: **\`${process.env.prefix}setakilang <langCode>\`\n\n<langcode> - <language>\n**en - English(Recommended)**\naf - Afghanistan\nam - Armenia\nar - Argentina\naz - Azerbaijan\nbe - Belarus\nbg - Bulgaria\nbn - Bangladesh\nbs - Bosnia and Herzegovina\nca - Canada\nceb - Cebuano\nco - Corsica\ncs - Czech\ncy - Welsh\nda - Danish\nde - German\nel - Greek\neo - Esperanto\nes - Spanish\n**en - English(Recommended)**\net - Estonian\neu - Basque\nfa - Persian\nfi - Finnish\nfr - French\nfy - West Frisian\nga - Irish\ngd - Scottish Gaelic\ngl - Galician\ngu - Gujarati\nha - Hausa\nhaw - Hawaiian\nhe - Hebrew\nhi - Hindi\nhmm - Hmong\nhr - Croatian\nht - Haitian Creole\nhu - Hungarian\nhy - Armenian\nid - Indonesian\nig - Igbo\nis - Icelandic\nit - Italian\niw - Hebrew (deprecated)\nka - Georgian\nkk - Kazakh\nkm - Khmer\nkn - Kannada\nko - Korean\nku - Kurdish\nky - Kyrgyz\nla - Latin\nlb - Luxembourgish\nlo - Lao\nlt - Lithuanian\nlv - Latvian\nmg - Malagasy\nmi - Maori\nmk - Macedonian\nml - Malayalam\nmn - Mongolian\nmr - Marathi\nms - Malay\nmt - Maltese\nmy - Burmese\nne - Nepali\nnl - Dutch\nno - Norwegian\nny - Chichewa\npa - Punjabi\npl - Polish\nps - Pashto\npt - Portuguese\nro - Romanian\nru - Russian\nsd - Sindhi\nsi - Sinhala\nsk - Slovak\nsl - Slovenian\nsm - Samoan\nsn - Shona\nso - Somali\nsq - Albanian\nsr - Serbian\nst - Southern Sotho\nsu - Sundanese\nsv - Swedish\nsw - Swahili\nta - Tamil\nte - Telugu\ntg - Tajik\nth - Thai\ntl - Filipino\ntr - Turkish\nuk - Ukrainian\nur - Urdu\nuz - Uzbek\nvi - Vietnamese\nxh - Xhosa\nyi - Yiddish\nyo - Yoruba\nzh-cn - Chinese (Simplified)\nzh-tw - Chinese (Traditional)\nzh - Chinese\nzu - Zulu `)
+    .setFooter({
+      text: `${username} - ${process.env.year} ©`, 
+      iconURL: process.env.iconurl
+    })
+    .setColor(`${process.env.ec}`);
+  return embed;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,55 +132,8 @@ function cmdCoolDown(message, command) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function voiceChannel(){
-  function message(msg){
-    let channel = msg.member.voice.channel;
-    return channel;
-  }
-  function interaction(int){
-    let channel = int.member.voice.channel;
-    return channel;
-  }
-  return { message, interaction }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function activityInfoEmbed(vc, msg){
-  let embed = new EmbedBuilder()
-    .setColor(`${process.env.ec}`)
-    .addFields(
-      { name: `**RequestedBy: **`, value: `${msg.author}`, inline: true },
-      { name: `\u200b`, value: `\u200b`, inline: true },
-      { name: `**VoiceChannel: **`, value: `${vc}`, inline: true }
-    )
-  return embed;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function pingEmbed(api, latency){
-  let embed = new EmbedBuilder()
-    .setColor(`${process.env.ec}`)
-    .addFields(
-      { name: '**🟢 Api: **', value: `> \`${api} ms\``,inline: true },  
-      { name: '**🏓 Latency: **', value: `> \`${latency} ms\``, inline: true },
-    )
-  return embed;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function akilangEmbed(username) {
-  let embed = new EmbedBuilder()
-    .setTitle('All Language Codes')
-  	.setDescription(`**Usage: **\`${process.env.prefix}setakilang <langCode>\`\n\n<langcode> - <language>\n**en - English(Recommended)**\naf - Afghanistan\nam - Armenia\nar - Argentina\naz - Azerbaijan\nbe - Belarus\nbg - Bulgaria\nbn - Bangladesh\nbs - Bosnia and Herzegovina\nca - Canada\nceb - Cebuano\nco - Corsica\ncs - Czech\ncy - Welsh\nda - Danish\nde - German\nel - Greek\neo - Esperanto\nes - Spanish\n**en - English(Recommended)**\net - Estonian\neu - Basque\nfa - Persian\nfi - Finnish\nfr - French\nfy - West Frisian\nga - Irish\ngd - Scottish Gaelic\ngl - Galician\ngu - Gujarati\nha - Hausa\nhaw - Hawaiian\nhe - Hebrew\nhi - Hindi\nhmm - Hmong\nhr - Croatian\nht - Haitian Creole\nhu - Hungarian\nhy - Armenian\nid - Indonesian\nig - Igbo\nis - Icelandic\nit - Italian\niw - Hebrew (deprecated)\nka - Georgian\nkk - Kazakh\nkm - Khmer\nkn - Kannada\nko - Korean\nku - Kurdish\nky - Kyrgyz\nla - Latin\nlb - Luxembourgish\nlo - Lao\nlt - Lithuanian\nlv - Latvian\nmg - Malagasy\nmi - Maori\nmk - Macedonian\nml - Malayalam\nmn - Mongolian\nmr - Marathi\nms - Malay\nmt - Maltese\nmy - Burmese\nne - Nepali\nnl - Dutch\nno - Norwegian\nny - Chichewa\npa - Punjabi\npl - Polish\nps - Pashto\npt - Portuguese\nro - Romanian\nru - Russian\nsd - Sindhi\nsi - Sinhala\nsk - Slovak\nsl - Slovenian\nsm - Samoan\nsn - Shona\nso - Somali\nsq - Albanian\nsr - Serbian\nst - Southern Sotho\nsu - Sundanese\nsv - Swedish\nsw - Swahili\nta - Tamil\nte - Telugu\ntg - Tajik\nth - Thai\ntl - Filipino\ntr - Turkish\nuk - Ukrainian\nur - Urdu\nuz - Uzbek\nvi - Vietnamese\nxh - Xhosa\nyi - Yiddish\nyo - Yoruba\nzh-cn - Chinese (Simplified)\nzh-tw - Chinese (Traditional)\nzh - Chinese\nzu - Zulu `)
-    .setFooter({
-      text: `${username} - ${process.env.year} ©`, 
-      iconURL: process.env.iconurl
-    })
-    .setColor(`${process.env.ec}`);
-  return embed;
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,9 +168,8 @@ async function discordActivity(vcId, appId){
   headers: { Authorization: `Bot ${process.env.token}`, 'Content-Type': 'application/json', },
   });
   const invite = await response.json();
-  console.log(invite)
   if (invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
-  return await `https://discord.com/invite/${invite.code}`;
+  return `https://discord.com/invite/${invite.code}`;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
