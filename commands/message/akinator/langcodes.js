@@ -12,7 +12,6 @@ module.exports = class MessageLangCodes extends Command {
   			description: "See Language Codes For Akinator.",
 		});
 	}
-
 	async run(client, message) {
 
         const buttonRow = new ActionRowBuilder()

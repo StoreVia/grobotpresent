@@ -12,7 +12,6 @@ module.exports = class MessageSetAkiLang extends Command {
   			description: "Set Your Akinator Language.",
 		});
 	}
-
 	async run(client, message, args) {
 		
         let string = args.join(" ").toLowerCase();

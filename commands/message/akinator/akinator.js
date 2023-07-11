@@ -15,7 +15,6 @@ module.exports = class MessageAkinator extends Command {
   			description: "Play Akinator Game.",
 		});
 	}
-
 	async run(client, message) {
 		
         let langdb = client.db.table(`akinatorlanguage`);

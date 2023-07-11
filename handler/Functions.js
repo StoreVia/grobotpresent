@@ -9,6 +9,8 @@ module.exports.getOptions = getOptions;
 module.exports.isValidURL = isValidURL;
 module.exports.akilangEmbed = akilangEmbed;
 module.exports.pingEmbed = pingEmbed;
+module.exports.activityInfoEmbed = activityInfoEmbed;
+module.exports.voiceChannel = voiceChannel;
 
 /////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
 
@@ -83,6 +85,33 @@ function cmdCoolDown(message, command) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function voiceChannel(){
+  function message(msg){
+    let channel = msg.member.voice.channel;
+    return channel;
+  }
+  function interaction(int){
+    let channel = int.member.voice.channel;
+    return channel;
+  }
+  return { message, interaction }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function activityInfoEmbed(vc, msg){
+  let embed = new EmbedBuilder()
+    .setColor(`${process.env.ec}`)
+    .addFields(
+      { name: `**RequestedBy: **`, value: `${msg.author}`, inline: true },
+      { name: `\u200b`, value: `\u200b`, inline: true },
+      { name: `**VoiceChannel: **`, value: `${vc}`, inline: true }
+    )
+  return embed;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function pingEmbed(api, latency){
   let embed = new EmbedBuilder()
     .setColor(`${process.env.ec}`)
@@ -139,8 +168,9 @@ async function discordActivity(vcId, appId){
   headers: { Authorization: `Bot ${process.env.token}`, 'Content-Type': 'application/json', },
   });
   const invite = await response.json();
+  console.log(invite)
   if (invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
-  return `https://discord.com/invite/${invite.code}`;
+  return await `https://discord.com/invite/${invite.code}`;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

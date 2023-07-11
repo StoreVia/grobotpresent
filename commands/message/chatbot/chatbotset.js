@@ -11,7 +11,6 @@ module.exports = class MessageChatBotSet extends Command {
   			description: "Set Chatbot Channel.",
 		});
 	}
-
 	async run(client, message) {
 
 		

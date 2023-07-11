@@ -1,4 +1,3 @@
-const { EmbedBuilder } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageKnowWhatIMeme extends Command {
@@ -12,25 +11,15 @@ module.exports = class MessageKnowWhatIMeme extends Command {
   			description: "Use KnowWhatIMeme Activity.",
 		});
 	}
-
 	async run(client, message) {
 		
-        let voicechannelcheck = message.member.voice.channel;
+        let voicechannelcheck = client.functions.voiceChannel().message(message);
         
         if(!voicechannelcheck){
             return message.reply({ content: `> Please Make Sure You Are In A Voice Channel.` })
         } else {
-            client.functions.discordActivity(voicechannelcheck.id, `kwim`).then(async (link) => {
-                let embed = new EmbedBuilder()
-                	.setColor(`${process.env.ec}`)
-                	.addFields(
-                    	{ name: `**RequestedBy: **`, value: `${message.author}`, inline: true },
-                    	{ name: `\u200b`, value: `\u200b`, inline: true },
-                    	{ name: `**VoiceChannel: **`, value: `${voicechannelcheck}`, inline: true }
-					)
-                message.reply({ embeds: [embed] })
-                message.channel.send({content: `${link}`})
-            })
+            message.reply({ embeds: [client.functions.activityInfoEmbed(voicechannelcheck, message)] })
+            message.channel.send({content: `${await client.functions.discordActivity(voicechannelcheck.id, `kwim`)}`})
         }
 	}
 };

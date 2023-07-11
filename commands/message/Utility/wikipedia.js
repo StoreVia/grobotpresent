@@ -12,7 +12,6 @@ module.exports = class MessagePing extends Command {
   			description: "Search Something In Wikipedia.",
 		});
 	}
-
 	async run(client, message, args) {
 		
 		const query = args.join(" ");
