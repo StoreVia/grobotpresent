@@ -8,6 +8,7 @@ module.exports.discordActivity = discordActivity;
 module.exports.getOptions = getOptions;
 module.exports.isValidURL = isValidURL;
 module.exports.akilangEmbed = akilangEmbed;
+module.exports.pingEmbed = pingEmbed;
 
 /////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
 
@@ -78,6 +79,18 @@ function cmdCoolDown(message, command) {
     setTimeout(() => time.delete(message.member.id), cooldownAmount); 
     return false;
   }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function pingEmbed(api, latency){
+  let embed = new EmbedBuilder()
+    .setColor(`${process.env.ec}`)
+    .addFields(
+      { name: '**🟢 Api: **', value: `> \`${api} ms\``,inline: true },  
+      { name: '**🏓 Latency: **', value: `> \`${latency} ms\``, inline: true },
+    )
+  return embed;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

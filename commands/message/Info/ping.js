@@ -1,4 +1,3 @@
-const { EmbedBuilder } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessagePing extends Command {
@@ -14,17 +13,8 @@ module.exports = class MessagePing extends Command {
 	}
 
 	async run(client, message) {
-		message.reply({ embeds: [embed("-", "-")] }).then((msg) =>  msg.edit({ embeds: [embed(Math.floor(client.ws.ping), msg.createdTimestamp - message.createdTimestamp)] }));
-	
-		function embed(api, latency){
-			let embed = new EmbedBuilder()
-				.setColor(`${process.env.ec}`)
-				.addFields(
-					{ name: '**🟢 Api: **', value: `> \`${api} ms\``,inline: true },  
-					{ name: '**🏓 Latency: **', value: `> \`${latency} ms\``, inline: true },
-				)
-			return embed;
-		}
+
+		message.reply({ embeds: [client.functions.pingEmbed("-", "-")] }).then((msg) =>  msg.edit({ embeds: [client.functions.pingEmbed(Math.floor(client.ws.ping), msg.createdTimestamp - message.createdTimestamp)] }));
 
 	}
 };
