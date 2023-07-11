@@ -1,7 +1,7 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
-module.exports = class MessagePing extends Command {
+module.exports = class MessageCheckers extends Command {
 	constructor(client) {
 		super(client, {
 			name: "checkers",

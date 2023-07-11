@@ -1,4 +1,4 @@
-const { Collection } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection } = require("discord.js");
 
 /////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
 
@@ -7,6 +7,7 @@ module.exports.escapeRegex = escapeRegex;
 module.exports.discordActivity = discordActivity;
 module.exports.getOptions = getOptions;
 module.exports.isValidURL = isValidURL;
+module.exports.akilangEmbed = akilangEmbed;
 
 /////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
 
@@ -77,6 +78,20 @@ function cmdCoolDown(message, command) {
     setTimeout(() => time.delete(message.member.id), cooldownAmount); 
     return false;
   }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function akilangEmbed(username) {
+  let embed = new EmbedBuilder()
+    .setTitle('All Language Codes')
+  	.setDescription(`**Usage: **\`${process.env.prefix}setakilang <langCode>\`\n\n<langcode> - <language>\n**en - English(Recommended)**\naf - Afghanistan\nam - Armenia\nar - Argentina\naz - Azerbaijan\nbe - Belarus\nbg - Bulgaria\nbn - Bangladesh\nbs - Bosnia and Herzegovina\nca - Canada\nceb - Cebuano\nco - Corsica\ncs - Czech\ncy - Welsh\nda - Danish\nde - German\nel - Greek\neo - Esperanto\nes - Spanish\n**en - English(Recommended)**\net - Estonian\neu - Basque\nfa - Persian\nfi - Finnish\nfr - French\nfy - West Frisian\nga - Irish\ngd - Scottish Gaelic\ngl - Galician\ngu - Gujarati\nha - Hausa\nhaw - Hawaiian\nhe - Hebrew\nhi - Hindi\nhmm - Hmong\nhr - Croatian\nht - Haitian Creole\nhu - Hungarian\nhy - Armenian\nid - Indonesian\nig - Igbo\nis - Icelandic\nit - Italian\niw - Hebrew (deprecated)\nka - Georgian\nkk - Kazakh\nkm - Khmer\nkn - Kannada\nko - Korean\nku - Kurdish\nky - Kyrgyz\nla - Latin\nlb - Luxembourgish\nlo - Lao\nlt - Lithuanian\nlv - Latvian\nmg - Malagasy\nmi - Maori\nmk - Macedonian\nml - Malayalam\nmn - Mongolian\nmr - Marathi\nms - Malay\nmt - Maltese\nmy - Burmese\nne - Nepali\nnl - Dutch\nno - Norwegian\nny - Chichewa\npa - Punjabi\npl - Polish\nps - Pashto\npt - Portuguese\nro - Romanian\nru - Russian\nsd - Sindhi\nsi - Sinhala\nsk - Slovak\nsl - Slovenian\nsm - Samoan\nsn - Shona\nso - Somali\nsq - Albanian\nsr - Serbian\nst - Southern Sotho\nsu - Sundanese\nsv - Swedish\nsw - Swahili\nta - Tamil\nte - Telugu\ntg - Tajik\nth - Thai\ntl - Filipino\ntr - Turkish\nuk - Ukrainian\nur - Urdu\nuz - Uzbek\nvi - Vietnamese\nxh - Xhosa\nyi - Yiddish\nyo - Yoruba\nzh-cn - Chinese (Simplified)\nzh-tw - Chinese (Traditional)\nzh - Chinese\nzu - Zulu `)
+    .setFooter({
+      text: `${username} - ${process.env.year} ©`, 
+      iconURL: process.env.iconurl
+    })
+    .setColor(`${process.env.ec}`);
+  return embed;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

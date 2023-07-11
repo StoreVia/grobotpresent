@@ -22,10 +22,9 @@ module.exports = class MessageCreate extends Event {
         const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})`);
         if(!prefixRegex.test(message.content)) return;
         const [, mPrefix] = message.content.match(prefixRegex);
-        const args = message.content.slice(mPrefix.length).trim().split(/ +/g);
+        const args = message.content.slice(mPrefix.length).trim().split(/ +/).filter(Boolean);
         const cmd = args.length > 0 ? args.shift().toLowerCase() : null;
         let command = client.messagecommands.get(cmd);
-        let functions = require(`../../handler/Functions`)
         if(!command) command = client.messagecommands.get(client.aliases.get(cmd));
         if(command){
             if(cmdCoolDown(message, command)){
@@ -34,7 +33,7 @@ module.exports = class MessageCreate extends Event {
                     .setColor(`${process.env.ec}`)
                 return message.reply({ embeds: [embed] });
             } else {
-                return command.run(client, message, functions, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
+                return command.run(client, message, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
             }
         }
 
