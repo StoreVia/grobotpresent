@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, Partials, ActivityType } = require('discord.j
 const { Collection } = require('@discordjs/collection');
 const CommandHandler = require('../handler/Command');
 const EventHandler = require('../handler/Event');
+const Functions = require('../handler/Functions');
 const { QuickDB } = require("quick.db");
 const { GiveawaysManager } = require("../B_Gro_Modules/discord-giveaways");
 const { Player } = require('discord-player');
@@ -38,22 +39,17 @@ module.exports = class BotClient extends Client {
 			],
 		});
 		
-		
+		["Command", "Event", "RegisterSlash", "AntiCrash"].filter(Boolean).forEach(h => { require(`../handler/${h}`) })
 		this.commands = new Collection();
 		this.messagecommands = new Collection();
 		this.aliases = new Collection();
 		this.cooldowns = new Collection();
 		this.messagecategories = require("fs").readdirSync(`./commands/message`);
 		this.categories = require("fs").readdirSync(`./commands/slash`);
-		["Command", "Event", "RegisterSlash", "AntiCrash"]
-		.filter(Boolean)
-		.forEach(h => {
-  			require(`../handler/${h}`);
-		})
 		this.events = new Collection();
 		this.db = new QuickDB();
 		this.player = new Player(this);
-		this.functions = require(`../handler/Functions`)
+		this.functions = new Functions(this);
 		this.giveawaysManager = new GiveawaysManager(this, {
 			storage: "./giveaway_utility/giveaways.json",
 			updateCountdownEvery: 5000,
