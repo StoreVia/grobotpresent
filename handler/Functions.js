@@ -1,7 +1,5 @@
 const { EmbedBuilder, Collection } = require("discord.js");
 
-/////////////////////////////////////////////{exports}/////////////////////////////////////////////////////////
-
 module.exports = class Functions {
   constructor(client) {
     this.client = client;
