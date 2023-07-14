@@ -72,6 +72,10 @@ module.exports = class Functions {
       .setColor(`${process.env.ec}`);
     return embed;
   }
+
+  errorMsg(){
+    return `> Error Occured Please Try Later Or Use "/report" To Report The Bug.`
+  }
   
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
