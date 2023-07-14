@@ -31,7 +31,7 @@ module.exports = class MessageLangCodes extends Command {
 			if (i.user.id != message.author.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} else if(i.customId === "langcodes") {
-				await i.reply({ embeds: [await client.functions.akilangEmbed(client.user.username)], ephemeral: true });
+				await i.reply({ embeds: [await client.functions.akilangEmbed()], ephemeral: true });
             }
 		})
 		collector.on('end', async (_, reason) => {
