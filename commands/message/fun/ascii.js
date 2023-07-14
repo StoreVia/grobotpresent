@@ -21,10 +21,10 @@ module.exports = class MessageAscii extends Command {
                 message.reply({ content: client.functions.errorMsg() });
             } else if(data.length > 2000){
                 message.reply({ content: `> Please Decrease The Length Of The Sentence.` });
-            } else if(text.length > 20){
-                message.reply({ content: ` \`\`\`20 Character Only Allowed For Message Command. You Can Use More Characters In Slash Command To Use Slash Command Type "/ascii"\`\`\` ` });
-			} else if(text.length < 20){
-                message.reply({ content: ` \`\`\`${data}\`\`\` ` });
+            } else if(text.length > 25){
+                message.reply({ content: `> 25 Characters Are Only Allowed For Message Command. You Can Use More Than 25 Characters In Slash Command To Use Slash Command Type "/ascii". ` });
+			} else if(text.length < 25){
+                message.channel.send({ content: ` \`\`\`${data}\`\`\` ` });
 			}
         }) 
 

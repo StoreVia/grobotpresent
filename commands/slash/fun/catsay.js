@@ -6,7 +6,7 @@ module.exports = class Catsay extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('catsay')
-				.setDescription('Make The Cat Say Your Message.')
+				.setDescription('Make Cat To Say Something.')
 				.setDMPermission(true)
                 .addStringOption(option =>
                     option.setName('string')
@@ -21,14 +21,6 @@ module.exports = class Catsay extends Command {
 
     await interaction.deferReply();
     const string = interaction.options.getString(`string`);
-
-    return await interaction.followUp({
-      files: [
-        {
-          attachment: `https://cataas.com/cat/cute/says/${string}`,
-          name: "catsay.png",
-        },
-      ],
-    });
-	}
+    return await interaction.followUp({ files: [{ attachment: `https://cataas.com/cat/cute/says/${string}`, name: "catsay.png" }]})
+  }
 };

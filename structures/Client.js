@@ -39,7 +39,7 @@ module.exports = class BotClient extends Client {
 			],
 		});
 		
-		["Command", "Event", "RegisterSlash", "AntiCrash"].filter(Boolean).forEach(h => {require(`../handler/${h}`)});
+		["Command", "Event", "RegisterSlash"].filter(Boolean).forEach(h => {require(`../handler/${h}`)});
 		this.commands = new Collection();
 		this.messagecommands = new Collection();
 		this.aliases = new Collection();

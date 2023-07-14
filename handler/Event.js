@@ -1,5 +1,6 @@
 const BaseEvent = require('../structures/EventClass');
 const PlayerEvent = require('../structures/PlayerEventClass');
+const ProcessEvent = require('../structures/ProcessEventClass');
 const path = require('path');
 const fs = require('fs').promises;
 
@@ -24,6 +25,9 @@ module.exports = class EventClass {
 				} else if(Event.prototype instanceof PlayerEvent){
 					const event = new Event(this.client);
 					this.client.player.events.on(event.name, event.run.bind(event));
+				} else if(Event.prototype instanceof ProcessEvent){
+					const event = new Event(this.client);
+					process.on(event.name, event.run.bind(event));
 				}
 			}
 		}
