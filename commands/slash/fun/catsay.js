@@ -21,6 +21,6 @@ module.exports = class Catsay extends Command {
 
     await interaction.deferReply();
     const string = interaction.options.getString(`string`);
-    return await interaction.followUp({ files: [{ attachment: `https://cataas.com/cat/cute/says/${string}`, name: "catsay.png" }]})
+    await interaction.followUp({ files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]})
   }
 };

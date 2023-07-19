@@ -1,5 +1,5 @@
 const Command = require('../../../structures/CommandClass');
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Dice extends Command {
 	constructor(client) {
@@ -15,65 +15,12 @@ module.exports = class Dice extends Command {
 	}
 	async run(client, interaction) {
 
+		let buttonRow = await client.functions.buttons().two(`Roll Again`, `dice`, `Stop`, `distop`);
+		let randomNum = await client.functions.randomNum(6);
+		let embed = client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
+
 		await interaction.deferReply();
-
-		const buttonRow = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Roll Again')
-					.setCustomId('dice')
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('distop')
-                	.setDisabled(false)
-					.setStyle(ButtonStyle.Danger),
-            )
-
-		let message = await interaction.followUp({ embeds: [embed(dice())], components: [buttonRow] })
-
-		const filter = i => i.customId;
-		const collector = message.createMessageComponentCollector({ filter, idle: 300000 });
-
-        collector.on('collect', async i => {
-			if (i.user.id != interaction.user.id) {
-				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} 
-			if(i.customId === "dice") {
-				i.update({ embeds: [embed(dice())], components: [buttonRow] })
-			}
-			if(i.customId === "distop"){
-				buttonRow.components.map(component=> component.setDisabled(true));
-				await i.update({ components: [buttonRow] });
-			}
-		})
-
-		collector.on('end', async (_, reason) => {
-			if (reason === 'idle' || reason === 'user') {
-				buttonRow.components.map(component=> component.setDisabled(true));
-				await interaction.editReply({ components: [buttonRow] });
-			}
-		});
-		
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
-		function embed(num){
-			const embed = new EmbedBuilder()
-				.setDescription(`🎲 You Got \`${num}\``)
-				.setColor(`${process.env.ec}`)
-			return embed;
-		}
-		function dice(){
-			const numbers = [
-				"1",
-				"2",
-				"3",
-				"4",
-				"5",
-				"6"
-			]
-			const rolleddice = numbers[Math.floor(Math.random() * numbers.length)];
-			return rolleddice;
-		}
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+		let msg = await interaction.followUp({ embeds: [embed], components:  [buttonRow]});
+		client.functions.collector(msg).dice(interaction.user.id, embed, buttonRow);
 	}
 };

@@ -18,7 +18,7 @@ module.exports = class MessageChess extends Command {
         if(!voicechannelcheck){
             return message.reply({ content: `> Please Make Sure You Are In A Voice Channel.` })
         } else {
-            message.reply({ embeds: [client.functions.activityInfoEmbed(voicechannelcheck, message)] })
+            message.reply({ embeds: [client.functions.activityInfoEmbed(voicechannelcheck, message.author)] })
             message.channel.send({content: `${await client.functions.discordActivity(voicechannelcheck.id, `chess`)}`})
         }
 	}

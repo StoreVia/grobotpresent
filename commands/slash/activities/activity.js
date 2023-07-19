@@ -1,5 +1,5 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder  } = require('discord.js');
+const { SlashCommandBuilder  } = require('discord.js');
 
 module.exports = class Activity extends Command {
 	constructor(client) {
@@ -42,17 +42,8 @@ module.exports = class Activity extends Command {
             return interaction.followUp({ content: `> Please Make Sure You Are In A Voice Channel.`})
         } else {
             await interaction.deferReply();
-            client.functions.discordActivity(channel.id, `${activity}`, ).then(async (link) => {
-                let embed = new EmbedBuilder()
-                	.setColor(`${process.env.ec}`)
-                	.addFields(
-                    	{ name: `**RequestedBy: **`, value: `${interaction.user}`, inline: true },
-                    	{ name: `\u200b`, value: `\u200b`, inline: true },
-                    	{ name: `**VoiceChannel: **`, value: `${channel}`, inline: true }
-					)
-                interaction.followUp({ embeds: [embed] });
-                return interaction.channel.send({content: `${link}`})
-            });
+            interaction.followUp({ embeds: [client.functions.activityInfoEmbed(channel, interaction.user)] });
+            return interaction.channel.send({ content: `${await client.functions.discordActivity(channel.id, `${activity}`)}`})
         }
         
 	}

@@ -18,36 +18,11 @@ function getButtonReply(interaction) {
     else return null;
 };
 
-/**
-    * Play a Game of Akinator.
-    * 
-    * Simply pass in the Discord `Message` or `CommandInteraction` sent by the user to this function to start the game.
-    * 
-    * __Game Options__
-    * 
-    * - `language` - The Language of the Game.
-    * - `childMode` - Whether to use Akinator's Child Mode.
-    * - `gameType` - The Type of Akinator Game to Play. (`animal`, `character` or `object`)
-    * - `useButtons` - Whether to use Discord's Buttons.
-    * - `embedColor` - The Color of the Message Embeds.
-    * 
-    * @param {Discord.Message | Discord.CommandInteraction} input The Message or Slash Command Sent by the User.
-    * @param {object} options The Options for the Game.
-    * @param {string} [options.language="en"] The Language of the Game. Defaults to "en".
-    * @param {boolean} [options.childMode=false] Whether to use Akinator's Child Mode. Defaults to "false".
-    * @param {"character" | "animal" | "object"} [options.gameType="character"] The Type of Akinator Game to Play. Defaults to "character".
-    * @param {boolean} [options.useButtons=false] Whether to use Discord's Buttons. Defaults to "false".
-    * @param {Discord.ColorResolvable} [options.embedColor="Random"] The Color of the Message Embeds. Defaults to "RANDOM".
-    * @returns {Promise<void>} Discord.js Akinator Game
-    */
-
 module.exports = async function (input, options = {}) {
-    // check discord.js version
     if (Discord.version.split(".")[0] < 14) return console.log("Discord.js Akinator Error: Discord.js v14 or Higher is Required.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
 
     let inputData = {};
     try {
-        // configuring game options if not specified
         options.language = options.language || "en";
         options.childMode = options.childMode || false;
         options.gameType = options.gameType || "character";
