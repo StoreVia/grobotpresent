@@ -18,7 +18,7 @@ module.exports = class MessageFlipText extends Command {
 		if(!string){
 			return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Flip.` })
 		} else {
-			return await message.reply({ content: `${await client.functions.filpText(args.join(" "))}`});
+			return await message.channel.send({ content: `${await client.functions.filpText(args.join(" "))}`});
 		}
 	}
 };

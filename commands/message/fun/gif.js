@@ -13,10 +13,12 @@ module.exports = class MessageFlipText extends Command {
 	}
 	async run(client, message, args) {
 
+		let string = args.join(" ");
+
         if(!string){
-			return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Flip.` })
+			return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Search A Gif.` })
 		} else {
-            return await message.reply({ embeds: [await client.functions.gif(await client.functions.getOptions(interaction).string(`string`))]});
+            return await message.channel.send({ embeds: [await client.functions.gif(string)]});
         }
 	}
 };
