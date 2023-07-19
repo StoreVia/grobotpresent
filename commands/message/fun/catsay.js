@@ -16,7 +16,7 @@ module.exports = class MessageCatSay extends Command {
 		const string = args.join(" ")
         
         if(!string){
-            return message.reply({ content: `> Please Provide a Specific Text Or Sentence That You Would Like the Cat to Say.` })
+            return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like The Cat To Say.` })
         } else {
             return await message.channel.send({ files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]});
         }

@@ -20,7 +20,6 @@ module.exports = class Catsay extends Command {
 	async run(client, interaction) {
 
     await interaction.deferReply();
-    const string = interaction.options.getString(`string`);
-    await interaction.followUp({ files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]})
+    await interaction.followUp({ files: [{ attachment: `${await client.functions.catSay(await client.functions.getOptions(interaction).string(`string`))}`, name: "catsay.png" }]})
   }
 };

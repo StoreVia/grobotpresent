@@ -6,7 +6,7 @@ module.exports = class Gif extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('gif')
-				.setDescription('Search For Gif.')
+				.setDescription('Search For A Gif.')
 				.setDMPermission(true)
                 .addStringOption(option =>
                     option.setName('string')
@@ -19,7 +19,7 @@ module.exports = class Gif extends Command {
 	}
 	async run(client, interaction) {
 
-    await interaction.deferReply();
-    return interaction.followUp({ embeds: [await client.functions.gif(await client.functions.getOptions(interaction).string(`string`))] });
+    	await interaction.deferReply();
+    	return interaction.followUp({ embeds: [await client.functions.gif(await client.functions.getOptions(interaction).string(`string`))]});
 	}
 };
