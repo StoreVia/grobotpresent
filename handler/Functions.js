@@ -1,6 +1,10 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
+const akinator = require("../B_Gro_Modules/discord.js-akinator");
+const fs = require('fs');
+const https = require('https');
+https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs_mozilla_bundle/ca_bundle/ca_intermediate_root_bundle.pem');
 
 module.exports = class Functions {
   constructor(client) {
@@ -9,7 +13,7 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  collector(msg){
+  async collector(msg){
     function dice(userId, embed, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
@@ -32,12 +36,51 @@ module.exports = class Functions {
     }
     return { dice }
   }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  gif(string){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  howGay(){
+
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async akinator(msg, lang){
+    return await akinator(msg, {
+      language: lang,
+      childMode: false,
+      gameType: "character",
+      useButtons: true,
+      embedColor: process.env.ec
+    })
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async gif(string){
     const client = this.client;
-    let gif = giphy.search(string).then(async function(res) {
+    return giphy.search(string).then(async function(res) {
       let id = await res.data[0].id;
       let msgurl = `https://media.giphy.com/media/${id}/giphy.gif`;
       const embed = new EmbedBuilder()
@@ -50,22 +93,63 @@ module.exports = class Functions {
         });
       return embed;
     })
-    return gif;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  catSay(string){
+  async catSay(string){
     let img = `https://cataas.com/cat/cute/says/${string}`
-    return img;
+    return await img;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  filpText(string){
+  async filpText(string){
     const flipped = flip(string);
 		const fliptext = flipped.split("").reverse().join("");
-    return fliptext;
+    return await fliptext;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  embedBuild(){
+    const embed = new EmbedBuilder();
+    function title(title){
+      embed.setTitle(title);
+      return this;
+    }
+    function description(description){
+      embed.setDescription(description);
+      return this;
+    }
+    function color(color) {
+      embed.setColor(color ? color : `${process.env.ec}`);
+      return this;
+    }
+    function author(text, iconurl){
+      embed.setAuthor({ name: text, iconURL: iconurl });
+      return this;
+    }
+    function thumbnail(url){
+      embed.setThumbnail(url);
+      return this;
+    }
+    function image(url){
+      embed.setImage(url);
+      return this;
+    }
+    function footer(text, iconurl){
+      embed.setFooter({ name: text ? text : `${this.client.user.username} - ${process.env.year} ©` , iconURL: iconurl ? iconurl : process.env.iconurl });
+      return this;
+    }
+    function fields(...value){
+      embed.addFields(...value);
+      return this;
+    }
+    function build(){
+      return embed;
+    }
+    return { author, title, description, thumbnail, image, fields, color, footer, build };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,14 +161,32 @@ module.exports = class Functions {
 				.setColor(`${process.env.ec}`)
 			return embed;
     }
-    return { onlyDescription }
+    function titleAndImage(title, image){
+      const embed = new EmbedBuilder()
+        .setTitle(title)
+				.setImage(image)
+				.setColor(`${process.env.ec}`)
+        .setFooter({ 
+          name: `${this.client.user.username} - ${process.env.year} ©` , 
+          iconURL: process.env.iconurl 
+        });
+			return embed;
+    }
+    return { onlyDescription, titleAndImage }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async randomNum(num){
-    const random = Math.floor(Math.random() * num) + 1;
-    return await random;
+  randomNum(num){
+    async function whole(){
+      const random = Math.floor(Math.random() * num + 1);
+      return await random;
+    }
+    async function natural(){
+      const random = Math.floor(Math.random() * num) + 1;
+      return await random;
+    }
+    return { whole, natural }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,9 +299,9 @@ module.exports = class Functions {
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  isValidURL(url){
+  async isValidURL(url){
     const pattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
-    return pattern.test(url);
+    return await pattern.test(url);
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,8 +334,8 @@ module.exports = class Functions {
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  escapeRegex(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
+  async escapeRegex(str) {
+    return await str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,7 +371,7 @@ module.exports = class Functions {
     });
     const invite = await response.json();
     if (invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
-    return `https://discord.com/invite/${invite.code}`;
+    return await `https://discord.com/invite/${invite.code}`;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

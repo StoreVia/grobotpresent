@@ -18,7 +18,7 @@ module.exports = class MessageAscii extends Command {
 
         figlet.text(text, async function(err, data){
             if(err){
-                message.reply({ content: client.functions.errorMsg() });
+                message.reply({ content: await client.functions.errorMsg() });
             } else if(data.length > 2000){
                 message.reply({ content: `> Please Decrease The Length Of The Sentence.` });
             } else if(text.length > 25){

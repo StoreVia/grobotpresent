@@ -11,11 +11,11 @@ module.exports = class MessageDice extends Command {
   			description: "Roll Dice.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message) {
 
 		let buttonRow = await client.functions.buttons().two(`Roll Again`, `dice`, `Stop`, `distop`);
-		let randomNum = await client.functions.randomNum(6);
-		let embed = client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
+		let randomNum = await client.functions.randomNum(6).natural();
+		let embed = await client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
 
 		let msg = await message.reply({ embeds: [embed], components:  [buttonRow]});
 		client.functions.collector(msg).dice(message.author.id, embed, buttonRow);

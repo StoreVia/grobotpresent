@@ -1,5 +1,5 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class HowGay extends Command {
 	constructor(client) {
@@ -18,18 +18,15 @@ module.exports = class HowGay extends Command {
 	}
 	async run(client, interaction) {
 
-        const user = interaction.options.getUser('user');
-        let gaypercentage = Math.floor(Math.random() * 101);
+        const user = await client.functions.getOptions(interaction).user('user');
+        let gaypercentage = await client.functions.randomNum(100).whole();
 
         if(user.id === client.user.id){
             await interaction.deferReply({ ephemeral: true });
-            interaction.followUp({ content: "> I'm Not Going To Tell You That 😉." })
+            return await interaction.followUp({ content: "> I'm Not Going To Tell You That 😉." })
         } else if(user){
-            const embed = new EmbedBuilder()
-                .setDescription(`${user} Is ${gaypercentage}% Gay`)
-                .setColor(`${process.env.ec}`)
             await interaction.deferReply();
-            return await interaction.followUp({embeds: [embed]})
+            return await interaction.followUp({embeds: [await client.functions.embedBuild().description(`${user} Is ${gaypercentage}% Gay`).color().build()]})
         }
 	}
 };

@@ -16,8 +16,8 @@ module.exports = class Dice extends Command {
 	async run(client, interaction) {
 
 		let buttonRow = await client.functions.buttons().two(`Roll Again`, `dice`, `Stop`, `distop`);
-		let randomNum = await client.functions.randomNum(6);
-		let embed = client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
+		let randomNum = await client.functions.randomNum(6).natural();
+		let embed = await client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
 
 		await interaction.deferReply();
 		let msg = await interaction.followUp({ embeds: [embed], components:  [buttonRow]});

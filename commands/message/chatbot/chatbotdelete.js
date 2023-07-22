@@ -14,7 +14,6 @@ module.exports = class MessageChatBotDelete extends Command {
 	}
 	async run(client, message) {
 
-
 		const chatbotdb = client.db.table(`chatbot`);
         const checkchannel = await chatbotdb.get(`${message.guild.id}`);
 
