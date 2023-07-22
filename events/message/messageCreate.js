@@ -54,7 +54,6 @@ module.exports = class MessageCreate extends Event {
         let command = client.messagecommands.get(cmd);
         if(!command) command = client.messagecommands.get(client.aliases.get(cmd));
         if(command){
-            console.log(`command exists`)
             if(client.functions.cmdCoolDown(message, command)){
                 const embed = new EmbedBuilder()
                     .setDescription(`\`\`\`Time Left: ${cmdCoolDown(message, command)}s\`\`\``)
