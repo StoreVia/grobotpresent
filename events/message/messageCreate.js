@@ -18,7 +18,7 @@ module.exports = class MessageCreate extends Event {
         if(message.channel.partial) await message.channel.fetch();
         if(message.partial) await message.fetch();
         const prefix = process.env.prefix;
-        const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${client.functions.escapeRegex(prefix)})`);
+        const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${await client.functions.escapeRegex(prefix)})`);
         if(!prefixRegex.test(message.content)){
             const chatbot = client.db.table(`chatbot`)
             const chatbotcheck = await chatbot.get(`${message.guild.id}`)
@@ -54,6 +54,7 @@ module.exports = class MessageCreate extends Event {
         let command = client.messagecommands.get(cmd);
         if(!command) command = client.messagecommands.get(client.aliases.get(cmd));
         if(command){
+            console.log(`command exists`)
             if(client.functions.cmdCoolDown(message, command)){
                 const embed = new EmbedBuilder()
                     .setDescription(`\`\`\`Time Left: ${cmdCoolDown(message, command)}s\`\`\``)
