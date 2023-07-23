@@ -17,7 +17,7 @@ module.exports = class MessageChatBotDelete extends Command {
 		const chatbotdb = client.db.table(`chatbot`);
         const checkchannel = await chatbotdb.get(`${message.guild.id}`);
 
-		if(!message.member.permissions.has(PermissionsBitField.Flags.ManageGuild)){
+		if(!await client.functions.permsCheck(`manageGuild`).message(message)){
             return message.reply({ content: `> You Need "Manage Guild" Permission To Use This Command.`})
         } else {
 			if(!checkchannel){
