@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, Embed } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
 const akinator = require("../B_Gro_Modules/discord.js-akinator");
@@ -215,6 +215,24 @@ module.exports = class Functions {
     function interaction(int){
       let channel = int.member.voice.channel;
       return channel;
+    }
+    return { message, interaction }
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  permsCheck(perm){
+    let Permissions = PermissionsBitField.Flags;
+    perm = perm.replace(`manageGuild`, Permissions.ManageGuild)
+              .replace(`kick`, Permissions.KickMembers)
+              .replace(`ban`, Permissions.BanMembers)
+              .replace(`sendMessages`, Permissions.SendMessages)
+              .replace(`viewChannel`, Permissions.ViewChannel);
+    function message(msg){
+      return msg.member.permissions.has(perm);
+    }
+    function interaction(int){
+      return int.memberPermissions.has(perm);
     }
     return { message, interaction }
   }

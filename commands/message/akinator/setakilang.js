@@ -18,13 +18,7 @@ module.exports = class MessageSetAkiLang extends Command {
         let langdb = client.db.table(`akinatorlanguage`);
         let langdbcheck = await langdb.get(`${message.author.id}`);
 
-        const buttonRow = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Language')
-					.setCustomId('sallang')
-					.setStyle(ButtonStyle.Secondary),
-            )
+        const buttonRow = await client.functions.buttons(`Language`, `sallang`, ButtonStyle.Secondary, `Stop`, `salstop`, ButtonStyle.Danger);
 
         if(!string){
             let msg = await message.reply({ content: `> Enter Language Code To Set Your Akinator Language.\n**Click Below Button To View All Language Codes.**`, components: [buttonRow] })
@@ -53,7 +47,10 @@ module.exports = class MessageSetAkiLang extends Command {
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    } else if(i.customId === "sallang") {
 				    await i.reply({ embeds: [await client.functions.akilangEmbed()], ephemeral: true });
-                }
+                } else if(i.customId === "salstop"){
+					buttonRow.components.map(component=> component.setDisabled(true));
+					await i.update({ components: [buttonRow] })
+				}
 		    })
 		    collector.on('end', async (_, reason) => {
 			    if (reason === 'idle' || reason === 'user') {
