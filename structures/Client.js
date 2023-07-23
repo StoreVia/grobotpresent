@@ -64,7 +64,7 @@ module.exports = class BotClient extends Client {
 		new EventHandler(this).build('../events');
 		new CommandHandler(this).build('../commands/slash');
 		new CommandHandler(this).build('../commands/message');
-		new CommandHandler(this).build('../C_Private_Slash');
+		new CommandHandler(this).build('../developer_commands');
 	}
 
 	async login() {

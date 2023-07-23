@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ButtonStyle } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageLangCodes extends Command {
@@ -14,15 +14,7 @@ module.exports = class MessageLangCodes extends Command {
 	}
 	async run(client, message) {
 
-        const buttonRow = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Language')
-					.setCustomId('langcodes')
-					.setStyle(ButtonStyle.Secondary),
-            )
-
-        
+        const buttonRow = await client.functions.buttons(`Language`, `langcodes`, ButtonStyle.Secondary, `Stop`, `lcstop`, ButtonStyle.Danger);
         let msg = await message.reply({ content: `> **Click Below Button To View All Language Codes.**`, components: [buttonRow] })
 
         const filter = i => i.customId;
@@ -31,8 +23,11 @@ module.exports = class MessageLangCodes extends Command {
 			if (i.user.id != message.author.id) {
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} else if(i.customId === "langcodes") {
-				await i.reply({ embeds: [await client.functions.akilangEmbed()], ephemeral: true });
-            }
+				i.reply({ content: ``, embeds: [await client.functions.akilangEmbed()], ephemeral: true })
+            } else if(i.customId === "lcstop"){
+				buttonRow.components.map(component=> component.setDisabled(true));
+				await i.update({ components: [buttonRow] })
+			}
 		})
 		collector.on('end', async (_, reason) => {
 			if (reason === 'idle' || reason === 'user') {

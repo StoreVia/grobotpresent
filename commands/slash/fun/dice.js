@@ -1,5 +1,5 @@
 const Command = require('../../../structures/CommandClass');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class Dice extends Command {
 	constructor(client) {
@@ -15,7 +15,7 @@ module.exports = class Dice extends Command {
 	}
 	async run(client, interaction) {
 
-		let buttonRow = await client.functions.buttons().two(`Roll Again`, `dice`, `Stop`, `distop`);
+		let buttonRow = await client.functions.buttons(`Roll Again`, `dice`, ButtonStyle.Secondary, `Stop`, `distop`, ButtonStyle.Danger);
 		let randomNum = await client.functions.randomNum(6).natural();
 		let embed = await client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
 

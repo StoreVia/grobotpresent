@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, Embed } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
 const akinator = require("../B_Gro_Modules/discord.js-akinator");
@@ -13,7 +13,7 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async collector(msg){
+  collector(msg){
     function dice(userId, embed, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
@@ -79,41 +79,33 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async gif(string){
-    const client = this.client;
     return giphy.search(string).then(async function(res) {
-      let id = await res.data[0].id;
+      let id = res.data[0].id;
       let msgurl = `https://media.giphy.com/media/${id}/giphy.gif`;
-      const embed = new EmbedBuilder()
-        .setTitle(`${string}`)
-        .setImage(msgurl)
-        .setColor(`${process.env.ec}`)
-        .setFooter({
-          text: `${client.user.username} - ${process.env.year} ©`, 
-          iconURL: process.env.iconurl
-        });
-      return embed;
+      return msgurl;
     })
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async catSay(string){
+  catSay(string){
     let img = `https://cataas.com/cat/cute/says/${string}`
-    return await img;
+    return img;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async filpText(string){
+  filpText(string){
     const flipped = flip(string);
 		const fliptext = flipped.split("").reverse().join("");
-    return await fliptext;
+    return fliptext;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   embedBuild(){
-    const embed = new EmbedBuilder();
+    const client = this.client;
+    const embed = new EmbedBuilder().setColor(`${process.env.ec}`);
     function title(title){
       embed.setTitle(title);
       return this;
@@ -122,8 +114,8 @@ module.exports = class Functions {
       embed.setDescription(description);
       return this;
     }
-    function color(color) {
-      embed.setColor(color ? color : `${process.env.ec}`);
+    function color() {
+      embed.setColor(`#000000`);
       return this;
     }
     function author(text, iconurl){
@@ -139,76 +131,79 @@ module.exports = class Functions {
       return this;
     }
     function footer(text, iconurl){
-      embed.setFooter({ name: text ? text : `${this.client.user.username} - ${process.env.year} ©` , iconURL: iconurl ? iconurl : process.env.iconurl });
+      embed.setFooter({ text: text ? text : `${client.user.username} - ${process.env.year} ©` , iconURL: iconurl ? iconurl : process.env.iconurl });
       return this;
     }
-    function fields(...value){
-      embed.addFields(...value);
+    function fields(...fieldSets) {
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 3) {
+        const [name, value, inline] = fieldSets.slice(i, i + 3);
+        realFields.push({ name, value, inline });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
+    function ifields(...fieldSets) {
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 2) {
+        const [name, value] = fieldSets.slice(i, i + 2);
+        realFields.push({ name, value, inline: true });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
+    function bfields(...fieldSets) {
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 3) {
+        const [name, value, inline] = fieldSets.slice(i, i + 3);
+        realFields.push({ name: `**${name}: **`, value, inline });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
+    function ibfields(...fieldSets) {
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 2) {
+        const [name, value] = fieldSets.slice(i, i + 2);
+        realFields.push({ name: `**${name}: **`, value, inline: true });
+      }
+      embed.addFields(...realFields);
       return this;
     }
     function build(){
       return embed;
     }
-    return { author, title, description, thumbnail, image, fields, color, footer, build };
-  }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  embed(){
-    function onlyDescription(text){
-      const embed = new EmbedBuilder()
-				.setDescription(text)
-				.setColor(`${process.env.ec}`)
-			return embed;
-    }
-    function titleAndImage(title, image){
-      const embed = new EmbedBuilder()
-        .setTitle(title)
-				.setImage(image)
-				.setColor(`${process.env.ec}`)
-        .setFooter({ 
-          name: `${this.client.user.username} - ${process.env.year} ©` , 
-          iconURL: process.env.iconurl 
-        });
-			return embed;
-    }
-    return { onlyDescription, titleAndImage }
+    return { author, title, description, thumbnail, image, fields, ifields, bfields, ibfields, color, footer, build };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   randomNum(num){
-    async function whole(){
+    function whole(){
       const random = Math.floor(Math.random() * num + 1);
-      return await random;
+      return random;
     }
     async function natural(){
       const random = Math.floor(Math.random() * num) + 1;
-      return await random;
+      return random;
     }
     return { whole, natural }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  buttons(){
-    function two(label1, id1, label2, id2){
-      const buttonRow = new ActionRowBuilder()
-        .addComponents(
-          new ButtonBuilder()
-            .setLabel(`${label1}`)
-            .setCustomId(`${id1}`)
-            .setStyle(ButtonStyle.Secondary),
-          new ButtonBuilder()
-            .setLabel(`${label2}`)
-            .setCustomId(`${id2}`)
-            .setDisabled(false)
-            .setStyle(ButtonStyle.Danger),
-        )
-      return buttonRow;
-    }
-    return { two }
+  buttons(...values) {
+    const buttonRow = new ActionRowBuilder();
+    for (let i = 0; i < values.length; i += 3) {
+      const [label, customId, style] = values.slice(i, i + 3);
+      const button = new ButtonBuilder()
+        .setLabel(`${label}`)
+        .setCustomId(`${customId}`)
+        .setStyle(style);
+      buttonRow.addComponents(button);
   }
+  return buttonRow;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -236,6 +231,20 @@ module.exports = class Functions {
       )
     return embed;
   }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  akilangEmbed(){
+    let embed = new EmbedBuilder()
+      .setTitle(`All Language Codes`)
+      .setDescription(`**Usage: **\`${process.env.prefix}setakilang <langCode>\`\n\n<langcode> - <language>\n**en - English(Recommended)**\naf - Afghanistan\nam - Armenia\nar - Argentina\naz - Azerbaijan\nbe - Belarus\nbg - Bulgaria\nbn - Bangladesh\nbs - Bosnia and Herzegovina\nca - Canada\nceb - Cebuano\nco - Corsica\ncs - Czech\ncy - Welsh\nda - Danish\nde - German\nel - Greek\neo - Esperanto\nes - Spanish\n**en - English(Recommended)**\net - Estonian\neu - Basque\nfa - Persian\nfi - Finnish\nfr - French\nfy - West Frisian\nga - Irish\ngd - Scottish Gaelic\ngl - Galician\ngu - Gujarati\nha - Hausa\nhaw - Hawaiian\nhe - Hebrew\nhi - Hindi\nhmm - Hmong\nhr - Croatian\nht - Haitian Creole\nhu - Hungarian\nhy - Armenian\nid - Indonesian\nig - Igbo\nis - Icelandic\nit - Italian\niw - Hebrew (deprecated)\nka - Georgian\nkk - Kazakh\nkm - Khmer\nkn - Kannada\nko - Korean\nku - Kurdish\nky - Kyrgyz\nla - Latin\nlb - Luxembourgish\nlo - Lao\nlt - Lithuanian\nlv - Latvian\nmg - Malagasy\nmi - Maori\nmk - Macedonian\nml - Malayalam\nmn - Mongolian\nmr - Marathi\nms - Malay\nmt - Maltese\nmy - Burmese\nne - Nepali\nnl - Dutch\nno - Norwegian\nny - Chichewa\npa - Punjabi\npl - Polish\nps - Pashto\npt - Portuguese\nro - Romanian\nru - Russian\nsd - Sindhi\nsi - Sinhala\nsk - Slovak\nsl - Slovenian\nsm - Samoan\nsn - Shona\nso - Somali\nsq - Albanian\nsr - Serbian\nst - Southern Sotho\nsu - Sundanese\nsv - Swedish\nsw - Swahili\nta - Tamil\nte - Telugu\ntg - Tajik\nth - Thai\ntl - Filipino\ntr - Turkish\nuk - Ukrainian\nur - Urdu\nuz - Uzbek\nvi - Vietnamese\nxh - Xhosa\nyi - Yiddish\nyo - Yoruba\nzh-cn - Chinese (Simplified)\nzh-tw - Chinese (Traditional)\nzh - Chinese\nzu - Zulu `)
+      .setColor(`${process.env.ec}`)
+      .setFooter({
+        text: `${client.user.username} - ${process.env.year} ©`, 
+        iconURL: process.env.iconurl
+      });
+    return embed;
+  }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -248,23 +257,17 @@ module.exports = class Functions {
       )
     return embed;
   }
-  
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  akilangEmbed() {
-    let embed = new EmbedBuilder()
-      .setTitle('All Language Codes')
-      .setDescription(`**Usage: **\`${process.env.prefix}setakilang <langCode>\`\n\n<langcode> - <language>\n**en - English(Recommended)**\naf - Afghanistan\nam - Armenia\nar - Argentina\naz - Azerbaijan\nbe - Belarus\nbg - Bulgaria\nbn - Bangladesh\nbs - Bosnia and Herzegovina\nca - Canada\nceb - Cebuano\nco - Corsica\ncs - Czech\ncy - Welsh\nda - Danish\nde - German\nel - Greek\neo - Esperanto\nes - Spanish\n**en - English(Recommended)**\net - Estonian\neu - Basque\nfa - Persian\nfi - Finnish\nfr - French\nfy - West Frisian\nga - Irish\ngd - Scottish Gaelic\ngl - Galician\ngu - Gujarati\nha - Hausa\nhaw - Hawaiian\nhe - Hebrew\nhi - Hindi\nhmm - Hmong\nhr - Croatian\nht - Haitian Creole\nhu - Hungarian\nhy - Armenian\nid - Indonesian\nig - Igbo\nis - Icelandic\nit - Italian\niw - Hebrew (deprecated)\nka - Georgian\nkk - Kazakh\nkm - Khmer\nkn - Kannada\nko - Korean\nku - Kurdish\nky - Kyrgyz\nla - Latin\nlb - Luxembourgish\nlo - Lao\nlt - Lithuanian\nlv - Latvian\nmg - Malagasy\nmi - Maori\nmk - Macedonian\nml - Malayalam\nmn - Mongolian\nmr - Marathi\nms - Malay\nmt - Maltese\nmy - Burmese\nne - Nepali\nnl - Dutch\nno - Norwegian\nny - Chichewa\npa - Punjabi\npl - Polish\nps - Pashto\npt - Portuguese\nro - Romanian\nru - Russian\nsd - Sindhi\nsi - Sinhala\nsk - Slovak\nsl - Slovenian\nsm - Samoan\nsn - Shona\nso - Somali\nsq - Albanian\nsr - Serbian\nst - Southern Sotho\nsu - Sundanese\nsv - Swedish\nsw - Swahili\nta - Tamil\nte - Telugu\ntg - Tajik\nth - Thai\ntl - Filipino\ntr - Turkish\nuk - Ukrainian\nur - Urdu\nuz - Uzbek\nvi - Vietnamese\nxh - Xhosa\nyi - Yiddish\nyo - Yoruba\nzh-cn - Chinese (Simplified)\nzh-tw - Chinese (Traditional)\nzh - Chinese\nzu - Zulu `)
-      .setFooter({
-        text: `${this.client.user.username} - ${process.env.year} ©`, 
-        iconURL: process.env.iconurl
-      })
-      .setColor(`${process.env.ec}`);
-    return embed;
-  }
 
   errorMsg(){
-    return `> Error Occured Please Try Later Or Use "/report" To Report The Bug.`
+    function bug(){
+      return `> Error Occured Please Try Later Or Use "/report" To Report The Bug.`
+    }
+    function vc(){
+      return `> Please Make Sure You Are In A Voice Channel.`
+    }
+    return { bug, vc }
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,9 +302,9 @@ module.exports = class Functions {
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  async isValidURL(url){
+  isValidURL(url){
     const pattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
-    return await pattern.test(url);
+    return pattern.test(url);
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,8 +337,8 @@ module.exports = class Functions {
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  async escapeRegex(str) {
-    return await str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
+  escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,7 +374,7 @@ module.exports = class Functions {
     });
     const invite = await response.json();
     if (invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
-    return await `https://discord.com/invite/${invite.code}`;
+    return `https://discord.com/invite/${invite.code}`;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

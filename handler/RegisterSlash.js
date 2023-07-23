@@ -7,6 +7,9 @@ const deploy = async () => {
 
 	const commandData = [];
 	const privateData = [];
+	function devPrefix(name){
+		return `dev${name}`;
+	}	
 
 	fs.readdirSync('./commands/slash').forEach(async category => {
 		const commands = fs.readdirSync(`./commands/slash/${category}/`).filter(cmd => cmd.endsWith('.js'));
@@ -18,15 +21,15 @@ const deploy = async () => {
 		}
 	});
 
-	fs.readdirSync('./C_Private_Slash/').forEach(async category => {
-		const commands1 = fs.readdirSync(`./C_Private_Slash/${category}/`).filter(cmd => cmd.endsWith('.js'));
-		for (const command of commands1) {
-			const Command1 = require(`../C_Private_Slash/${category}/${command}`);
+	fs.readdirSync('./developer_commands/').forEach(async category => {
+		const commands1 = fs.readdirSync(`./developer_commands/${category}/`).filter(cmd => cmd.endsWith('.js'));
+		for(const command of commands1) {
+			const Command1 = require(`../developer_commands/${category}/${command}`);
 			const cmd1 = new Command1();
 			const cmdData1 = cmd1.data.toJSON();
-			privateData.push(cmdData1);
+			privateData.push(cmdData1)		  
 		}
-	});
+	})
 
 	const rest = new REST({ version: '10' }).setToken(process.env.token);
 

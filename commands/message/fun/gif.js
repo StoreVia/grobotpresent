@@ -18,7 +18,7 @@ module.exports = class MessageFlipText extends Command {
         if(!string){
 			return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Search A Gif.` })
 		} else {
-            return message.channel.send({ embeds: [await client.functions.gif(string)]});
+            return message.channel.send({ embeds: [await client.functions.embedBuild().title(`${string}`).image(await client.functions.gif(string)).footer().build()]});
         }
 	}
 };

@@ -18,7 +18,7 @@ module.exports = class MessageCreate extends Event {
         if(message.channel.partial) await message.channel.fetch();
         if(message.partial) await message.fetch();
         const prefix = process.env.prefix;
-        const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${await client.functions.escapeRegex(prefix)})`);
+        const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${client.functions.escapeRegex(prefix)})`);
         if(!prefixRegex.test(message.content)){
             const chatbot = client.db.table(`chatbot`)
             const chatbotcheck = await chatbot.get(`${message.guild.id}`)

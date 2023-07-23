@@ -5,7 +5,7 @@ module.exports = class Update extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()
-				.setName('update')
+				.setName('devupdate')
 				.setDescription('DEVELOPER ONLY COMMNAD.'),
 			usage: 'update',
 			category: 'client',
