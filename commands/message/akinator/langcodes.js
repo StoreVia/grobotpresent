@@ -15,7 +15,8 @@ module.exports = class MessageLangCodes extends Command {
 	async run(client, message) {
 
         const buttonRow = await client.functions.buttons(`Language`, `langcodes`, ButtonStyle.Secondary, `Stop`, `lcstop`, ButtonStyle.Danger);
-        let msg = await message.reply({ content: `> **Click Below Button To View All Language Codes.**`, components: [buttonRow] })
+		let msgdefer = await client.functions.deferReply().message(message);
+        let msg = await msgdefer.edit({ content: `> **Click Below Button To View All Language Codes.**`, components: [buttonRow] })
 
         const filter = i => i.customId;
 		const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });

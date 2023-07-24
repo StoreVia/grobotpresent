@@ -1,5 +1,5 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder, Attachment } = require('discord.js');
+const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const fetch = require(`node-fetch`);
 
 module.exports = class Ping extends Command {

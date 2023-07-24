@@ -14,11 +14,12 @@ module.exports = class MessageFlipText extends Command {
 	async run(client, message, args) {
 		
 		let string = args.join(" ");
+		let msgdefer = await client.functions.deferReply().message(message);
 
 		if(!string){
-			return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Flip.` })
+			return msgdefer.edit({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Flip.` })
 		} else {
-			return await message.channel.send({ content: `${await client.functions.filpText(args.join(" "))}`});
+			return await msgdefer.edit({ content: `${await client.functions.filpText(args.join(" "))}`});
 		}
 	}
 };

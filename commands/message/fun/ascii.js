@@ -15,16 +15,17 @@ module.exports = class MessageAscii extends Command {
 	async run(client, message, args) {
 
 		const text = args.join(" ");
+		let msgdefer = await client.functions.deferReply().message(message);
 
         figlet.text(text, async function(err, data){
             if(err){
-                message.reply({ content: await client.functions.errorMsg() });
+                msgdefer.edit({ content: await client.functions.errorMsg() });
             } else if(data.length > 2000){
-                message.reply({ content: `> Please Decrease The Length Of The Sentence.` });
+                msgdefer.edit({ content: `> Please Decrease The Length Of The Sentence.` });
             } else if(text.length > 25){
-                message.reply({ content: `> 25 Characters Are Only Allowed For Message Command. You Can Use More Than 25 Characters In Slash Command To Use Slash Command Type "/ascii". ` });
+                msgdefer.edit({ content: `> 25 Characters Are Only Allowed For Message Command. You Can Use More Than 25 Characters In Slash Command To Use Slash Command Type "/ascii". ` });
 			} else if(text.length < 25){
-                message.channel.send({ content: ` \`\`\`${data}\`\`\` ` });
+                msgdefer.edit({ content: ` \`\`\`${data}\`\`\` ` });
 			}
         }) 
 

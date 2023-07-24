@@ -6,7 +6,7 @@ module.exports = class HowGay extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('howgay')
-				.setDescription('Gay Calculator.')
+				.setDescription('Gay Calculator(Fun).')
                 .addUserOption(option =>
                     option.setName('user')
                         .setDescription(`Check Any User's Gay Percententage.`)
@@ -26,7 +26,7 @@ module.exports = class HowGay extends Command {
             return await interaction.followUp({ content: "> I'm Not Going To Tell You That 😉." })
         } else if(user){
             await interaction.deferReply();
-            return await interaction.followUp({embeds: [await client.functions.embedBuild().description(`${user} Is ${gaypercentage}% Gay`).color().build()]})
+            return await interaction.followUp({embeds: [await client.functions.embedBuild().description(`${user} Is ${gaypercentage}% Gay`).build()]})
         }
 	}
 };

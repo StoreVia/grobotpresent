@@ -17,8 +17,9 @@ module.exports = class MessageDice extends Command {
 		let buttonRow = await client.functions.buttons(`Roll Again`, `dice`, ButtonStyle.Secondary, `Stop`, `distop`, ButtonStyle.Danger);
 		let randomNum = await client.functions.randomNum(6).natural();
 		let embed = await client.functions.embedBuild().description(`🎲 You Got \`${randomNum}\``).build();
+		let msgdefer = await client.functions.deferReply().message(message);
 
-		let msg = await message.reply({ embeds: [embed], components:  [buttonRow]});
+		let msg = await msgdefer.edit({ embeds: [embed], components:  [buttonRow]});
 		client.functions.collector(msg).dice(message.author.id, embed, buttonRow);
 	}
 };

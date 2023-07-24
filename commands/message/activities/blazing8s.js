@@ -14,12 +14,12 @@ module.exports = class MessageBlazing8s extends Command {
 	async run(client, message) {
 
         let voicechannelcheck = await client.functions.voiceChannel().message(message);
+		let msgdefer = await client.functions.deferReply().message(message);
         
         if(!voicechannelcheck){
-            return message.reply({ content: `${await client.functions.errorMsg().vc()}` })
+            return msgdefer.edit({ content: `${await client.functions.errorMsg().vc()}` })
         } else {
-            message.reply({ embeds: [await client.functions.embedBuild().ibfields(`RequestedBy`, `${voicechannelcheck}`, `VoiceChannel`, `${message.author}`).build()]})
-            return message.channel.send({content: `${await client.functions.discordActivity(voicechannelcheck.id, `blazing8`)}`})
+            return await msgdefer.edit({ content: `${await client.functions.discordActivity(voicechannelcheck.id, `blazing8`)}`})
         }
 	}
 };

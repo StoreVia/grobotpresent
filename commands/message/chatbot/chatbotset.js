@@ -17,20 +17,21 @@ module.exports = class MessageChatBotSet extends Command {
 		let channel = message.mentions.channels.first();
 		const chatbotdb = client.db.table(`chatbot`);
         const checkchannel = await chatbotdb.get(`${message.guild.id}`);
+		let msgdefer = await client.functions.deferReply().message(message);
 
 		if(!await client.functions.permsCheck(`manageGuild`).message(message)){
-            return message.reply({ content: `> You Need "Manage Guild" Permission To Use This Command.`})
+            return msgdefer.edit({ content: `> You Need "Manage Guild" Permission To Use This Command.`})
         } else {
 			if(!channel){
-				return await message.reply({ content: `> Mention A Channel To Set Chatbot.`})
+				return await msgdefer.edit({ content: `> Mention A Channel To Set Chatbot.`})
 			} else if(!checkchannel){
                 await chatbotdb.set(`${message.guild.id}`, channel.id);
-                return await message.reply({ content: `> Chatbot Was Now Bounded To ${channel}.`})
+                return await msgdefer.edit({ content: `> Chatbot Was Now Bounded To ${channel}.`})
             } else if(channel.id === checkchannel){
-                return await message.reply({ content: `> Chatbot Was Already Linked To ${channel}.`})
+                return await msgdefer.edit({ content: `> Chatbot Was Already Linked To ${channel}.`})
             } else if(channel.id != checkchannel){
                 await chatbotdb.set(`${message.guild.id}`, channel.id);
-                return await message.reply({ content: `> Chatbot Was Now Updated To ${channel}.`})
+                return await msgdefer.edit({ content: `> Chatbot Was Now Updated To ${channel}.`})
             }
 		}
 	}

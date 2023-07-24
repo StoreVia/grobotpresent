@@ -52,7 +52,7 @@ module.exports = async function (input, options = {}) {
         attemptingGuess.delete(inputData.guild.id);
 
         // defining for easy use
-        let usertag = inputData.author.tag;
+        let usertag = inputData.author.username;
         let avatar = inputData.author.displayAvatarURL({ dynamic: true });
 
         // get translation object for the language

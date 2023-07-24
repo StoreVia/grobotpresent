@@ -21,7 +21,8 @@ module.exports = class MessageSetAkiLang extends Command {
         const buttonRow = await client.functions.buttons(`Language`, `sallang`, ButtonStyle.Secondary, `Stop`, `salstop`, ButtonStyle.Danger);
 
         if(!string){
-            let msg = await message.reply({ content: `> Enter Language Code To Set Your Akinator Language.\n**Click Below Button To View All Language Codes.**`, components: [buttonRow] })
+            let msgdefer = await client.functions.deferReply().message(message);
+            let msg = await msgdefer.edit({ content: `> Enter Language Code To Set Your Akinator Language.\n**Click Below Button To View All Language Codes.**`, components: [buttonRow] })
             collector(msg);
         } else {
             let langCodes = ["af", "am", "ar", "az", "be", "bg", "bn", "bs", "ca", "ceb", "co", "cs", "cy", "da", "de", "el", "en", "eo", "es", "et", "eu", "fa", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "haw", "he", "hi", "hmm", "hr", "ht", "hu", "hy", "id", "ig", "is", "it", "iw", "ka", "kk", "km", "kn", "ko", "ku", "ky", "la", "lb", "lo", "lt", "lv", "mg", "mi", "mk", "ml", "mn", "mr", "ms", "mt", "my", "ne", "nl", "no", "ny", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "sm", "sn", "so", "sq", "sr", "st", "su", "sv", "sw", "ta", "te", "tg", "th", "tl", "tr", "uk", "ur", "uz", "vi", "xh", "yi", "yo", "zh-cn", "zh-tw", "zh", "zu"];

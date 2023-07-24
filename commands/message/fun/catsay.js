@@ -13,12 +13,13 @@ module.exports = class MessageCatSay extends Command {
 	}
 	async run(client, message, args) {
 
-		const string = args.join(" ")
+		const string = args.join(" ");
+		let msgdefer = await client.functions.deferReply().message(message);
         
         if(!string){
-            return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like The Cat To Say.` })
+            return msgdefer.edit({ content: `> Please Provide A Specific Text Or Sentence That You Would Like The Cat To Say.` })
         } else {
-            return await message.channel.send({ files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]});
+            return await msgdefer.edit({ files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]});
         }
 	}
 };

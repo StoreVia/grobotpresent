@@ -16,15 +16,16 @@ module.exports = class MessageChatBotDelete extends Command {
 
 		const chatbotdb = client.db.table(`chatbot`);
         const checkchannel = await chatbotdb.get(`${message.guild.id}`);
+		let msgdefer = await client.functions.deferReply().message(message);
 
 		if(!await client.functions.permsCheck(`manageGuild`).message(message)){
-            return message.reply({ content: `> You Need "Manage Guild" Permission To Use This Command.`})
+            return msgdefer.edit({ content: `> You Need "Manage Guild" Permission To Use This Command.`})
         } else {
 			if(!checkchannel){
-                return await message.reply({ content: `> Chatbot Was Not Bounded To Any Channel.`})
+                return await msgdefer.edit({ content: `> Chatbot Was Not Bounded To Any Channel.`})
             } else if(checkchannel){
                 await chatbotdb.delete(`${message.guild.id}`);
-                return await message.reply({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
+                return await msgdefer.edit({ content: `> Chatbot Was Now Deleted In <#${checkchannel}>.`})
             }
 		}
 	}

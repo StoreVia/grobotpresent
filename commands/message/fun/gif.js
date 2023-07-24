@@ -1,6 +1,6 @@
 const Command = require('../../../structures/MessageCommandClass');
 
-module.exports = class MessageFlipText extends Command {
+module.exports = class MessageGif extends Command {
 	constructor(client) {
 		super(client, {
 			name: "gif",
@@ -14,11 +14,12 @@ module.exports = class MessageFlipText extends Command {
 	async run(client, message, args) {
 
 		let string = args.join(" ");
+		let msgdefer = await client.functions.deferReply().message(message);
 
         if(!string){
-			return message.reply({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Search A Gif.` })
+			return msgdefer.edit({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Search A Gif.` })
 		} else {
-            return message.channel.send({ embeds: [await client.functions.embedBuild().title(`${string}`).image(await client.functions.gif(string)).footer().build()]});
+            return msgdefer.edit({ embeds: [await client.functions.embedBuild().title(`${string}`).image(await client.functions.gif(string)).footer().build()]});
         }
 	}
 };
