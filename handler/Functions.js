@@ -48,7 +48,7 @@ module.exports = class Functions {
 				  await i.update({ content: `Searching...`, components: [buttonRow] });
           let meme = await extension.genrateMeme();
 				  if(meme){
-					  buttonRow.components.map(component=> component.setDisabled(false));
+					  await buttonRow.components.map(component=> component.setDisabled(false));
 					  i.editReply({ content: ``, embeds: [embed.setTitle(`${titlecase(meme.title)}`).setURL(`${meme.url}`).setImage(meme.memeImage)], components: [buttonRow] });
         	}
 			  }
