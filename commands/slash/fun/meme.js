@@ -19,9 +19,9 @@ module.exports = class Ping extends Command {
 		await interaction.deferReply();
 		let buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);
 		let meme = await client.functions.genrateMeme();
-		let embed = await client.functions.embedBuild();
+		let embed = await client.functions.embedBuild().title(`${titlecase(meme.title)}`).url(`${meme.url}`).image(meme.memeImage).footer().build();
 		
-		let message = await interaction.followUp({ embeds: [embed.title(`${titlecase(meme.title)}`).url(`${meme.url}`).image(meme.memeImage).footer().build()], components: [buttonRow] });
+		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
 		await client.functions.collector(message).meme(interaction.user.id, embed, buttonRow);
 	}
 };
