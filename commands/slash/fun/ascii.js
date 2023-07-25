@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 const figlet = require('figlet');
 
-module.exports = class Ascii extends Command {
+module.exports = class InteractionAscii extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()

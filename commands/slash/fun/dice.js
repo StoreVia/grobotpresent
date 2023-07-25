@@ -1,7 +1,7 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
 
-module.exports = class Dice extends Command {
+module.exports = class InteractionDice extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()

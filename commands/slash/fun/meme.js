@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
 const titlecase = require(`titlecase`);
 
-module.exports = class Ping extends Command {
+module.exports = class InteractionMeme extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()

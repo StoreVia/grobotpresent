@@ -1,7 +1,7 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
-module.exports = class FlipText extends Command {
+module.exports = class InteractionFlipText extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()
