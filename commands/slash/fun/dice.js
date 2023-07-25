@@ -17,10 +17,10 @@ module.exports = class Dice extends Command {
 
 		let buttonRow = await client.functions.buttons(`Roll Again`, `dice`, ButtonStyle.Secondary, `Stop`, `distop`, ButtonStyle.Danger);
 		let randomNum = await client.functions.randomNum(6).natural();
-		let embed = await client.functions.embed().onlyDescription(`🎲 You Got \`${randomNum}\``);
+		let embed = await client.functions.embedBuild().description(`🎲 You Got \`${randomNum}\``).build();
 
 		await interaction.deferReply();
 		let msg = await interaction.followUp({ embeds: [embed], components:  [buttonRow]});
-		client.functions.collector(msg).dice(interaction.user.id);
+		client.functions.collector(msg).dice(interaction.user.id, embed, buttonRow);
 	}
 };

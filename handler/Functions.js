@@ -16,15 +16,14 @@ module.exports = class Functions {
 
   collector(msg){
     const extension = this;
-    function dice(userId){
-      let buttonRow = client.functions.buttons(`Roll Again`, `dice`, ButtonStyle.Secondary, `Stop`, `distop`, ButtonStyle.Danger);
+    function dice(userId, embed, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
       collector.on('collect', async (i) => {
 			  if (i.user.id != userId) {
 				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			  } else if(i.customId === `dice`) {
-				  i.update({ embeds: [extension.embedBuild().description(`🎲 You Got \`${await Math.floor(Math.random() * 6) + 1}\``).build()], components: [buttonRow]})
+				  i.update({ embeds: [embed().setDescription(`🎲 You Got \`${await Math.floor(Math.random() * 6) + 1}\``)], components: [buttonRow]})
 			  } else if(i.customId === `distop`){
           buttonRow.components.map(component=> component.setDisabled(true));
 				  await i.update({ components: [buttonRow] });
@@ -37,8 +36,7 @@ module.exports = class Functions {
 			  }
 		  });
     }
-    function meme(userId){
-      const buttonRow = extension.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);
+    function meme(userId, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
       collector.on('collect', async i => {
@@ -51,7 +49,7 @@ module.exports = class Functions {
           let meme = await extension.genrateMeme();
 				  if(meme){
 					  buttonRow.components.map(component=> component.setDisabled(false));
-					  i.editReply({ content: ``, embeds: [extension.embedBuild().title(`${titlecase(meme.title)}`).url(`${meme.url}`).image(meme.memeImage).footer().build()], components: [buttonRow] });
+					  i.editReply({ content: ``, embeds: [embed.setTitle(`${titlecase(meme.title)}`).setURL(`${meme.url}`).setImage(meme.memeImage)], components: [buttonRow] });
         	}
 			  }
 			  if(i.customId === "mestop"){

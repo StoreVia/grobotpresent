@@ -18,10 +18,10 @@ module.exports = class Ping extends Command {
 
 		await interaction.deferReply();
 		const buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);
-		
 		let meme = await client.functions.genrateMeme();
 		let embed = await client.functions.embedBuild();
+		
 		let message = await interaction.followUp({ embeds: [embed.title(`${titlecase(meme.title)}`).url(`${meme.url}`).image(meme.memeImage).footer().build()], components: [buttonRow] });
-		await client.functions.collector(message).meme(interaction.user.id);
+		await client.functions.collector(message).meme(interaction.user.id, embed, buttonRow);
 	}
 };
