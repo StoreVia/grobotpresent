@@ -7,7 +7,7 @@ module.exports = class Ping extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('hug')
-				.setDescription('Hug Some User.')
+				.setDescription('Hug Someone.')
 				.setDMPermission(true)
                 .addUserOption(option =>
                     option.setName('user')
@@ -22,19 +22,12 @@ module.exports = class Ping extends Command {
 
     await interaction.deferReply();
     const string = interaction.options.getUser(`user`);
-
-    fetch(`https://some-random-api.com/animu/hug`)
-      .then((res) => res.json())
-		  .then((data) => {
-        const link = data.link;
-        if(string === interaction.user){
-          let attachment = new AttachmentBuilder(link);
-          return interaction.followUp({ files: [attachment],content: `${interaction.user} You Can't Hug Yourselft. Come I Will Hug You 🥰.` })
-        } else {
-          let attachment = new AttachmentBuilder(link);
-          return interaction.followUp({ files: [attachment],content: `${interaction.user} Hugs ${string}, Awww How Cute 🥰.` })
-        }
-      }
-    ) 
+    let attachment = await client.functions.hug();
+    
+    if(string === interaction.user){
+      return interaction.followUp({ files: [attachment], content: `${interaction.user} You Can't Hug Yourselft. Come I Will Hug You 🥰.` })
+    } else {
+      return interaction.followUp({ files: [attachment],content: `${interaction.user} Hugs ${string}, Awww How Cute 🥰.` })
+    }
 	}
 };

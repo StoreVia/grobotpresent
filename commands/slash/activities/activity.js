@@ -42,8 +42,7 @@ module.exports = class Activity extends Command {
             return interaction.followUp({ content: `> Please Make Sure You Are In A Voice Channel.`})
         } else {
             await interaction.deferReply();
-            interaction.followUp({ embeds: [client.functions.activityInfoEmbed(channel, interaction.user)] });
-            return interaction.channel.send({ content: `${await client.functions.discordActivity(channel.id, `${activity}`)}`})
+            return interaction.followUp({ content: `${await client.functions.discordActivity(channel.id, `${activity}`)}`})
         }
         
 	}
