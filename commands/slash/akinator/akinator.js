@@ -138,7 +138,8 @@ module.exports = class InteractionAkinator extends Command {
             'Chinese': 'zh',
             'Zulu': 'zu',
         };
-        const focusedValue = interaction.options.getFocused(getFull = true);
+        let functions = client.functions;
+        const focusedValue = await functions.getOptions(interaction).string(`language`);
         await client.functions.akinator(interaction, languageCodes[focusedValue])
     }
 };
