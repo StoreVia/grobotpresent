@@ -21,6 +21,6 @@ module.exports = class Dice extends Command {
 
 		await interaction.deferReply();
 		let msg = await interaction.followUp({ embeds: [embed], components:  [buttonRow]});
-		client.functions.collector(msg).dice(interaction.user.id, embed, buttonRow);
+		client.functions.collector(msg).dice(interaction.user.id);
 	}
 };

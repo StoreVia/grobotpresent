@@ -20,6 +20,6 @@ module.exports = class MessageDice extends Command {
 		let msgdefer = await client.functions.deferReply().message(message);
 
 		let msg = await msgdefer.edit({ content: ``, embeds: [embed], components:  [buttonRow]});
-		client.functions.collector(msg).dice(message.author.id, embed, buttonRow);
+		client.functions.collector(msg).dice(message.author.id);
 	}
 };
