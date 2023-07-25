@@ -19,7 +19,7 @@ module.exports = class MessageHug extends Command {
 
 		if (!user){
 			return msgdefer.edit({ content: `> Mention Someone To Hug.` })
-		} else if(user === message.author){
+		} else if(user.id === message.author.id){
 			return msgdefer.edit({ files: [attachment], content: `${message.author} You Can't Hug Yourselft. Come I Will Hug You 🥰.` })
 		} else {
 			return msgdefer.edit({ files: [attachment],content: `${message.author} Hugs ${user}, Awww How Cute 🥰.` })

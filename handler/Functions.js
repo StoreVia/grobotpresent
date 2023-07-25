@@ -6,6 +6,8 @@ const fs = require('fs');
 const https = require('https');
 https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs_mozilla_bundle/ca_bundle/ca_intermediate_root_bundle.pem');
 const titlecase = require(`titlecase`);
+const ms = require(`ms`);
+const roasts = require(`../A_Gro_db/roast.json`);
 
 module.exports = class Functions {
   constructor(client) {
@@ -82,7 +84,35 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  roast(){
+    return `${titlecase(roasts[Math.floor(Math.random() * roasts.length)])}`;
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  nitro(msg){
+    let extension = this;
+    let time = "3s";
+    setTimeout(function () {
+      msg.edit({content: " ", embeds: [extension.embedBuild().description(`Getting Things Ready For Nitro Payment!`).build()]});
+    }, ms(time));
+    let time14 = "5s";
+    setTimeout(function () {
+      msg.edit({embeds: [extension.embedBuild().description(`Getting Things Ready For Nitro Payment!`).build()]});
+    }, ms(time14));
+    let time2 = "7s";
+    setTimeout(function () {
+      msg.edit({embeds: [extension.embedBuild().description(`Choosen 99.99$ Plan!`).build()]});
+    }, ms(time2));
+    let time3 = "10s";
+    setTimeout(function () {
+      msg.edit({embeds: [extension.embedBuild().description(`Payment Requested In Paypal!`).image(`https://cdn.discordapp.com/attachments/1097119486986960968/1097822394351104101/animated-paypal-loading.gif`).footer().build()]});
+    }, ms(time3));
+    let time5 = "18s";
+    setTimeout(function () {
+      msg.edit({embeds: [extension.embedBuild().title(`Here Is Your Nitro Link!`).description(`[Click Here](https://bit.ly/3HydaR9) To Claim Your Nitro!`).image(`https://i.imgur.com/ZEopR3f.png`).build()]});
+    }, ms(time5));
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

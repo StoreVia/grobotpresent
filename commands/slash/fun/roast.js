@@ -1,7 +1,5 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const roasts = require(`../../../A_Gro_db/roast.json`);
-const titlecase = require(`titlecase`);
 
 module.exports = class Ping extends Command {
 	constructor(client) {
@@ -30,8 +28,7 @@ module.exports = class Ping extends Command {
             interaction.followUp({ content: "> Why Are You Guys Trying To Roast Me." })
         } else if(target){
             await interaction.deferReply();
-            interaction.followUp({ content: `${target}, ${titlecase(roasts[Math.floor(Math.random() * roasts.length)])}.` })
+            interaction.followUp({ content: `${target}, ${await client.functions.roast(target)}` })
         }
-		
 	}
 };
