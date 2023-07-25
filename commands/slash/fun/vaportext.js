@@ -19,15 +19,7 @@ module.exports = class VaporText extends Command {
 	async run(client, interaction) {   
 
         await interaction.deferReply();
-
         const args = interaction.options.getString(`text`);
-
-        let msg = "";
-        for (let i = 0; i < args.length; i++) {
-            msg += args[i].toUpperCase().split("").join(" ") + " ";
-        }
-
-        return await interaction.followUp({ content: `${msg}` })
-        
+        return await interaction.followUp({ content: `${await client.functions.vaporText(args)}` })
 	}
 };

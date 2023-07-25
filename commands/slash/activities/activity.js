@@ -1,7 +1,7 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder  } = require('discord.js');
 
-module.exports = class Activity extends Command {
+module.exports = class InteractionActivity extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()
@@ -34,15 +34,16 @@ module.exports = class Activity extends Command {
 	}
 	async run(client, interaction) {
 
-        const activity = interaction.options.getString("name");
-        let channel = interaction.member.voice.channel;
+        let functions = client.functions;
+        let channel = await functions.voiceChannel().interaction(interaction);
+        let activity = await functions.getOptions(interaction).string("name");
 
         if(!channel){
             await interaction.deferReply({ ephemeral: true });
-            return interaction.followUp({ content: `> Please Make Sure You Are In A Voice Channel.`})
+            return interaction.followUp({ content: `${await functions.errorMsg().vc()}.`})
         } else {
             await interaction.deferReply();
-            return interaction.followUp({ content: `${await client.functions.discordActivity(channel.id, `${activity}`)}`})
+            return interaction.followUp({ content: `${await functions.discordActivity(channel.id, `${activity}`)}`})
         }
         
 	}
