@@ -10,7 +10,7 @@
  * Contact :- professor.js (Discord)
  * Version :- v1.1
  * BotName :- GroBot
- * Website :- https://www.grobot.store
+ * Website :- https://www.grobot.netlify.app
 
 */
 

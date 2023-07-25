@@ -33,7 +33,7 @@ const deploy = async () => {
 
 	const rest = new REST({ version: '10' }).setToken(process.env.token);
 
-	try {
+	try{
 		let clientId = `${process.env.client_id}`;
 		let psid = `${process.env.privateserver_id}`;
 		await rest.put(
@@ -45,7 +45,7 @@ const deploy = async () => {
 			{ body: privateData },
 		)
 	}
-	catch (e) {
+	catch(e){
 		console.error(e);
 	}
 };
