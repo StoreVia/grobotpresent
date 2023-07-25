@@ -17,7 +17,7 @@ module.exports = class Ping extends Command {
 	async run(client, interaction) {
 
 		await interaction.deferReply();
-		const buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);
+		let buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);
 		let meme = await client.functions.genrateMeme();
 		let embed = await client.functions.embedBuild();
 		

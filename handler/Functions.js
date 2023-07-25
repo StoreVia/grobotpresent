@@ -36,7 +36,7 @@ module.exports = class Functions {
 			  }
 		  });
     }
-    function meme(userId, buttonRow){
+    function meme(userId, embed, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
       collector.on('collect', async i => {
