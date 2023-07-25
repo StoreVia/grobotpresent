@@ -19,7 +19,7 @@ module.exports = class MessageGif extends Command {
         if(!string){
 			return msgdefer.edit({ content: `> Please Provide A Specific Text Or Sentence That You Would Like To Search A Gif.` })
 		} else {
-            return msgdefer.edit({ embeds: [await client.functions.embedBuild().title(`${string}`).image(await client.functions.gif(string)).footer().build()]});
+            return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().title(`${string}`).image(await client.functions.gif(string)).footer().build()]});
         }
 	}
 };

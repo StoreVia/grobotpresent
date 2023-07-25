@@ -19,7 +19,7 @@ module.exports = class MessageCatSay extends Command {
         if(!string){
             return msgdefer.edit({ content: `> Please Provide A Specific Text Or Sentence That You Would Like The Cat To Say.` })
         } else {
-            return await msgdefer.edit({ files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]});
+            return await msgdefer.edit({ content: ``, files: [{ attachment: `${await client.functions.catSay(string)}`, name: "catsay.png" }]});
         }
 	}
 };
