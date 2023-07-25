@@ -1,9 +1,8 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+const { SlashCommandBuilder } = require('discord.js');
 const { TwoZeroFourEight } = require('../../../B_Gro_Modules/discord-gamecord')
 
-module.exports = class TwoZeroFourEightGame extends Command {
+module.exports = class InteractionTwoZeroFourEight extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()
@@ -15,6 +14,7 @@ module.exports = class TwoZeroFourEightGame extends Command {
 		});
 	}
 	async run(client, interaction) {
+
         new TwoZeroFourEight({
             message : interaction,
             isSlashGame: true,
@@ -22,6 +22,6 @@ module.exports = class TwoZeroFourEightGame extends Command {
               title: '2048',
               color: `${process.env.ec}`,
             },
-          }).startGame();
+        }).startGame();
 	}
 };

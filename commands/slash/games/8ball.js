@@ -8,11 +8,10 @@ module.exports = class EightBallGame extends Command {
 			data: new SlashCommandBuilder()
 				.setName('8ball')
 				.setDescription('Play 8Ball Game.')
-                .addStringOption(option =>
-                    option
-                        .setName('question')
-                        .setDescription('Enter Question.')
-                        .setRequired(true)),
+        .addStringOption(option =>
+          option.setName('question')
+                .setDescription('Enter Question.')
+                .setRequired(true)),
 			usage: '8ball',
 			category: 'Games',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
@@ -20,41 +19,10 @@ module.exports = class EightBallGame extends Command {
 	}
 	async run(client, interaction) {
 
-		const array = [
-            "Yes",
-            "Yes Maybe!",
-            "Absolute",
-            "Hmmm...",
-            "Sussy Baka",
-            "Idk",
-            "No",
-            "Huh!",
-            "I Mean... Yes",
-            "I Mean No",
-            "I Mean So",
-            "Small Change",
-            "Big chance",
-            "Never!",
-            "Bruh",
-            "Yoo Whatt???",
-          ];
-    const question = interaction.options.getString('question');
-    const answer = array[Math.floor(Math.random() * array.length)];
-
-    
-    const embed = new EmbedBuilder()
-      .setTitle("8Ball")
-      .setColor(`${process.env.ec}`)
-      .addFields(
-	      { name: '**Your Question: **', value: `\`\`\`${question}\`\`\``,inline: false },
-		    { name: '**Answer: **', value: `\`\`\`${answer}\`\`\``, inline: false },
-	    )
-      .setFooter({
-        text: `${client.user.username} - ${process.env.year} ©`, 
-        iconURL: process.env.iconurl
-      })
     await interaction.deferReply();
-		await interaction.followUp({ embeds: [embed] });
+    const question = interaction.options.getString('question');
+    let functions = client.functions;
     
+		await interaction.followUp({ embeds: [await functions.embedBuild().title(`8Ball`).ibfields(`Your Question`, `${question}`, `Answer`, `${await functions.eightBall()}`).build()]});
 	}
 };
