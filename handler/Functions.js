@@ -23,7 +23,7 @@ module.exports = class Functions {
 			  if (i.user.id != userId) {
 				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			  } else if(i.customId === `dice`) {
-				  i.update({ embeds: [embed().setDescription(`🎲 You Got \`${await Math.floor(Math.random() * 6) + 1}\``)], components: [buttonRow]})
+				  i.update({ embeds: [embed.setDescription(`🎲 You Got \`${await Math.floor(Math.random() * 6) + 1}\``)], components: [buttonRow]})
 			  } else if(i.customId === `distop`){
           buttonRow.components.map(component=> component.setDisabled(true));
 				  await i.update({ components: [buttonRow] });
