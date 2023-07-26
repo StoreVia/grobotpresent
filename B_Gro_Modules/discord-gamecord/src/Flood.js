@@ -136,13 +136,17 @@ module.exports = class Flood extends events {
   
 
   gameOver(msg, result) {
+    const FloodGame = { player: this.message.author, turns: this.turns, maxTurns: this.maxTurns, boardColor: this.gameBoard[0] };
+    const GameOverMessage = result ? this.options.winMessage : this.options.loseMessage;
+    this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...FloodGame });
     const embed = new EmbedBuilder()
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
+    .setDescription(GameOverMessage.replace('{turns}', this.turns))
     .setTitle(this.options.embed.title)
     .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    return msg.edit({ embeds: [embed], components: disableButtons(msg.components) });
+    return msg.edit({ embeds: [embed], components: [] });
   }
 
 
