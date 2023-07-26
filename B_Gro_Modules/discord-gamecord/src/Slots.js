@@ -1,6 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 module.exports = class Slots extends events {
   constructor(options = {}) {

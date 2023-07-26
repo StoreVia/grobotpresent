@@ -1,8 +1,7 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+const { SlashCommandBuilder } = require('discord.js');
 
-module.exports = class EightBallGame extends Command {
+module.exports = class InteractionEightBall extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()
@@ -19,10 +18,9 @@ module.exports = class EightBallGame extends Command {
 	}
 	async run(client, interaction) {
 
-    await interaction.deferReply();
-    const question = interaction.options.getString('question');
-    let functions = client.functions;
+    	await interaction.deferReply();
+    	const question = await client.functions.getOptions(interaction).string('question');
     
-		await interaction.followUp({ embeds: [await functions.embedBuild().title(`8Ball`).ibfields(`Your Question`, `${question}`, `Answer`, `${await functions.eightBall()}`).build()]});
+		await interaction.followUp({ embeds: [await client.functions.embedBuild().title(`8Ball`).ibfields(`Your Question`, `${question}`, `Answer`, `${await client.functions.eightBall()}`).build()]});
 	}
 };

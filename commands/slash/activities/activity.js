@@ -34,16 +34,15 @@ module.exports = class InteractionActivity extends Command {
 	}
 	async run(client, interaction) {
 
-        let functions = client.functions;
-        let channel = await functions.voiceChannel().interaction(interaction);
-        let activity = await functions.getOptions(interaction).string("name");
+        let channel = await client.functions.voiceChannel().interaction(interaction);
+        let activity = await client.functions.getOptions(interaction).string("name");
 
         if(!channel){
             await interaction.deferReply({ ephemeral: true });
-            return interaction.followUp({ content: `${await functions.errorMsg().vc()}.`})
+            return interaction.followUp({ content: `${await client.functions.errorMsg().vc()}.`})
         } else {
             await interaction.deferReply();
-            return interaction.followUp({ content: `${await functions.discordActivity(channel.id, `${activity}`)}`})
+            return interaction.followUp({ content: `${await client.functions.discordActivity(channel.id, `${activity}`)}`})
         }
         
 	}

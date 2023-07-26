@@ -1,9 +1,8 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+const { SlashCommandBuilder } = require('discord.js');
 const { Trivia } = require('../../../B_Gro_Modules/discord-gamecord')
 
-module.exports = class TriviaGame extends Command {
+module.exports = class InteractionTrivia extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()

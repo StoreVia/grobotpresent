@@ -18,7 +18,7 @@ module.exports = class InteractionRoast extends Command {
 	}
 	async run(client, interaction) {
 
-        let target = interaction.options.getUser(`user`);
+        let target = await client.functions.getOptions(interaction).user(`user`);
 
         if(target.id === interaction.user.id){
             await interaction.deferReply({ ephemeral: true });

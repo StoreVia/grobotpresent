@@ -1,7 +1,7 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const { formatMessage, buttonStyle } = require('../utils/utils');
 const approve = require('../utils/approve');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class RPSGame extends approve {

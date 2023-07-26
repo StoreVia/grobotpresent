@@ -20,7 +20,7 @@ module.exports = class InteractionPing extends Command {
 	async run(client, interaction) {
 
     await interaction.deferReply();
-    const string = interaction.options.getUser(`user`);
+    const string = await client.functions.getOptions(interaction).user(`user`);
     let attachment = await client.functions.hug();
     
     if(string === interaction.user){

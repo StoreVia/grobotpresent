@@ -1,9 +1,8 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+const { SlashCommandBuilder } = require('discord.js');
 const { Flood } = require('../../../B_Gro_Modules/discord-gamecord')
 
-module.exports = class FloodGame extends Command {
+module.exports = class InteractionFlood extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()
@@ -25,17 +24,7 @@ module.exports = class FloodGame extends Command {
 	}
 	async run(client, interaction) {
 
-		let difficulty = interaction.options.getString(`difficulty`);
-
-        const Game = new Flood({
-            message : interaction,
-            isSlashGame: true,
-            embed: {
-              title: 'Flood',
-			  difficulty: difficulty,
-              color: `${process.env.ec}`,
-            },
-        })
-		Game.startGame();
+		let difficulty = await client.functions.getOptions(interaction).string(`difficulty`);
+		await client.functions.games(interaction).flood(true, difficulty);
 	}
 };

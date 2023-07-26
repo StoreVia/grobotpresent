@@ -1,7 +1,7 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
 const approve = require('../utils/approve');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 module.exports = class TicTacToe extends approve {
   constructor(options = {}) {

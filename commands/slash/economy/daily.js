@@ -1,6 +1,6 @@
 const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, Formatters } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 const moment = require('moment');
 const ms = require("parse-ms-2");
 const db = require("quick.db");

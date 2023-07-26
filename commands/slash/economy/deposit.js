@@ -1,6 +1,6 @@
 const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, Embed } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 const db = require(`quick.db`);
 
 module.exports = class Ping extends Command {

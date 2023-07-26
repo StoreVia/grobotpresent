@@ -1,6 +1,6 @@
 const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType, StringSelectMenuBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, Embed, ButtonStyle, ButtonBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 const db = require(`quick.db`)
 
 module.exports = class Leave extends Command {

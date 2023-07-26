@@ -8,7 +8,7 @@ https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs
 const titlecase = require(`titlecase`);
 const ms = require(`ms`);
 const roasts = require(`../A_Gro_db/roast.json`);
-const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../../../B_Gro_Modules/discord-gamecord')
+const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Gro_Modules/discord-gamecord')
 
 module.exports = class Functions {
   constructor(client) {
@@ -70,6 +70,29 @@ module.exports = class Functions {
     }
     return { dice, meme }
   }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -423,7 +446,11 @@ module.exports = class Functions {
       let rleInput = interaction.options.getRole(rle);
       return rleInput;
     }
-    return { string, user, channel, integer, number, role }
+    function subcommand(){
+      let suCommandInput = interaction.options.getSubcommand();
+      return suCommandInput;
+    }
+    return { string, user, channel, integer, number, role, subcommand }
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -501,6 +528,113 @@ module.exports = class Functions {
     const invite = await response.json();
     if (invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
     return `https://discord.com/invite/${invite.code}`;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  games(interact){
+    function ctfRandom(){
+      const positions = {      
+        safe  :   '_ _                          :fish:\n            _ _              :hand_splayed:\n            _ _              :cat:',
+        danger: '_ _                          💣\n            _ _              :hand_splayed:\n            _ _              :cat:',
+        win   :    '_ _           :crown:**You Won.**:crown:\n_ _                      :hand_splayed:\n_ _                      :cat:',
+        lose  :   '_ _           :skull:**You Lost.**:skull:             \n_ _                      :hand_splayed:\n_ _                      :cat:',
+        left  :   '_ _                 **You Left.**\n_ _                      :hand_splayed:\n_ _                      :cat:'
+      };
+      let randomized = Math.floor(Math.random() * 2);
+      let randomPos = `${positions[Object.keys(positions)[randomized]]}`
+      return { positions, randomPos }
+    }
+    function twozerofoureight(torf){
+      return new TwoZeroFourEight({
+        message : interact,
+        isSlashGame: torf,
+        embed: {
+          title: '2048',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    function catchTheFish(msg, count, componentsArray, userId){
+      let randomized = Math.floor(Math.random() * 2);
+      let gameEnded = false;
+      let positions = ctfRandom().positions;
+      let randomPos = ctfRandom().randomPos;
+      let data = 0;
+      const filter = i => i.customId;
+      const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+      function update(button) {
+        randomized = Math.floor(Math.random() * 2);
+        randomPos = positions[Object.keys(positions)[randomized]];
+        if(data === count) {
+          gameEnded = true;
+          collector.stop();
+          componentsArray.components.map(component=> component.setDisabled(true));
+          msg.edit({ content: positions.win, components: [componentsArray] });
+          button.deferUpdate();
+        } else {
+          if(data <= -count * 3) {
+            gameEnded = true;
+            collector.stop();
+            componentsArray.components.map(component=> component.setDisabled(true));
+            msg.edit({ content: positions.lose, components: [componentsArray] });
+            button.deferUpdate();
+          } else {
+            if(button){
+              return button.deferUpdate();
+            } else {
+              msg.edit({ content: randomPos + `           **${data}**`, components: [componentsArray] });
+            }
+          } 
+        }
+      }
+      setInterval(() => {
+        if(gameEnded === false){
+          return update();
+        } 
+      }, 1000);
+      collector.on('collect', async (button) => {
+        if(button.user.id != userId){
+          await button.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+        }
+        if(button.customId === "e"){
+          gameEnded = true;
+          componentsArray.components.map(component=> component.setDisabled(true));
+          await msg.edit({ components: [componentsArray] });
+        }
+        if(button.customId === "ee"){
+          gameEnded = true;
+          componentsArray.components.map(component=> component.setDisabled(true));
+          await msg.edit({ components: [componentsArray] });
+        }
+        if(randomized !== 0) {
+          data -= count;
+          update(button);
+        } else {
+          data++;
+          update(button);
+        }
+      });
+      collector.on('end', async (_, reason) => {
+        if (reason === 'idle' || reason === 'user') {
+          gameEnded = true;
+          componentsArray.components.map(component=> component.setDisabled(true));
+          await msg.edit({ components: [componentsArray] });
+        }
+      });
+    }
+    function flood(slash, difficult){
+      new Flood({
+        message : interact,
+        isSlashGame: slash,
+        embed: {
+          title: 'Flood',
+          difficulty: difficult ? difficult : `13`,
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    return { ctfRandom, twozerofoureight, catchTheFish, flood }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

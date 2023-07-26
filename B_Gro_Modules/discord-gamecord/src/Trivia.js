@@ -3,7 +3,7 @@ const { decode, formatMessage, shuffleArray, disableButtons, buttonStyle } = req
 const difficulties = ['easy', 'medium', 'hard'];
 const fetch = require('node-fetch');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 module.exports = class Trivia extends events {
   constructor(options = {}) {

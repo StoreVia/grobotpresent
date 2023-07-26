@@ -2,7 +2,7 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, InteractionCollector, But
 const { getAlphaEmoji, formatMessage, buttonStyle } = require('../utils/utils');
 const words = require('../utils/words.json');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class Hangman extends events {

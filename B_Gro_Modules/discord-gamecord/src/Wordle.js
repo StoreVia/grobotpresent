@@ -1,7 +1,7 @@
 const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const words = require('../utils/words.json');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class Wordle extends events {

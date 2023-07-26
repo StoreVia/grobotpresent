@@ -1,9 +1,8 @@
 const Command = require('../../../structures/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+const { SlashCommandBuilder } = require('discord.js');
 const { Wordle } = require('../../../B_Gro_Modules/discord-gamecord')
 
-module.exports = class WordleGame extends Command {
+module.exports = class InteractionWordle extends Command {
 	constructor(client) {
 		super(client, {
 			data: new SlashCommandBuilder()

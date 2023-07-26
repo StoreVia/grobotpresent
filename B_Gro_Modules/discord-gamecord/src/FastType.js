@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 module.exports = class FastType extends events {
   constructor(options = {}) {

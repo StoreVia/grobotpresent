@@ -17,3 +17,4 @@ module.exports.Snake = require('./src/Snake');
 module.exports.Trivia = require('./src/Trivia');
 module.exports.Wordle = require('./src/Wordle');
 module.exports.version = require('./package.json').version;
+require('dotenv').config();

@@ -2,8 +2,7 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, AttachmentBuilder, Button
 const { disableButtons, formatMessage, move, oppDirection, buttonStyle } = require('../utils/utils');
 const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 const events = require('events');
-const cu = `${process.env.botname}`;
-
+const cu = `GroBot`;
 
 module.exports = class TwoZeroFourEight extends events {
   constructor(options = {}) {
@@ -81,7 +80,7 @@ module.exports = class TwoZeroFourEight extends events {
 
 
     const embed = new EmbedBuilder()
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setTitle(this.options.embed.title)
     .setColor(this.options.embed.color)
     .setImage('attachment://gameboard.png')
@@ -140,7 +139,7 @@ module.exports = class TwoZeroFourEight extends events {
 
 
       const embed = new EmbedBuilder()
-      .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+      .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
       .setTitle(this.options.embed.title)
       .setColor(this.options.embed.color)
       .setImage('attachment://gameboard.png')
@@ -163,7 +162,7 @@ module.exports = class TwoZeroFourEight extends events {
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...TwoZeroFourEightGame });
 
     const embed = new EmbedBuilder()
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setTitle(this.options.embed.title)
     .setColor(this.options.embed.color)
     .setImage('attachment://gameboard.png')

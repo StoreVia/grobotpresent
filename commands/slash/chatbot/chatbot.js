@@ -28,19 +28,18 @@ module.exports = class InteractionChatBot extends Command {
 
         const chatbotdb = client.db.table(`chatbot`)
         const checkchannel = await chatbotdb.get(`${interaction.guild.id}`);
-        let subcommand = interaction.options.getSubcommand();
-        let functions = client.functions;
+        let subcommand = await client.functions.getOptions(interaction).subcommand();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(!await functions.permsCheck(`manageGuild`)){
+        if(!await client.functions.permsCheck(`manageGuild`)){
             return await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (subcommand === 'set') {
-            const channel = await functions.getOptions(interaction).channel('channel');
+            const channel = await client.functions.getOptions(interaction).channel('channel');
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });
                 await chatbotdb.set(`${interaction.guild.id}`, channel.id);

@@ -19,7 +19,7 @@ module.exports = class InteractionKill extends Command {
 	}
 	async run(client, interaction) {
 
-    const target = interaction.options.getUser(`user`);
+    const target = await client.functions.getOptions(interaction).user(`user`);
     const author = interaction.user;
     const sentence = await client.functions.kill(target, author);
       

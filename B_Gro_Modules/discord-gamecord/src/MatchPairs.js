@@ -1,7 +1,7 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 const { disableButtons, shuffleArray, formatMessage, buttonStyle } = require('../utils/utils');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class MatchPairs extends events {

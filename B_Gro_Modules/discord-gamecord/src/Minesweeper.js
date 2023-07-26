@@ -1,7 +1,7 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const { disableButtons , getNumEmoji, formatMessage, buttonStyle } = require('../utils/utils');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class Minesweeper extends events {

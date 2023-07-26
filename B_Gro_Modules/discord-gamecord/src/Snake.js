@@ -3,7 +3,7 @@ const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils')
 const events = require('events');
 const HEIGHT = 10;
 const WIDTH = 15;
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class SnakeGame extends events {

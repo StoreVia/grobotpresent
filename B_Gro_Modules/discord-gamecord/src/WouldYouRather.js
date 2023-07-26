@@ -2,7 +2,7 @@ const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const { formatMessage, buttonStyle } = require('../utils/utils');
 const fetch = require('node-fetch');
 const events = require('events');
-const cu = `${process.env.botname}`;
+const cu = `GroBot`;
 
 
 module.exports = class WouldYouRather extends events {

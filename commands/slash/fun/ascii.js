@@ -19,7 +19,7 @@ module.exports = class InteractionAscii extends Command {
 	}
 	async run(client, interaction) {   
         
-        const text = interaction.options.getString(`text`);
+        const text = await client.functions.getOptions(interaction).string(`text`);
 
         figlet.text(text, async function(err, data){
             if(err){
