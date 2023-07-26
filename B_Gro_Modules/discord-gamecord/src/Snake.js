@@ -143,7 +143,7 @@ module.exports = class SnakeGame extends events {
 
 
     const embed = new EmbedBuilder()
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription('**Score:** ' + this.score + '\n\n' + this.getBoardContent())
@@ -175,7 +175,7 @@ module.exports = class SnakeGame extends events {
     }
 
     const embed = new EmbedBuilder()
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription('**Score:** ' + this.score + '\n\n' + this.getBoardContent())
@@ -191,7 +191,7 @@ module.exports = class SnakeGame extends events {
 
     
     const embed = new EmbedBuilder()
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.overTitle)
     .setDescription('**Score:** ' + this.score + '\n\n' + this.getBoardContent(true))

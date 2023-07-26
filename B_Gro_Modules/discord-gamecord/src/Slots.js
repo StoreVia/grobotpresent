@@ -62,7 +62,7 @@ module.exports = class Slots extends events {
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent())
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     const msg = await this.sendMessage({ embeds: [embed] });
     
 
@@ -87,7 +87,7 @@ module.exports = class Slots extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.getBoardContent(true))
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 
     return msg.edit({ embeds: [embed] });
   }

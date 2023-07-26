@@ -80,7 +80,7 @@ module.exports = class Trivia extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(`**${this.trivia.question}**\n\n**Difficulty:** ${this.trivia.difficulty}\n**Category:** ${this.trivia.category}`)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: '\u200b', value: this.options.embed.description });
 
     const msg = await this.sendMessage({ embeds: [embed], components: this.getComponents() });
@@ -115,7 +115,7 @@ module.exports = class Trivia extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(`**${this.trivia.question}**\n\n**Difficulty:** ${this.trivia.difficulty}\n**Category:** ${this.trivia.category}`)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: '\u200b', value: this.options.embed.description });
 
     return await msg.edit({ content: GameOverMessage.replace('{answer}', this.trivia.answer), embeds: [embed], components: disableButtons(this.getComponents(true)) });

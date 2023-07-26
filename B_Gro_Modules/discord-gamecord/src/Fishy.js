@@ -110,7 +110,7 @@ module.exports = class FishyGame extends events {
     const embed = new MessageEmbed()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setDescription(fishes + `\n\n\u2000**${this.fishes.junk.emoji} Junk** — ${this.player.fishes.junk || 0}`)
     .setTimestamp()
 

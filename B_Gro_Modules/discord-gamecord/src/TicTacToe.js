@@ -90,7 +90,7 @@ module.exports = class TicTacToe extends approve {
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setDescription(`**${this.message.author.tag} vs ${this.opponent.tag}**`)
+    .setDescription(`**${this.message.author.username} vs ${this.opponent.tag}**`)
     .addFields({ name: this.options.embed.statusTitle, value: this.getTurnMessage() }) 
 
     await msg.edit({ embeds: [embed], components: this.getComponents() });
@@ -121,7 +121,7 @@ module.exports = class TicTacToe extends approve {
       .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
       .setColor(this.options.embed.color)
       .setTitle(this.options.embed.title)
-      .setDescription(`**${this.message.author.tag} vs ${this.opponent.tag}**`)
+      .setDescription(`**${this.message.author.username} vs ${this.opponent.tag}**`)
       .addFields({ name: this.options.embed.statusTitle, value: this.getTurnMessage() }) 
 
       return await msg.edit({ embeds: [embed], components: this.getComponents() });
@@ -144,7 +144,7 @@ module.exports = class TicTacToe extends approve {
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setDescription(`**${this.message.author.tag} vs ${this.opponent.tag}**`)
+    .setDescription(`**${this.message.author.username} vs ${this.opponent.tag}**`)
     .addFields({ name: this.options.embed.overTitle, value: this.getTurnMessage(result + 'Message') })
 
     return await msg.edit({ embeds: [embed], components: disableButtons(this.getComponents()) });

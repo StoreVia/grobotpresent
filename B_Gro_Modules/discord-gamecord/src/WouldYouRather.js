@@ -70,7 +70,7 @@ module.exports = class WouldYouRather extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(`1. ${this.data.option1} \n2. ${this.data.option2}`)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` })
 
 
@@ -108,7 +108,7 @@ module.exports = class WouldYouRather extends events {
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` })
 
     if (result === '1') embed.setDescription(`**1. ${this.data.option1} (${prnt1}%)**\n2. ${this.data.option2} (${prnt2})%`);

@@ -70,7 +70,7 @@ module.exports = class FastType extends events {
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description.replace('{time}', (this.options.timeoutTime/1000)))
     .addFields({ name: 'Sentence', value: this.options.sentence.split(' ').map(e => '`'+ e.split('').join(' ')+'`').join(' ') })
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 
 
     const msg = await this.sendMessage({ embeds: [embed] });
@@ -104,7 +104,7 @@ module.exports = class FastType extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(GameOverMessage.replace('{time}', Math.floor((this.timeTaken / 1000) % 60)).replace('{wpm}', this.wpm))
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setTimestamp()
 
     return msg.edit({ embeds: [embed] });

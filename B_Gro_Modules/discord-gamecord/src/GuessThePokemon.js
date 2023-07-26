@@ -58,7 +58,7 @@ module.exports = class GuessThePokemon extends events {
     .setImage('attachment://question-image.png')
     .addFields({ name: 'Types', value: this.pokemon.types.join(', ') ?? 'No Data', inline: true })
     .addFields({ name: 'Abilities', value: this.pokemon.abilities.join(', ') ?? 'No Data', inline: true })
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
 
     const attachment = new AttachmentBuilder(this.pokemon.questionImage, { name: 'question-image.png' });
@@ -91,7 +91,7 @@ module.exports = class GuessThePokemon extends events {
     .setImage('attachment://answer-image.png')
     .addFields({ name: 'Types', value: this.pokemon.types.join(', ') ?? 'No Data', inline: true })
     .addFields({ name: 'Abilities', value: this.pokemon.abilities.join(', ') ?? 'No Data', inline: true })
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
     const attachment = new AttachmentBuilder(this.pokemon.answerImage, { name: 'answer-image.png' });
     return msg.edit({ content: this.options.winMessage.replace('{pokemon}', this.pokemon.name), embeds: [embed], files: [attachment] });

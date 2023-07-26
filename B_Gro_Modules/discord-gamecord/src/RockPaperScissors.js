@@ -98,8 +98,8 @@ module.exports = class RPSGame extends approve {
     const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setDescription(`${this.options.embed.description}.\n\n> ${this.message.author.tag + ' vs ' + this.opponent.tag}`)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setDescription(`${this.options.embed.description}.\n\n> ${this.message.author.username + ' vs ' + this.opponent.tag}`)
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
 
     this.options.buttonStyle = buttonStyle(this.options.buttonStyle);
@@ -158,9 +158,9 @@ module.exports = class RPSGame extends approve {
     const embed = new EmbedBuilder()
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
-    .setDescription(`${formatMessage(this.options, result+'Message', !this.player1Won())}.\n\n> ${this.message.author.tag + ' vs ' + this.opponent.tag}`)
+    .setDescription(`${formatMessage(this.options, result+'Message', !this.player1Won())}.\n\n> ${this.message.author.username + ' vs ' + this.opponent.tag}`)
     .addFields({ name: this.message.author.username, value: this.playerPick ?? '❔', inline: true })
     .addFields({ name: 'VS', value: '⚡', inline: true })
     .addFields({ name: this.opponent.username, value: this.opponentPick ?? '❔', inline: true })

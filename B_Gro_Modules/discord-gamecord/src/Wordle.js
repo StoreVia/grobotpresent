@@ -64,7 +64,7 @@ module.exports = class Wordle extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setImage('attachment://wordle.png')
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
     const msg = await this.sendMessage({ embeds: [embed], files: [await this.getBoardImage()] });
     const filter = (m) => m.author.id === this.message.author.id && m.content.length === 5;
@@ -99,7 +99,7 @@ module.exports = class Wordle extends events {
     .setTitle(this.options.embed.title)
     .setImage('attachment://wordle.png')
     .addFields({ name: 'Game Over', value: GameOverMessage.replace('{word}', this.word) })
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL() });
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL() });
 
     return await msg.edit({ embeds: [embed], files: [await this.getBoardImage()] });
   }

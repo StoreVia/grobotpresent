@@ -74,7 +74,7 @@ module.exports = class MatchPairs extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(this.options.embed.description)
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
     const msg = await this.sendMessage({ embeds: [embed], components: this.getComponents() });
     return this.handleButtons(msg);
@@ -118,7 +118,7 @@ module.exports = class MatchPairs extends events {
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
     .setDescription(GameOverMessage.replace('{tilesTurned}', this.tilesTurned))
-    .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
+    .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
     return msg.edit({ embeds: [embed], components: disableButtons(this.components) });
   }

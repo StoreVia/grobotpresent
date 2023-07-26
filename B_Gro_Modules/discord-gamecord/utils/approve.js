@@ -39,7 +39,7 @@ module.exports = class Approve extends events {
     return new Promise(async resolve => {
 
       const embed = new EmbedBuilder()
-      .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+      .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
       .setColor(this.options.embed.requestColor)
       .setTitle(this.options.embed.requestTitle)
@@ -62,7 +62,7 @@ module.exports = class Approve extends events {
         if (reason === 'accept') return resolve(msg);
 
         const embed = new EmbedBuilder()
-        .setAuthor({ name: this.message.author.tag, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
+        .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
 .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
         .setColor(this.options.embed.rejectColor)
         .setTitle(this.options.embed.rejectTitle)
