@@ -1,6 +1,5 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const { RockPaperScissors } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionRockPaperScissors extends Command {
 	constructor(client) {
@@ -18,15 +17,8 @@ module.exports = class InteractionRockPaperScissors extends Command {
 		});
 	}
 	async run(client, interaction) {
-        const opponent = interaction.options.getUser('user');
-        new RockPaperScissors({
-            message : interaction,
-            isSlashGame: true,
-            opponent: opponent,
-            embed: {
-              title: 'Rock Paper Sissors',
-              color: `${process.env.ec}`,
-            },
-          }).startGame();
+
+    	const opponent = interaction.options.getUser('user');
+    	await client.functions.games(interaction).rockPaperScissors(true, opponent);
 	}
 };

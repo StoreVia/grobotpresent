@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const { disableButtons, formatMessage, buttonStyle } = require('../utils/utils');
 const squares = ['🟥', '🟦', '🟧', '🟪', '🟩'];
 const events = require('events');
@@ -95,13 +95,9 @@ module.exports = class Flood extends events {
     const btn3 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[2]).setCustomId('flood_2');
     const btn4 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[3]).setCustomId('flood_3');
     const btn5 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[4]).setCustomId('flood_4');
-    const btn6 = new ButtonBuilder().setStyle(ButtonStyle.Danger).setEmoji(`🛑`).setCustomId('flood_5');
-    const btn7 = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(`\u200b`).setCustomId('flood_6').setDisabled(true);
-    const btn8 = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(`\u200b`).setCustomId('flood_7').setDisabled(true);
-    const row = new ActionRowBuilder().addComponents(btn1, btn2, btn3, btn7);
-    const row1 = new ActionRowBuilder().addComponents(btn4, btn5, btn6, btn8)
+    const row = new ActionRowBuilder().addComponents(btn1, btn2, btn3, btn4, btn5);
 
-    const msg = await this.sendMessage({ embeds: [embed], components: [row, row1] });
+    const msg = await this.sendMessage({ embeds: [embed], components: [row] });
     const collector = msg.createMessageComponentCollector({ idle: this.options.timeoutTime });
 
 
@@ -115,17 +111,16 @@ module.exports = class Flood extends events {
       const update = await this.updateGame(squares[btn.customId.split('_')[1]], msg);
       if (!update && update !== false) return collector.stop();
       if (update === false) return;
-      if(btn.customId === "flood_5"){
-        return this.gameOver(msg, false);
-      } else {
-        const embed = new EmbedBuilder()
-        .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
-        .setColor(this.options.embed.color)
-        .setTitle(this.options.embed.title)
-        .setDescription(this.getBoardContent() + `\n**Turns: **\`${this.turns}/${this.maxTurns}\``)
-        .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
-        return await msg.edit({ embeds: [embed], components: [row, row1] });
-      }
+
+
+      const embed = new EmbedBuilder()
+      .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
+      .setColor(this.options.embed.color)
+      .setTitle(this.options.embed.title)
+      .setDescription(this.getBoardContent() + `\n**Turns: **\`${this.turns}/${this.maxTurns}\``)
+      .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
+
+      return await msg.edit({ embeds: [embed], components: [row] });
     })
 
 
@@ -139,14 +134,16 @@ module.exports = class Flood extends events {
     const FloodGame = { player: this.message.author, turns: this.turns, maxTurns: this.maxTurns, boardColor: this.gameBoard[0] };
     const GameOverMessage = result ? this.options.winMessage : this.options.loseMessage;
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), ...FloodGame });
+
+
     const embed = new EmbedBuilder()
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
-    .setDescription(GameOverMessage.replace('{turns}', this.turns))
     .setTitle(this.options.embed.title)
+    .setDescription(this.getBoardContent() + `\n` + GameOverMessage.replace('{turns}', this.turns))
     .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) });
 
-    return msg.edit({ embeds: [embed], components: [] });
+    return msg.edit({ embeds: [embed], components: disableButtons(msg.components) });
   }
 
 

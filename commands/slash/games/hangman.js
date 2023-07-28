@@ -1,6 +1,5 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const { Hangman } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionHangMan extends Command {
 	constructor(client) {
@@ -14,13 +13,7 @@ module.exports = class InteractionHangMan extends Command {
 		});
 	}
 	async run(client, interaction) {
-        new Hangman({
-            message : interaction,
-            isSlashGame: true,
-            embed: {
-              title: 'Hangman',
-              color: `${process.env.ec}`,
-            },
-          }).startGame();
+        
+		await client.functions.games(interaction).hangMan(true);
 	}
 };

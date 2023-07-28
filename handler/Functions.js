@@ -345,8 +345,9 @@ module.exports = class Functions {
     for (let i = 0; i < values.length; i += 3) {
       const [label, customId, style] = values.slice(i, i + 3);
       const button = new ButtonBuilder()
-        .setLabel(`${label}`)
+        .setLabel(`${label.replace(/\(disabled\)/g, '')}`)
         .setCustomId(`${customId}`)
+        .setDisabled(label.includes(`disabled`) ? true : false)
         .setStyle(style);
       buttonRow.addComponents(button);
   }
@@ -533,6 +534,7 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   games(interact){
+    let extension = this;
     function ctfRandom(){
       const positions = {      
         safe  :   '_ _                          :fish:\n            _ _              :hand_splayed:\n            _ _              :cat:',
@@ -544,6 +546,16 @@ module.exports = class Functions {
       let randomized = Math.floor(Math.random() * 2);
       let randomPos = `${positions[Object.keys(positions)[randomized]]}`
       return { positions, randomPos }
+    }
+    function footBallRandom(){
+      const positions = {
+        left    : '_ _                   🥅🥅🥅\n_ _                   🕴️\n      \n_ _                         ⚽',
+        middle  : '_ _                   🥅🥅🥅\n_ _                        🕴️\n      \n_ _                         ⚽',
+        right   : '_ _                   🥅🥅🥅\n_ _                              🕴️\n      \n_ _                         ⚽',
+      };
+      let randomized = Math.floor(Math.random() * Object.keys(positions).length);
+      let randomPos = positions[Object.keys(positions)[randomized]];
+      return { positions, randomPos, randomized }
     }
     function twozerofoureight(torf){
       return new TwoZeroFourEight({
@@ -623,10 +635,51 @@ module.exports = class Functions {
         }
       });
     }
-    function flood(slash, difficult){
+    function footBall(msg, componentsArray, userId){
+      let positions = footBallRandom().positions;
+      let randomPos = footBallRandom().randomPos;
+      let randomized = footBallRandom().randomized;
+      let gameEnded = false;
+      function update(){
+        randomized = Math.floor(Math.random() * Object.keys(positions).length);
+        randomPos = positions[Object.keys(positions)[randomized]];
+        msg.edit({ content: randomPos, components: [componentsArray] });
+      }
+      setInterval(() => {
+        if(gameEnded === false){
+          return update();
+        } 
+      }, 1000);
+      const filter = i => i.customId;
+      const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+      collector.on('collect', async (button) => {
+        if(button.user.id != userId){
+          await button.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+        }
+        if(button.customId !== Object.keys(positions)[randomized]) {
+          gameEnded = true;
+          componentsArray.components.map(component=> component.setDisabled(true));
+          await msg.edit({ components: [componentsArray, extension.buttons(`YouWon(disabled)`, `yw`, ButtonStyle.Secondary)] });
+          return button.deferUpdate();
+        } else {
+          gameEnded = true;
+          componentsArray.components.map(component=> component.setDisabled(true));
+          await msg.edit({ components: [componentsArray, extension.buttons(`YouLose(disabled)`, `yl`, ButtonStyle.Secondary)] });
+          return button.deferUpdate();
+        }
+      });
+      collector.on('end', async (_, reason) => {
+        if (reason === 'idle' || reason === 'user') {
+          gameEnded = true;
+          componentsArray.components.map(component=> component.setDisabled(true));
+          await msg.edit({ components: [componentsArray, extension.buttons(`GameEndDueToInactivity(disabled)`, `gedti`, ButtonStyle.Secondary)] });
+        }
+      });
+    }
+    function flood(torf, difficult){
       new Flood({
         message : interact,
-        isSlashGame: slash,
+        isSlashGame: torf,
         embed: {
           title: 'Flood',
           difficulty: difficult ? difficult : `13`,
@@ -634,7 +687,28 @@ module.exports = class Functions {
         },
       }).startGame();
     }
-    return { ctfRandom, twozerofoureight, catchTheFish, flood }
+    function hangMan(torf){
+      new Hangman({
+        message : interact,
+        isSlashGame: torf,
+        embed: {
+          title: 'Hangman',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    function rockPaperScissors(torf, opponent){
+      new RockPaperScissors({
+        message : interact,
+        isSlashGame: torf,
+        opponent: opponent,
+        embed: {
+          title: 'Rock Paper Sissors',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    return { ctfRandom, footBallRandom, twozerofoureight, catchTheFish, flood, footBall, hangMan, rockPaperScissors }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
