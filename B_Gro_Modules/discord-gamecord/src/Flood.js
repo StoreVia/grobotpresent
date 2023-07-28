@@ -95,9 +95,9 @@ module.exports = class Flood extends events {
     const btn3 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[2]).setCustomId('flood_2');
     const btn4 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[3]).setCustomId('flood_3');
     const btn5 = new ButtonBuilder().setStyle(this.options.buttonStyle).setEmoji(squares[4]).setCustomId('flood_4');
-    const btn6 = new ButtonBuilder().setStyle(ButtonStyle.Danger).setLabel(`Stop`).setCustomId('flood_5');
-    const btn7 = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel(`\u200b`).setCustomId('flood_6').setDisabled(true);
-    const btn8 = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel(`\u200b`).setCustomId('flood_7').setDisabled(true);
+    const btn6 = new ButtonBuilder().setStyle(ButtonStyle.Danger).setEmoji(`🛑`).setCustomId('flood_5');
+    const btn7 = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(`\u200b`).setCustomId('flood_6').setDisabled(true);
+    const btn8 = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(`\u200b`).setCustomId('flood_7').setDisabled(true);
     const row = new ActionRowBuilder().addComponents(btn1, btn2, btn3, btn7);
     const row1 = new ActionRowBuilder().addComponents(btn4, btn5, btn6, btn8)
 

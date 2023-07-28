@@ -23,25 +23,7 @@ module.exports = class InteractionFootBall extends Command {
 		let gameEnded = false;
 		let randomPos = positions[Object.keys(positions)[randomized]];
 
-        const componentsArray = new ActionRowBuilder()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('left')
-                    .setLabel('Left')
-                    .setDisabled(false)
-                    .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                    .setCustomId(String(Math.random()))
-                    .setLabel(`Middle`)
-                    .setDisabled(false)
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                    .setCustomId('right')
-                    .setLabel('Right')
-                    .setDisabled(false)
-                    .setStyle(ButtonStyle.Secondary)
-            );
-
+        const componentsArray = await client.function.buttons(`Left`, `left`, ButtonStyle.Secondary, `Middle`, String(Math.random()), ButtonStyle.Primary, `Right`, `right`, ButtonStyle.Secondary);
         await interaction.deferReply();
 		const msg = await interaction.followUp({ content: randomPos, components: [componentsArray] });
 
