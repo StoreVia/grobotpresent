@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class MemberCount extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('membercount')
@@ -13,7 +13,7 @@ module.exports = class MemberCount extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply();
 

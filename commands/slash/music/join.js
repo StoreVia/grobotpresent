@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Join extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('join')
@@ -12,7 +12,7 @@ module.exports = class Join extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {   
+	async run(client, interaction){   
 
 		const clientVoice = interaction.guild.members.me.voice.channel;
         const memberVoice = interaction.member.voice.channel;

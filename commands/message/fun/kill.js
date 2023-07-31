@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageKill extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "kill",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageKill extends Command {
   			description: "Kill Someone.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		const target = message.mentions.members.first();
         const author = message.author;

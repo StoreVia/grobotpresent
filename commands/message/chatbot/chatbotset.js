@@ -2,7 +2,7 @@ const Command = require('../../../structures/MessageCommandClass');
 const { PermissionsBitField } = require('discord.js');
 
 module.exports = class MessageChatBotSet extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "chatbotset",
   			category: "chatbot",
@@ -12,7 +12,7 @@ module.exports = class MessageChatBotSet extends Command {
   			description: "Set Chatbot Channel.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let channel = message.mentions.channels.first();
 		const chatbotdb = client.db.table(`chatbot`);

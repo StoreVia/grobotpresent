@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const translate = require('@iamtraction/google-translate');
 
 module.exports = class Translate extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('translate')
@@ -49,7 +49,7 @@ module.exports = class Translate extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply();
 

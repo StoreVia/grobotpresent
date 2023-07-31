@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField, PermissionFlagsB
 const db = require(`quick.db`);
 
 module.exports = class Welcome extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('welcome')
@@ -63,7 +63,7 @@ module.exports = class Welcome extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         const welcomesetdb = client.db.table(`welcome`);
         const welcomeconfirgurationdb = client.db.table(`welcomeconfiguration`);
@@ -81,7 +81,7 @@ module.exports = class Welcome extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'set') {
+        if(subcommand === 'set'){
             const channel1 = channel('channel');
             if(!welcomesetcheck){
                 await interaction.deferReply({ ephemeral: true });
@@ -112,7 +112,7 @@ module.exports = class Welcome extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'background') {
+        if(subcommand === 'background'){
             const background = string('url');
             let validurl = isValidURL(background)
             if(!welcomesetcheck){
@@ -287,11 +287,11 @@ module.exports = class Welcome extends Command {
             const filter = i => i.customId === 'colors';
             const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
             collector.on('collect', async i => {
-			    if (i.user.id != interaction.user.id) {
+			    if(i.user.id != interaction.user.id){
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			    }
 			    const selected = i.values[0];
-			    if (i.customId === 'colors') {
+			    if(i.customId === 'colors'){
                     if(selected === "000000"){
 				        const embed = new EmbedBuilder()
                             .setTitle(`Done`)
@@ -403,7 +403,7 @@ module.exports = class Welcome extends Command {
                 }
 	        })
 	        collector.on('end', async (_, reason) => {
-                if (reason === 'idle') {
+                if(reason === 'idle'){
                     await interaction.editReply({ components: [disabled] });
                 }
             });

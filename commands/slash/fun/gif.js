@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionGif extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('gif')
@@ -17,7 +17,7 @@ module.exports = class InteractionGif extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     	await interaction.deferReply();
     	return interaction.followUp({ embeds: [await client.functions.gif(await client.functions.getOptions(interaction).string(`string`))]});

@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder, PermissionsBitFiel
 const db = require(`quick.db`)
 
 module.exports = class Leave extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('leave')
@@ -38,7 +38,7 @@ module.exports = class Leave extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         let subcommand = interaction.options.getSubcommand();
         
@@ -50,7 +50,7 @@ module.exports = class Leave extends Command {
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(subcommand === 'set') {
+        if(subcommand === 'set'){
             const channel = interaction.options.getChannel('channel');
             const channelcheck = db.fetch(`leave_${interaction.guild.id}`, channel.id)
             if(!channelcheck){

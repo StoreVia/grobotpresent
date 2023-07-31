@@ -1,5 +1,5 @@
 module.exports = class Command {
-    constructor(client, meta = {}) {
+    constructor(client, meta = {}){
         this.client = client;
         this.data = meta.data;
         this.contextDescription = meta.contextDescription || null;
@@ -8,11 +8,11 @@ module.exports = class Command {
         this.permissions = meta.permissions || ['Use Application Commands', 'Send Messages', 'Embed Links'];
     }
 
-    async autocomplete() {
+    async autocomplete(){
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Autocomplete Method.`);
     }
 
-    async run() {
+    async run(){
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Run Method.`);
     }
 };

@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder, PermissionsBitFiel
 const db = require(`quick.db`);
 
 module.exports = class Ping extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('shop')
@@ -43,7 +43,7 @@ module.exports = class Ping extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         await interaction.deferReply();
 
@@ -88,7 +88,7 @@ module.exports = class Ping extends Command {
                 ])
 			);
 
-        if (interaction.options.getSubcommand() === 'view') {
+        if(interaction.options.getSubcommand() === 'view'){
             let embed = new EmbedBuilder()
             .setTitle('Store')
             .setThumbnail(`${process.env.iconurl}`)
@@ -103,11 +103,11 @@ module.exports = class Ping extends Command {
 			const filter = i => i.customId === 'storepage';
 			const collector = interaction.channel.createMessageComponentCollector({ filter, idle: 60000 });
         	collector.on('collect', async i => {
-			if (i.user.id != interaction.user.id) {
+			if(i.user.id != interaction.user.id){
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			}
 			const selected = i.values[0];
-			if (i.customId === 'storepage') {
+			if(i.customId === 'storepage'){
 				if(selected === `jew`){
 					let imageembed = new EmbedBuilder()
 					.setTitle(`Jewellery Items In Store`)
@@ -145,7 +145,7 @@ module.exports = class Ping extends Command {
 	   })
 
        collector.on('end', async (_, reason) => {
-			if (reason === 'idle') {
+			if(reason === 'idle'){
             	return await interaction.editReply({ components: [disabled] });
         	}
       	});
@@ -157,7 +157,7 @@ module.exports = class Ping extends Command {
 
 
 	  
-	  if (interaction.options.getSubcommand() === 'buy') {
+	  if(interaction.options.getSubcommand() === 'buy'){
 		const StringOption = interaction.options.getString("item");
 
 		let money = db.fetch(`money_${interaction.user.id}`);

@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageAkinator extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "akinator",
   			category: "akinator",
@@ -11,7 +11,7 @@ module.exports = class MessageAkinator extends Command {
   			description: "Play Akinator Game.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 		
         let langdb = client.db.table(`akinatorlanguage`);
         let langdbcheck = await langdb.get(`${message.author.id}`);

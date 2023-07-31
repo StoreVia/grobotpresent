@@ -3,7 +3,7 @@ const { ButtonStyle } = require(`discord.js`);
 const titlecase = require(`titlecase`);
 
 module.exports = class MessageMeme extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "meme",
   			category: "fun",
@@ -13,7 +13,7 @@ module.exports = class MessageMeme extends Command {
   			description: "Get A Random Meme.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let msgdefer = await client.functions.deferReply().message(message);
 		let buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);

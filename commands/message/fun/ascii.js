@@ -2,7 +2,7 @@ const Command = require('../../../structures/MessageCommandClass');
 const figlet = require('figlet');
 
 module.exports = class MessageAscii extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "ascii",
   			category: "fun",
@@ -12,7 +12,7 @@ module.exports = class MessageAscii extends Command {
   			description: "Convert Normal Text To Ascii Text.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 
 		const text = args.join(" ");
 		let msgdefer = await client.functions.deferReply().message(message);

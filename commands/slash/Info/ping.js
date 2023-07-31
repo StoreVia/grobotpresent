@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Ping extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('ping')
@@ -13,7 +13,7 @@ module.exports = class Ping extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply()
 		interaction.followUp({ embeds: [client.functions.pingEmbed("-", "-")] }).then((msg) =>  msg.edit({ embeds: [client.functions.pingEmbed(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp)] }));

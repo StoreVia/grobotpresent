@@ -10,7 +10,7 @@ const statuses = {
   }  
 
 module.exports = class Userinfo extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('userinfo')
@@ -24,7 +24,7 @@ module.exports = class Userinfo extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		await interaction.deferReply();
 		const flag = { 
             TEAM_PSEUDO_USER: 'Team User', 

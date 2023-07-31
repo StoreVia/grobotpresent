@@ -1,13 +1,13 @@
 const ProcessEvent = require('../../structures/ProcessEventClass');
 
 module.exports = class UnhandledRejection extends ProcessEvent {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'unhandledRejection',
 			category: 'process',
 		});
 	}
-	async run(reason, p) {
+	async run(reason, p){
         
         console.log(' [ AntiCrashDetection ]: Unhandled Rejection/Catch');
         console.log(reason, p);

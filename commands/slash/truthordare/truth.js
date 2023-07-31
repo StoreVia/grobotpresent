@@ -4,7 +4,7 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Embed
 const truth = require(`../../../A_Gro_db/truth.json`);
 
 module.exports = class Truth extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('truth')
@@ -15,7 +15,7 @@ module.exports = class Truth extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply();
 
@@ -45,9 +45,9 @@ module.exports = class Truth extends Command {
 		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
-			if (i.user.id != interaction.user.id) {
+			if(i.user.id != interaction.user.id){
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} else if(i.customId === "truth") {
+			} else if(i.customId === "truth"){
                 let embed = new EmbedBuilder()
                     .setTitle('Truth')
                     .setDescription(`${truth[Math.floor(Math.random() * truth.length)]}`)
@@ -64,7 +64,7 @@ module.exports = class Truth extends Command {
 		})
 
 		collector.on('end', async (_, reason) => {
-			if (reason === 'idle' || reason === 'user') {
+			if(reason === 'idle' || reason === 'user'){
 				buttonRow.components.map(component=> component.setDisabled(true));
 				await interaction.editReply({ components: [buttonRow] });
 			}

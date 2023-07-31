@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageRoast extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "roast",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageRoast extends Command {
   			description: "Roast Someone.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let user = message.mentions.members.first();
 		let msgdefer = await client.functions.deferReply().message(message);

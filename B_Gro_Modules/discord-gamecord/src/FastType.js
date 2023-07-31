@@ -3,7 +3,7 @@ const events = require('events');
 const cu = `GroBot`;
 
 module.exports = class FastType extends events {
-  constructor(options = {}) {
+  constructor(options = {}){
 
     let sentences = [
       "Live A Life You Will Remember.",
@@ -13,31 +13,31 @@ module.exports = class FastType extends events {
 
     let randomsentence = sentences[Math.floor(Math.random() * sentences.length)];
 
-    if (!options.isSlashGame) options.isSlashGame = false;
-    if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
-    if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
-    if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
+    if(!options.isSlashGame) options.isSlashGame = false;
+    if(!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
+    if(typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
+    if(typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
 
 
-    if (!options.embed) options.embed = {};
-    if (!options.embed.title) options.embed.title = 'Fast Type';
-    if (!options.embed.color) options.embed.color = '#5865F2';
-    if (!options.embed.description) options.embed.description = 'You have {time} seconds to type the sentence below.';
+    if(!options.embed) options.embed = {};
+    if(!options.embed.title) options.embed.title = 'Fast Type';
+    if(!options.embed.color) options.embed.color = '#5865F2';
+    if(!options.embed.description) options.embed.description = 'You have {time} seconds to type the sentence below.';
 
-    if (!options.sentence) options.sentence = `${randomsentence}`;
-    if (!options.winMessage) options.winMessage = 'You won! You finished the type race in {time} seconds with word per minute of {wpm}.';
-    if (!options.loseMessage) options.loseMessage = 'You lost! You didn\'t type the correct sentence in time.';
-    if (!options.timeoutTime) options.timeoutTime = 60000;
+    if(!options.sentence) options.sentence = `${randomsentence}`;
+    if(!options.winMessage) options.winMessage = 'You won! You finished the type race in {time} seconds with word per minute of {wpm}.';
+    if(!options.loseMessage) options.loseMessage = 'You lost! You didn\'t type the correct sentence in time.';
+    if(!options.timeoutTime) options.timeoutTime = 60000;
 
 
-    if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
-    if (typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
-    if (typeof options.embed.color !== 'string') throw new TypeError('INVALID_EMBED: embed color must be a string.');
-    if (typeof options.embed.description !== 'string') throw new TypeError('INVALID_DESCRIPTION: embed description must be a string.');
-    if (typeof options.sentence !== 'string') throw new TypeError('INVALID_SENTENCE: sentence must be a string.');
-    if (typeof options.winMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Win message option must be a string.');
-    if (typeof options.loseMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Lose message option must be a string.');
-    if (typeof options.timeoutTime !== 'number') throw new TypeError('INVALID_TIME: Timeout time option must be a number.');
+    if(typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
+    if(typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
+    if(typeof options.embed.color !== 'string') throw new TypeError('INVALID_EMBED: embed color must be a string.');
+    if(typeof options.embed.description !== 'string') throw new TypeError('INVALID_DESCRIPTION: embed description must be a string.');
+    if(typeof options.sentence !== 'string') throw new TypeError('INVALID_SENTENCE: sentence must be a string.');
+    if(typeof options.winMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Win message option must be a string.');
+    if(typeof options.loseMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Lose message option must be a string.');
+    if(typeof options.timeoutTime !== 'number') throw new TypeError('INVALID_TIME: Timeout time option must be a number.');
 
 
     super();
@@ -48,15 +48,15 @@ module.exports = class FastType extends events {
   }
 
 
-  async sendMessage(content) {
-    if (this.options.isSlashGame) return await this.message.editReply(content);
+  async sendMessage(content){
+    if(this.options.isSlashGame) return await this.message.editReply(content);
     else return await this.message.channel.send(content);
   }
 
 
-  async startGame() {
-    if (this.options.isSlashGame) {
-      if (!this.message.deferred) await this.message.deferReply({}).catch(e => {});
+  async startGame(){
+    if(this.options.isSlashGame){
+      if(!this.message.deferred) await this.message.deferReply({}).catch(e => {});
       this.message.author = this.message.user;
     }
 
@@ -89,12 +89,12 @@ module.exports = class FastType extends events {
 
     collector.on('end', (_, reason) => {
       this.timeTaken = Math.floor(Date.now() - startTime);
-      if (reason === 'time') return this.gameOver(msg, false);
+      if(reason === 'time') return this.gameOver(msg, false);
     })
   }
 
 
-  gameOver(msg, result) {
+  gameOver(msg, result){
     const FasttypeGame = { player: this.message.author, timeTaken: Math.floor(this.timeTaken / 1000), wpm: this.wpm };
     const GameOverMessage = result ? this.options.winMessage : this.options.loseMessage;
     this.emit('gameOver', { result: (result ? 'win' : 'lose'), FasttypeGame });

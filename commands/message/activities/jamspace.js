@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageJamSpace extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "jamspace",
   			category: "activities",
@@ -11,7 +11,7 @@ module.exports = class MessageJamSpace extends Command {
   			description: "Use JamSpace Activity.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 		
         let voicechannelcheck = await client.functions.voiceChannel().message(message);
 		let msgdefer = await client.functions.deferReply().message(message);

@@ -13,7 +13,7 @@ const deploy = async () => {
 
 	fs.readdirSync('./commands/slash').forEach(async category => {
 		const commands = fs.readdirSync(`./commands/slash/${category}/`).filter(cmd => cmd.endsWith('.js'));
-		for (const command of commands) {
+		for (const command of commands){
 			const Command = require(`../commands/slash/${category}/${command}`);
 			const cmd = new Command();
 			const cmdData = cmd.data.toJSON();
@@ -23,7 +23,7 @@ const deploy = async () => {
 
 	fs.readdirSync('./developer_commands/').forEach(async category => {
 		const commands1 = fs.readdirSync(`./developer_commands/${category}/`).filter(cmd => cmd.endsWith('.js'));
-		for(const command of commands1) {
+		for(const command of commands1){
 			const Command1 = require(`../developer_commands/${category}/${command}`);
 			const cmd1 = new Command1();
 			const cmdData1 = cmd1.data.toJSON();

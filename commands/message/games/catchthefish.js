@@ -2,7 +2,7 @@ const Command = require('../../../structures/MessageCommandClass');
 const { ButtonStyle } = require('discord.js');
 
 module.exports = class InteractionCatchTheFish extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "catchthefish",
   			category: "games",
@@ -12,7 +12,7 @@ module.exports = class InteractionCatchTheFish extends Command {
   			description: "Play CatchTheFish Game.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 
         let count = args.join(" ");
         let msgdefer = await client.functions.deferReply().message(message);

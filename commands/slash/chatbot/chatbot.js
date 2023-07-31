@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = class InteractionChatBot extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('chatbot')
@@ -24,7 +24,7 @@ module.exports = class InteractionChatBot extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         const chatbotdb = client.db.table(`chatbot`)
         const checkchannel = await chatbotdb.get(`${interaction.guild.id}`);
@@ -38,7 +38,7 @@ module.exports = class InteractionChatBot extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'set') {
+        if(subcommand === 'set'){
             const channel = await client.functions.getOptions(interaction).channel('channel');
             if(!checkchannel){
                 await interaction.deferReply({ ephemeral: true });

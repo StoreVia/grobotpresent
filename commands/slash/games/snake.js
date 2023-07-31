@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Snake } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionSnake extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('snake')
@@ -13,27 +13,8 @@ module.exports = class InteractionSnake extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
-        new Snake({
-            message: interaction,
-            isSlashGame: true,
-            embed: {
-              title: 'Snake',
-              color: `${process.env.ec}`,
-              OverTitle: 'Game Over',
-            },
-            snake: { head: '🟢', body: '🟩', tail: '🟢', over: '💀' },
-            emojis: {
-              board: '⬛', 
-              food: '🍎',
-              up: '⬆️', 
-              right: '➡️',
-              down: '⬇️',
-              left: '⬅️',
-            },
-            foods: ['🍎', '🍇', '🍊', '🍈', '🍉', '🍊', '🍋', '🍌', '🍍', '🍏'],
-            stopButton: 'Stop',
-            othersMessage: 'You are not allowed to use buttons for this message!',
-          }).startGame();
-	}
+	async run(client, interaction){
+
+    await client.functions.games(interaction, true).snake();
+  }    
 };

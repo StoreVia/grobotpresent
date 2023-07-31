@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionTwoZeroFourEight extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('2048')
@@ -12,8 +12,8 @@ module.exports = class InteractionTwoZeroFourEight extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
-		await client.functions.games(interaction).twozerofoureight(true);
+		await client.functions.games(interaction, true).twozerofoureight();
 	}
 };

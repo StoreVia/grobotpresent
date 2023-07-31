@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, Butt
 const version = require(`../../../package.json`).version;
 
 module.exports = class Botinfo extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('botinfo')
@@ -14,7 +14,7 @@ module.exports = class Botinfo extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		await interaction.deferReply();
 
 		const promises = [

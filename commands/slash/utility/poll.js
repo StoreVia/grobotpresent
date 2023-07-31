@@ -3,7 +3,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class Ping extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('poll')
@@ -21,7 +21,7 @@ module.exports = class Ping extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         const choice1 = interaction.options.getString('text1');
         const choice2 = interaction.options.getString('text2');
@@ -61,10 +61,10 @@ module.exports = class Ping extends Command {
 		    const collector = message.createMessageComponentCollector({ filter, idle: 300000 });
 
             collector.on('collect', async i => {
-				if (votedUsers.includes(i.user.id)) {
+				if(votedUsers.includes(i.user.id)){
 					return await i.reply({ content: 'You Have Already Voted.', ephemeral: true });
 				}
-                if(i.customId === "pchoice1") {
+                if(i.customId === "pchoice1"){
                     Choice1Votes++;
                     votedUsers.push(`${i.user.id}`);
                 } else if(i.customId === "pchoice2"){
@@ -84,7 +84,7 @@ module.exports = class Ping extends Command {
             })
     
             collector.on('end', async (_, reason) => {
-                if (reason === 'idle' || reason === 'user') {
+                if(reason === 'idle' || reason === 'user'){
                     buttonRow.components.map(component=> component.setDisabled(true));
                     embed.setDescription(`🅰: **${choice1} - {Majority}**\n\n🅱: **${choice2}**\n\n> **PollEnded: **<t:${Math.floor((Date.now())/1000)}:R>`)
                     return await interaction.editReply({ embeds: [embed], components: [buttonRow] });

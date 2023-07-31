@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageFlipText extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "fliptext",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageFlipText extends Command {
   			description: "Flip Text UpsideDown.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 		
 		let string = args.join(" ");
 		let msgdefer = await client.functions.deferReply().message(message);

@@ -11,7 +11,7 @@ const roasts = require(`../A_Gro_db/roast.json`);
 const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Gro_Modules/discord-gamecord')
 
 module.exports = class Functions {
-  constructor(client) {
+  constructor(client){
     this.client = client;
   }
 
@@ -23,9 +23,9 @@ module.exports = class Functions {
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
       collector.on('collect', async (i) => {
-			  if (i.user.id != userId) {
+			  if(i.user.id != userId){
 				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			  } else if(i.customId === `dice`) {
+			  } else if(i.customId === `dice`){
 				  i.update({ embeds: [embed.setDescription(`🎲 You Got \`${await Math.floor(Math.random() * 6) + 1}\``)], components: [buttonRow]})
 			  } else if(i.customId === `distop`){
           buttonRow.components.map(component=> component.setDisabled(true));
@@ -33,7 +33,7 @@ module.exports = class Functions {
 			  }
 		  });
 		  collector.on('end', async (_, reason) => {
-			  if (reason === 'idle' || reason === 'user') {
+			  if(reason === 'idle' || reason === 'user'){
 				  buttonRow.components.map(component=> component.setDisabled(true));
 				  await msg.edit({ components: [buttonRow] });
 			  }
@@ -43,10 +43,10 @@ module.exports = class Functions {
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
       collector.on('collect', async i => {
-			  if (i.user.id != userId) {
+			  if(i.user.id != userId){
 				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			  } 
-			  if(i.customId === "meme") {
+			  if(i.customId === "meme"){
 				  buttonRow.components.map(component=> component.setDisabled(true));
 				  await i.update({ content: `Searching...`, components: [buttonRow] });
           let meme = await extension.genrateMeme();
@@ -62,7 +62,7 @@ module.exports = class Functions {
 		  })
 
 		  collector.on('end', async (_, reason) => {
-			  if (reason === 'idle' || reason === 'user') {
+			  if(reason === 'idle' || reason === 'user'){
 				  buttonRow.components.map(component=> component.setDisabled(true));
 				  await msg.edit({ components: [buttonRow] });
 			  }
@@ -147,23 +147,23 @@ module.exports = class Functions {
   nitro(msg){
     let extension = this;
     let time = "3s";
-    setTimeout(function () {
+    setTimeout(function (){
       msg.edit({content: " ", embeds: [extension.embedBuild().description(`Getting Things Ready For Nitro Payment!`).build()]});
     }, ms(time));
     let time14 = "5s";
-    setTimeout(function () {
+    setTimeout(function (){
       msg.edit({embeds: [extension.embedBuild().description(`Getting Things Ready For Nitro Payment!`).build()]});
     }, ms(time14));
     let time2 = "7s";
-    setTimeout(function () {
+    setTimeout(function (){
       msg.edit({embeds: [extension.embedBuild().description(`Choosen 99.99$ Plan!`).build()]});
     }, ms(time2));
     let time3 = "10s";
-    setTimeout(function () {
+    setTimeout(function (){
       msg.edit({embeds: [extension.embedBuild().description(`Payment Requested In Paypal!`).image(`https://cdn.discordapp.com/attachments/1097119486986960968/1097822394351104101/animated-paypal-loading.gif`).footer().build()]});
     }, ms(time3));
     let time5 = "18s";
-    setTimeout(function () {
+    setTimeout(function (){
       msg.edit({embeds: [extension.embedBuild().title(`Here Is Your Nitro Link!`).description(`[Click Here](https://bit.ly/3HydaR9) To Claim Your Nitro!`).image(`https://i.imgur.com/ZEopR3f.png`).build()]});
     }, ms(time5));
   }
@@ -189,7 +189,7 @@ module.exports = class Functions {
 			} else {
 				return { url, memeImage, title };
 			}
-		} catch(e) {
+		} catch(e){
 			let url = process.env.website;
 			let memeImage = "https://i.imgur.com/lCGlrZq.png";
 			let title = "Error Occured"
@@ -223,7 +223,7 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async gif(string){
-    return giphy.search(string).then(async function(res) {
+    return giphy.search(string).then(async function(res){
       let id = res.data[0].id;
       let msgurl = `https://media.giphy.com/media/${id}/giphy.gif`;
       return msgurl;
@@ -258,7 +258,7 @@ module.exports = class Functions {
       embed.setDescription(description);
       return this;
     }
-    function color() {
+    function color(){
       embed.setColor(`#000000`);
       return this;
     }
@@ -282,36 +282,36 @@ module.exports = class Functions {
       embed.setFooter({ text: text ? text : `${client.user.username} - ${process.env.year} ©` , iconURL: iconurl ? iconurl : process.env.iconurl });
       return this;
     }
-    function fields(...fieldSets) {
+    function fields(...fieldSets){
       const realFields = [];
-      for (let i = 0; i < fieldSets.length; i += 3) {
+      for (let i = 0; i < fieldSets.length; i += 3){
         const [name, value, inline] = fieldSets.slice(i, i + 3);
         realFields.push({ name, value, inline });
       }
       embed.addFields(...realFields);
       return this;
     }
-    function ifields(...fieldSets) {
+    function ifields(...fieldSets){
       const realFields = [];
-      for (let i = 0; i < fieldSets.length; i += 2) {
+      for (let i = 0; i < fieldSets.length; i += 2){
         const [name, value] = fieldSets.slice(i, i + 2);
         realFields.push({ name, value, inline: true });
       }
       embed.addFields(...realFields);
       return this;
     }
-    function bfields(...fieldSets) {
+    function bfields(...fieldSets){
       const realFields = [];
-      for (let i = 0; i < fieldSets.length; i += 3) {
+      for (let i = 0; i < fieldSets.length; i += 3){
         const [name, value, inline] = fieldSets.slice(i, i + 3);
         realFields.push({ name: `**${name}: **`, value, inline });
       }
       embed.addFields(...realFields);
       return this;
     }
-    function ibfields(...fieldSets) {
+    function ibfields(...fieldSets){
       const realFields = [];
-      for (let i = 0; i < fieldSets.length; i += 2) {
+      for (let i = 0; i < fieldSets.length; i += 2){
         const [name, value] = fieldSets.slice(i, i + 2);
         realFields.push({ name: `**${name}: **`, value, inline: true });
       }
@@ -340,9 +340,9 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  buttons(...values) {
+  buttons(...values){
     const buttonRow = new ActionRowBuilder();
-    for (let i = 0; i < values.length; i += 3) {
+    for (let i = 0; i < values.length; i += 3){
       const [label, customId, style] = values.slice(i, i + 3);
       const button = new ButtonBuilder()
         .setLabel(`${label.replace(/\(disabled\)/g, '')}`)
@@ -463,7 +463,7 @@ module.exports = class Functions {
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  cmdCoolDown(message, command) {
+  cmdCoolDown(message, command){
     let client = message.client;
     if(!message || !client) return;
     if(!command || !command.name) return;
@@ -472,9 +472,9 @@ module.exports = class Functions {
     }
     const time = client.cooldowns.get(command.name);
     const cooldownAmount = (command.cooldown) * 1000;
-    if (time.has(`${message.member.id}`)) {
+    if(time.has(`${message.member.id}`)){
       const expirationTime = time.get(message.member.id) + cooldownAmount;
-      if (Date.now() < expirationTime) {
+      if(Date.now() < expirationTime){
         const timeLeft = (expirationTime - Date.now()) / 1000;
         return timeLeft
       } else {
@@ -491,7 +491,7 @@ module.exports = class Functions {
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  escapeRegex(str) {
+  escapeRegex(str){
     return str.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
   }
   
@@ -527,13 +527,13 @@ module.exports = class Functions {
     headers: { Authorization: `Bot ${process.env.token}`, 'Content-Type': 'application/json', },
     });
     const invite = await response.json();
-    if (invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
+    if(invite.error || !invite.code) return console.log('An Error Occured While Genrating Link.');
     return `https://discord.com/invite/${invite.code}`;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  games(interact){
+  games(interact, torf){
     let extension = this;
     function ctfRandom(){
       const positions = {      
@@ -557,7 +557,7 @@ module.exports = class Functions {
       let randomPos = positions[Object.keys(positions)[randomized]];
       return { positions, randomPos, randomized }
     }
-    function twozerofoureight(torf){
+    function twozerofoureight(){
       return new TwoZeroFourEight({
         message : interact,
         isSlashGame: torf,
@@ -575,17 +575,17 @@ module.exports = class Functions {
       let data = 0;
       const filter = i => i.customId;
       const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
-      function update(button) {
+      function update(button){
         randomized = Math.floor(Math.random() * 2);
         randomPos = positions[Object.keys(positions)[randomized]];
-        if(data === count) {
+        if(data === count){
           gameEnded = true;
           collector.stop();
           componentsArray.components.map(component=> component.setDisabled(true));
           msg.edit({ content: positions.win, components: [componentsArray] });
           button.deferUpdate();
         } else {
-          if(data <= -count * 3) {
+          if(data <= -count * 3){
             gameEnded = true;
             collector.stop();
             componentsArray.components.map(component=> component.setDisabled(true));
@@ -619,7 +619,7 @@ module.exports = class Functions {
           componentsArray.components.map(component=> component.setDisabled(true));
           await msg.edit({ components: [componentsArray] });
         }
-        if(randomized !== 0) {
+        if(randomized !== 0){
           data -= count;
           update(button);
         } else {
@@ -628,7 +628,7 @@ module.exports = class Functions {
         }
       });
       collector.on('end', async (_, reason) => {
-        if (reason === 'idle' || reason === 'user') {
+        if(reason === 'idle' || reason === 'user'){
           gameEnded = true;
           componentsArray.components.map(component=> component.setDisabled(true));
           await msg.edit({ components: [componentsArray] });
@@ -656,7 +656,7 @@ module.exports = class Functions {
         if(button.user.id != userId){
           await button.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
         }
-        if(button.customId !== Object.keys(positions)[randomized]) {
+        if(button.customId !== Object.keys(positions)[randomized]){
           gameEnded = true;
           componentsArray.components.map(component=> component.setDisabled(true));
           await msg.edit({ components: [componentsArray, extension.buttons(`YouWon(disabled)`, `yw`, ButtonStyle.Secondary)] });
@@ -669,14 +669,14 @@ module.exports = class Functions {
         }
       });
       collector.on('end', async (_, reason) => {
-        if (reason === 'idle' || reason === 'user') {
+        if(reason === 'idle' || reason === 'user'){
           gameEnded = true;
           componentsArray.components.map(component=> component.setDisabled(true));
           await msg.edit({ components: [componentsArray, extension.buttons(`GameEndDueToInactivity(disabled)`, `gedti`, ButtonStyle.Secondary)] });
         }
       });
     }
-    function flood(torf, difficult){
+    function flood(difficult){
       new Flood({
         message : interact,
         isSlashGame: torf,
@@ -687,7 +687,7 @@ module.exports = class Functions {
         },
       }).startGame();
     }
-    function hangMan(torf){
+    function hangMan(){
       new Hangman({
         message : interact,
         isSlashGame: torf,
@@ -697,7 +697,7 @@ module.exports = class Functions {
         },
       }).startGame();
     }
-    function rockPaperScissors(torf, opponent){
+    function rockPaperScissors(opponent){
       new RockPaperScissors({
         message : interact,
         isSlashGame: torf,
@@ -708,7 +708,40 @@ module.exports = class Functions {
         },
       }).startGame();
     }
-    return { ctfRandom, footBallRandom, twozerofoureight, catchTheFish, flood, footBall, hangMan, rockPaperScissors }
+    function slots(){
+      new Slots({
+        message : interact,
+        isSlashGame: torf,
+        embed: {
+          title: 'Slots',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    function snake(){
+      new Snake({
+        message: interact,
+        isSlashGame: torf,
+        embed: {
+          title: 'Snake',
+          color: `${process.env.ec}`,
+          OverTitle: 'Game Over',
+        },
+        snake: { head: '🟢', body: '🟩', tail: '🟢', over: '💀' },
+        emojis: {
+          board: '⬛', 
+          food: '🍎',
+          up: '⬆️', 
+          right: '➡️',
+          down: '⬇️',
+          left: '⬅️',
+        },
+        foods: ['🍎', '🍇', '🍊', '🍈', '🍉', '🍊', '🍋', '🍌', '🍍', '🍏'],
+        stopButton: 'Stop',
+        othersMessage: 'You are not allowed to use buttons for this message!',
+      }).startGame();
+    }
+    return { ctfRandom, footBallRandom, twozerofoureight, catchTheFish, flood, footBall, hangMan, rockPaperScissors, slots, snake }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

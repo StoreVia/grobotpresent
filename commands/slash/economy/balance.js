@@ -5,7 +5,7 @@ const moment = require('moment');
 const db = require("quick.db");
 
 module.exports = class Userinfo extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('balance')
@@ -19,14 +19,14 @@ module.exports = class Userinfo extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     await interaction.deferReply();
     const UserOption = interaction.options.getUser('user') || interaction.user;
     let bal = db.fetch(`money_${UserOption.id}`);
     let bank = db.fetch(`bank_${UserOption.id}`);
-    if (bal === null) bal = 0;
-    if (bank === null) bank = 0;
+    if(bal === null) bal = 0;
+    if(bank === null) bank = 0;
     let Total = bal + bank;
 
     let moneyEmbed = new EmbedBuilder()

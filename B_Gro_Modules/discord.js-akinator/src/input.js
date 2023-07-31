@@ -12,9 +12,9 @@ const translate = require("./translate");
  * 
  */
 
-module.exports = async function awaitInput(useButtons, input, botMessage, isGuessFilter, translations, language) {
+module.exports = async function awaitInput(useButtons, input, botMessage, isGuessFilter, translations, language){
     //check if useButtons is true. If so, use buttons. If not, use text input
-    if (useButtons) {
+    if(useButtons){
         let yes = { type: 2, label: translations.yes, style: 3, custom_id: "✅", emoji: { name: "✅" } }
         let no = { type: 2, label: translations.no, style: 2, custom_id: "❌", emoji: { name: "❌" } }
         let back = { type: 2, label: translations.back, style: 2, custom_id: "⏪", emoji: { name: "⏪" } }
@@ -23,7 +23,7 @@ module.exports = async function awaitInput(useButtons, input, botMessage, isGues
 
         let answerTypes = [];
 
-        if (isGuessFilter) {
+        if(isGuessFilter){
             answerTypes = [yes, no]
         }
         else {
@@ -31,12 +31,12 @@ module.exports = async function awaitInput(useButtons, input, botMessage, isGues
         }
 
         let choice = await buttonMenu(input.client, input, botMessage, answerTypes, 60000);
-        if (!choice) return null;
+        if(!choice) return null;
         else return choice;
     }
     else {
         let filter;
-        if (isGuessFilter) {
+        if(isGuessFilter){
             filter = x => {
                 return (x.author.id === input.author.id && ([
                     "y",
@@ -73,13 +73,13 @@ module.exports = async function awaitInput(useButtons, input, botMessage, isGues
             time: 60000
         })
 
-        if (!response.size) {
+        if(!response.size){
             return null
         }
         else {
             await response.first().delete();
             const responseText = String(response.first()).toLowerCase();
-            if (["y", "n", "i", "idk", "b", "s"].includes(responseText)) return responseText; //skip translation for these responses
+            if(["y", "n", "i", "idk", "b", "s"].includes(responseText)) return responseText; //skip translation for these responses
             return await translate(responseText, language);
         }
 

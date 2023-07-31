@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageHug extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "hug",
   			category: "fun",
@@ -11,13 +11,13 @@ module.exports = class MessageHug extends Command {
   			description: "Hug Someone.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let user = message.mentions.members.first();
 		let attachment = await client.functions.hug();
 		let msgdefer = await client.functions.deferReply().message(message);
 
-		if (!user){
+		if(!user){
 			return msgdefer.edit({ content: `> Mention Someone To Hug.` })
 		} else if(user.id === message.author.id){
 			return msgdefer.edit({ files: [attachment], content: `${message.author} You Can't Hug Yourselft. Come I Will Hug You 🥰.` })

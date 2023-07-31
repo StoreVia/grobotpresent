@@ -4,13 +4,13 @@ const db = require(`quick.db`);
 const Discord = require(`discord.js`);
 
 module.exports = class GuildMemberAdd extends Event {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'guildMemberAdd',
 			category: 'guild',
 		});
 	}
-	async run(member) {
+	async run(member){
 
 		const client = this.client;
 
@@ -44,9 +44,9 @@ module.exports = class GuildMemberAdd extends Event {
             member.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th Member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}], components: [row]})
         }
 
-        if (!server) {
+        if(!server){
             return;
-        } else if (server) {
+        } else if(server){
             let text = db.fetch(`welcometext_${member.guild.id}`) || "<MemberMention>, Welcome To <ServerName>."
             const text1 = text.replace('<MemberMention>', `${member}`)
                 .replace('<MemberCount>', `${member.guild.memberCount}`)

@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Google extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('google')
@@ -16,7 +16,7 @@ module.exports = class Google extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		
 
 		const query = interaction.options.getString(`query`);

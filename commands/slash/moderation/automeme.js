@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, Butt
 const db = require(`quick.db`)
 
 module.exports = class Avatar extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('automeme')
@@ -28,7 +28,7 @@ module.exports = class Avatar extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
         
         await interaction.deferReply({ ephemeral: true })
         let automemedb = client.db.table(`automeme`)

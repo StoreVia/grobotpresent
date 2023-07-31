@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class Avatar extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('avatar')
@@ -25,7 +25,7 @@ module.exports = class Avatar extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply();
 		let result = interaction.options.getString(`size`)

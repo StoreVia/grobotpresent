@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionVaporText extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('vaportext')
@@ -16,7 +16,7 @@ module.exports = class InteractionVaporText extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {   
+	async run(client, interaction){   
 
         await interaction.deferReply();
         const args = await client.functions.getOptions(interaction).string(`text`);

@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder, Embed } = require('discord.js');
 const db = require(`quick.db`);
 
 module.exports = class Ping extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('deposit')
@@ -19,7 +19,7 @@ module.exports = class Ping extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
        await interaction.deferReply();
        let user = interaction.user;

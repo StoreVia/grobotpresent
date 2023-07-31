@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Slots } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionSlots extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('slots')
@@ -13,14 +13,8 @@ module.exports = class InteractionSlots extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
-        new Slots({
-            message : interaction,
-            isSlashGame: true,
-            embed: {
-              title: 'Slots',
-              color: `${process.env.ec}`,
-            },
-        }).startGame();
+	async run(client, interaction){
+		
+		await client.functions.games(interaction, true).slots()
 	}
 };

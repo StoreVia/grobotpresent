@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Trivia } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionTrivia extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('trivia')
@@ -13,7 +13,7 @@ module.exports = class InteractionTrivia extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         new Trivia({
             message: interaction,

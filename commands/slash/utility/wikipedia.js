@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Wikipedia extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('wikipedia')
@@ -16,7 +16,7 @@ module.exports = class Wikipedia extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		const query = interaction.options.getString(`query`)
 
@@ -37,7 +37,7 @@ module.exports = class Wikipedia extends Command {
 						});
 					await interaction.deferReply();
 					interaction.followUp({ embeds: [embed] })
-				} catch(e) {
+				} catch(e){
 					await interaction.deferReply({ ephemeral: true });
 					interaction.followUp({ content: `> No Query Found For \`${query}\`` })
 				}
@@ -55,7 +55,7 @@ module.exports = class Wikipedia extends Command {
 					 	});
 					await interaction.deferReply();
 					interaction.followUp({ embeds: [embed] })
-				} catch(e) {
+				} catch(e){
 					await interaction.deferReply({ ephemeral: true });
 					interaction.followUp({ content: `> No Query Found For \`${query}\`` })
 				}

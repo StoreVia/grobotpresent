@@ -2,7 +2,7 @@ const Command = require('../../../structures/MessageCommandClass');
 const { PermissionsBitField } = require('discord.js');
 
 module.exports = class MessageChatBotDelete extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "chatbotdelete",
   			category: "chatbot",
@@ -12,7 +12,7 @@ module.exports = class MessageChatBotDelete extends Command {
   			description: "Delete Chatbot Channel.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		const chatbotdb = client.db.table(`chatbot`);
         const checkchannel = await chatbotdb.get(`${message.guild.id}`);

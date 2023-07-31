@@ -4,7 +4,7 @@ const { Snake } = require('../index');
 
 
 client.on('messageCreate', async (message) => {
-  if(message.content === '!snake') {
+  if(message.content === '!snake'){
     const Game = new Snake({
       message: message,
       isSlashGame: false,

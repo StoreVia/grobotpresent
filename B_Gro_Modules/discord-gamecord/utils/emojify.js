@@ -1,9 +1,9 @@
-module.exports = function (content) {
+module.exports = function (content){
   content = content.toLowerCase().split('');
 
   content = content.map(letter => {
-    if (/[a-z]/g.test(letter)) return `:regional_indicator_${letter}:`;
-    else if (this.chars[letter]) return this.chars[letter];
+    if(/[a-z]/g.test(letter)) return `:regional_indicator_${letter}:`;
+    else if(this.chars[letter]) return this.chars[letter];
     else return letter;
   })
 

@@ -3,7 +3,7 @@ const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
 const titlecase = require(`titlecase`);
 
 module.exports = class InteractionMeme extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('meme')
@@ -14,7 +14,7 @@ module.exports = class InteractionMeme extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply();
 		let buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);

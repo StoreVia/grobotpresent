@@ -70,8 +70,8 @@ With Discord.js Akinator, you can choose whether you want to use a message, or a
 
 ```js
 client.on("interactionCreate", async interaction => {
-    if (!interaction.isChatInputCommand()) return; // If the interaction is not a slash command, do nothing
-    if (interaction.commandName === "akinator") { // If the user sends "/akinator"...
+    if(!interaction.isChatInputCommand()) return; // If the interaction is not a slash command, do nothing
+    if(interaction.commandName === "akinator"){ // If the user sends "/akinator"...
         akinator(interaction, {
             language: language, // Defaults to "en"
             childMode: childMode, // Defaults to "false"
@@ -91,7 +91,7 @@ client.on("interactionCreate", async interaction => {
 const PREFIX = "!"; // Your bot's command prefix
 
 client.on("messageCreate", async message => {
-    if (message.content.startsWith(`${PREFIX}akinator`)) { // When the user types "!akinator"...
+    if(message.content.startsWith(`${PREFIX}akinator`)){ // When the user types "!akinator"...
         akinator(message, {
             language: language, // Defaults to "en"
             childMode: childMode, // Defaults to "false"

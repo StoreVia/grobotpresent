@@ -2,7 +2,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessagePing extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "wikipedia",
   			category: "utility",
@@ -12,7 +12,7 @@ module.exports = class MessagePing extends Command {
   			description: "Search Something In Wikipedia.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 		
 		const query = args.join(" ");
 		
@@ -35,7 +35,7 @@ module.exports = class MessagePing extends Command {
 								iconURL: process.env.iconurl
 							});
 						await message.reply({ embeds: [embed] })
-					} catch(e) {
+					} catch(e){
 						await message.reply({ content: `> No Query Found For \`${query}\`` })
 					}
 				} else {
@@ -51,7 +51,7 @@ module.exports = class MessagePing extends Command {
 								iconURL: process.env.iconurl
 							});
 						await message.reply({ embeds: [embed] })
-					} catch(e) {
+					} catch(e){
 						await message.reply({ content: `> No Query Found For \`${query}\`` })
 					}
 				}

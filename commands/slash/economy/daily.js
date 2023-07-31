@@ -6,7 +6,7 @@ const ms = require("parse-ms-2");
 const db = require("quick.db");
 
 module.exports = class Userinfo extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('daily')
@@ -16,7 +16,7 @@ module.exports = class Userinfo extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     await interaction.deferReply();
     let user = interaction.user;
@@ -25,7 +25,7 @@ module.exports = class Userinfo extends Command {
     let amount = 5000;
 
     
-    if (daily !== null && timeout - (Date.now() - daily) > 0) {
+    if(daily !== null && timeout - (Date.now() - daily) > 0){
         let time = ms(timeout - (Date.now() - daily));
         let timeEmbed = new EmbedBuilder()
             .setColor(`${process.env.ec}`)

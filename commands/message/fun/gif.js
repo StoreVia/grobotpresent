@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageGif extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "gif",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageGif extends Command {
   			description: "Search For A Gif.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 
 		let string = args.join(" ");
 		let msgdefer = await client.functions.deferReply().message(message);

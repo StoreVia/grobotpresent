@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionCatsay extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('catsay')
@@ -17,7 +17,7 @@ module.exports = class InteractionCatsay extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     	await interaction.deferReply();
     	await interaction.followUp({ files: [{ attachment: `${await client.functions.catSay(await client.functions.getOptions(interaction).string(`string`))}`, name: "catsay.png" }]})

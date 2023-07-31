@@ -1,5 +1,5 @@
 module.exports = class Command {
-    constructor(client, meta = {}) {
+    constructor(client, meta = {}){
         this.client = client;
         this.name = meta.name;
         this.category = meta.category;
@@ -7,7 +7,7 @@ module.exports = class Command {
         this.alias = meta.alias;
     }
 
-    async run() {
+    async run(){
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Run Method.`);
     }
 };

@@ -5,7 +5,7 @@ const moment = require('moment');
 const db = require("quick.db");
 
 module.exports = class Userinfo extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('inventory')
@@ -19,25 +19,25 @@ module.exports = class Userinfo extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     await interaction.deferReply();
     const user = interaction.options.getUser('user') || interaction.user;
 
     let steel = db.fetch(`steel_${user.id}`)
-    if (steel === null) steel = 0;
+    if(steel === null) steel = 0;
 
     let silver = db.fetch(`silver_${user.id}`)
-    if (silver === null) silver = 0;
+    if(silver === null) silver = 0;
 
     let gold = db.fetch(`gold_${user.id}`)
-    if (gold === null) gold = 0;
+    if(gold === null) gold = 0;
 
     let diamond = db.fetch(`diamond_${user.id}`)
-    if (diamond === null) diamond = 0;
+    if(diamond === null) diamond = 0;
 
     let platinum = db.fetch(`platinum_${user.id}`)
-    if (platinum === null) platinum = 0;
+    if(platinum === null) platinum = 0;
 
     let moneyEmbed = new EmbedBuilder()
         .setTitle(`Inventory Of \`${user.username}\``)

@@ -3,7 +3,7 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Embed
 const dare = require(`../../../A_Gro_db/dare.json`);
 
 module.exports = class Dare extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('dare')
@@ -14,7 +14,7 @@ module.exports = class Dare extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		
 		await interaction.deferReply();
 
@@ -44,7 +44,7 @@ module.exports = class Dare extends Command {
 		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
-			if (i.user.id != interaction.user.id) {
+			if(i.user.id != interaction.user.id){
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} else if(i.customId === "dare"){
                 let embed = new EmbedBuilder()
@@ -63,7 +63,7 @@ module.exports = class Dare extends Command {
 		})
 
 		collector.on('end', async (_, reason) => {
-			if (reason === 'idle' || reason === 'user') {
+			if(reason === 'idle' || reason === 'user'){
 				buttonRow.components.map(component=> component.setDisabled(true));
 				await interaction.editReply({ components: [buttonRow] });
 			}

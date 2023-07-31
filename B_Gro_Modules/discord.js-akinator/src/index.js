@@ -8,18 +8,18 @@ const cu = "GroBot";
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`);
 
 // this simply gets the user's reply from a button interaction (that is, if the user has chosen to enable buttons)
-function getButtonReply(interaction) {
+function getButtonReply(interaction){
     interaction = interaction.customId;
-    if (interaction === "✅") return "y"; // yes
-    else if (interaction === "❌") return "n"; //no 
-    else if (interaction === "⏪") return "b"; // back
-    else if (interaction === "🤷") return "i"; // don't know
-    else if (interaction === "🛑") return "s"; // stop game
+    if(interaction === "✅") return "y"; // yes
+    else if(interaction === "❌") return "n"; //no 
+    else if(interaction === "⏪") return "b"; // back
+    else if(interaction === "🤷") return "i"; // don't know
+    else if(interaction === "🛑") return "s"; // stop game
     else return null;
 };
 
-module.exports = async function (input, options = {}) {
-    if (Discord.version.split(".")[0] < 14) return console.log("Discord.js Akinator Error: Discord.js v14 or Higher is Required.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
+module.exports = async function (input, options = {}){
+    if(Discord.version.split(".")[0] < 14) return console.log("Discord.js Akinator Error: Discord.js v14 or Higher is Required.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
 
     let inputData = {};
     try {
@@ -33,11 +33,11 @@ module.exports = async function (input, options = {}) {
         options.gameType = options.gameType.toLowerCase();
 
         // error handling
-        if (!input) return console.log("Discord.js Akinator Error: Message or CommandInteraction was not Provided.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
-        if (!input.client) return console.log("Discord.js Akinator Error: Message or CommandInteration Provided was Invalid.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
-        if (!input.guild) return console.log("Discord.js Akinator Error: Cannot be used in Direct Messages.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
-        if (!fs.existsSync(`${__dirname}/translations/${options.language}.json`)) return console.log(`Discord.js Akinator Error: Language "${options.language}" Not Found. Examples are: "en" or "fr" or "es".\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'`);
-        if (!["animal", "character", "object"].includes(options.gameType)) return console.log(`Discord.js Akinator Error: Game Type "${options.gameType}" Not Found. Choose from: "animal", "character" or "object".\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'`);
+        if(!input) return console.log("Discord.js Akinator Error: Message or CommandInteraction was not Provided.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
+        if(!input.client) return console.log("Discord.js Akinator Error: Message or CommandInteration Provided was Invalid.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
+        if(!input.guild) return console.log("Discord.js Akinator Error: Cannot be used in Direct Messages.\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'");
+        if(!fs.existsSync(`${__dirname}/translations/${options.language}.json`)) return console.log(`Discord.js Akinator Error: Language "${options.language}" Not Found. Examples are: "en" or "fr" or "es".\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'`);
+        if(!["animal", "character", "object"].includes(options.gameType)) return console.log(`Discord.js Akinator Error: Game Type "${options.gameType}" Not Found. Choose from: "animal", "character" or "object".\nNeed Help? Join Our Discord Server at 'https://discord.gg/P2g24jp'`);
 
         try {
             inputData.client = input.client,
@@ -114,11 +114,11 @@ module.exports = async function (input, options = {}) {
 
         let startingMessage;
 
-        if ((input.commandName !== undefined) && (!input.replied) && (!input.deferred)) { // check if it's a slash command and hasn't been replied or deferred
+        if((input.commandName !== undefined) && (!input.replied) && (!input.deferred)){ // check if it's a slash command and hasn't been replied or deferred
             await input.deferReply();
             startingMessage = await input.editReply({ embeds: [startingEmbed], components: [buttonRow, buttonRow1]  })
         } else {
-            if (input.commandName !== undefined) { //check if it's a slash command
+            if(input.commandName !== undefined){ //check if it's a slash command
                 startingMessage = await input.editReply({ embeds: [startingEmbed], components: [buttonRow, buttonRow1] })
             }
             else { startingMessage = await input.channel.send({ embeds: [startingEmbed], components: [buttonRow, buttonRow1]  }) } // else, the input is a message
@@ -155,26 +155,26 @@ module.exports = async function (input, options = {}) {
       iconURL: process.env.iconurl
 })
 
-        if (!options.useButtons) {
+        if(!options.useButtons){
             akiEmbed.footer = { text: translations.stopTip }
             akiEmbed.fields.push({ name: translations.pleaseType, value: `**Y** or **${translations.yes}**\n**N** or **${translations.no}**\n**I** or **IDK**\n**P** or **${translations.probably}**\n**PN** or **${translations.probablyNot}**\n**B** or **${translations.back}**` })
         }
 
         let akiMessage;
 
-        if (input.commandName !== undefined) { //check if it's a slash command
+        if(input.commandName !== undefined){ //check if it's a slash command
             akiMessage = await input.editReply({ embeds: [akiEmbed] })
         } else { akiMessage = await startingMessage.edit({ embeds: [akiEmbed] }); } // else, the input is a message
 
         let updatedAkiEmbed = akiMessage.embeds[0];
 
         // repeat while the game is not finished
-        while (notFinished) {
-            if (!notFinished) return;
+        while (notFinished){
+            if(!notFinished) return;
 
             stepsSinceLastGuess = stepsSinceLastGuess + 1
 
-            if (((aki.progress >= 95 && (stepsSinceLastGuess >= 10 || hasGuessed == false)) || aki.currentStep >= 78) && (!attemptingGuess.has(inputData.guild.id))) {
+            if(((aki.progress >= 95 && (stepsSinceLastGuess >= 10 || hasGuessed == false)) || aki.currentStep >= 78) && (!attemptingGuess.has(inputData.guild.id))){
                 attemptingGuess.add(inputData.guild.id)
                 await aki.win();
 
@@ -202,19 +202,19 @@ module.exports = async function (input, options = {}) {
 
                 await awaitInput(options.useButtons, inputData, akiMessage, true, translations, options.language)
                     .then(async response => {
-                        if (response === null) {
+                        if(response === null){
                             notFinished = false;
                             akiMessage.edit({ embeds: [noResEmbed], components: [] })
                             return;
                         }
-                        if (options.useButtons !== false) await response.deferUpdate()
+                        if(options.useButtons !== false) await response.deferUpdate()
                         let reply = getButtonReply(response) || response
                         const guessAnswer = reply.toLowerCase();
 
                         attemptingGuess.delete(inputData.guild.id)
 
                         // if they answered yes
-                        if (guessAnswer == "y" || guessAnswer == translations.yes.toLowerCase()) {
+                        if(guessAnswer == "y" || guessAnswer == translations.yes.toLowerCase()){
                             let finishedGameCorrect = {
                                 title: translations.wellPlayed,
                                 description: `**${inputData.author.username}, ${translations.guessedRightOneMoreTime}**`,
@@ -227,14 +227,14 @@ module.exports = async function (input, options = {}) {
                                 ]
                             }
 
-                            if (options.useButtons) await response.editReply({ embeds: [finishedGameCorrect], components: [] })
+                            if(options.useButtons) await response.editReply({ embeds: [finishedGameCorrect], components: [] })
                             else await akiMessage.edit({ embeds: [finishedGameCorrect], components: [] })
                             notFinished = false;
                             return;
 
                             // otherwise
-                        } else if (guessAnswer == "n" || guessAnswer == translations.no.toLowerCase()) {
-                            if (aki.currentStep >= 78) {
+                        } else if(guessAnswer == "n" || guessAnswer == translations.no.toLowerCase()){
+                            if(aki.currentStep >= 78){
                                 let finishedGameDefeated = {
                                     thumbnail: {
                                         url: 'https://i.imgur.com/SCjjjEa.png',
@@ -246,11 +246,11 @@ module.exports = async function (input, options = {}) {
                                     author: { name: usertag, icon_url: avatar }
                                 }
 
-                                if (options.useButtons) await response.editReply({ embeds: [finishedGameDefeated], components: [] })
+                                if(options.useButtons) await response.editReply({ embeds: [finishedGameDefeated], components: [] })
                                 else await akiMessage.edit({ embeds: [finishedGameDefeated], components: [] })
                                 notFinished = false;
                             } else {
-                                if (options.useButtons) await response.editReply({ embeds: [guessEmbed], components: [] })
+                                if(options.useButtons) await response.editReply({ embeds: [guessEmbed], components: [] })
                                 else await akiMessage.edit({ embeds: [guessEmbed], components: [] })
                                 aki.progress = 50
                             }
@@ -258,9 +258,9 @@ module.exports = async function (input, options = {}) {
                     });
             }
 
-            if (!notFinished) return;
+            if(!notFinished) return;
 
-            if (updatedAkiEmbed !== akiMessage.embeds[0]) {
+            if(updatedAkiEmbed !== akiMessage.embeds[0]){
                 updatedAkiEmbed = {
                     thumbnail: {
                         url: 'https://i.imgur.com/SCjjjEa.png',
@@ -273,7 +273,7 @@ module.exports = async function (input, options = {}) {
                     author: { name: usertag, icon_url: avatar }
                 }
 
-                if (!options.useButtons) {
+                if(!options.useButtons){
                     updatedAkiEmbed.footer = { text: translations.stopTip }
                     updatedAkiEmbed.fields.push({ name: translations.pleaseType, value: `**Y** or **${translations.yes}**\n**N** or **${translations.no}**\n**I** or **IDK**\n**P** or **${translations.probably}**\n**PN** or **${translations.probablyNot}**\n**B** or **${translations.back}**` })
                 }
@@ -283,12 +283,12 @@ module.exports = async function (input, options = {}) {
 
             await awaitInput(options.useButtons, inputData, akiMessage, false, translations, options.language)
                 .then(async response => {
-                    if (response === null) {
+                    if(response === null){
                         await aki.win()
                         notFinished = false;
                         return akiMessage.edit({ embeds: [noResEmbed], components: [] })
                     }
-                    if (options.useButtons !== false) await response.deferUpdate()
+                    if(options.useButtons !== false) await response.deferUpdate()
                     let reply = getButtonReply(response) || response
                     const answer = reply.toLowerCase();
 
@@ -321,7 +321,7 @@ module.exports = async function (input, options = {}) {
                         author: { name: usertag, icon_url: avatar },
                     }
 
-                    if (!options.useButtons) thinkingEmbed.fields.push({ name: translations.pleaseType, value: `**Y** or **${translations.yes}**\n**N** or **${translations.no}**\n**I** or **IDK**\n**P** or **${translations.probably}**\n**PN** or **${translations.probablyNot}**\n**B** or **${translations.back}**` })
+                    if(!options.useButtons) thinkingEmbed.fields.push({ name: translations.pleaseType, value: `**Y** or **${translations.yes}**\n**N** or **${translations.no}**\n**I** or **IDK**\n**P** or **${translations.probably}**\n**PN** or **${translations.probablyNot}**\n**B** or **${translations.back}**` })
 
                     
 
@@ -368,17 +368,17 @@ module.exports = async function (input, options = {}) {
                                 .setStyle(ButtonStyle.Danger),
                         );
 
-                    if (options.useButtons) await response.editReply({ embeds: [thinkingEmbed], components: [buttonRow, buttonRow1] })
+                    if(options.useButtons) await response.editReply({ embeds: [thinkingEmbed], components: [buttonRow, buttonRow1] })
                     else await akiMessage.edit({ embeds: [thinkingEmbed], components: [buttonRow, buttonRow1] })
                     akiMessage.embeds[0] = thinkingEmbed
 
-                    if (answer == "b" || answer == translations.back.toLowerCase()) {
-                        if (aki.currentStep >= 1) {
+                    if(answer == "b" || answer == translations.back.toLowerCase()){
+                        if(aki.currentStep >= 1){
                             await aki.back();
                         }
 
                         // stop the game if the user selected to stop
-                    } else if (answer == "s" || answer == translations.stop.toLowerCase()) {
+                    } else if(answer == "s" || answer == translations.stop.toLowerCase()){
                         let stopEmbed = {
                             thumbnail: {
                                 url: 'https://i.imgur.com/SCjjjEa.png',
@@ -397,13 +397,13 @@ module.exports = async function (input, options = {}) {
                         await aki.step(answers[answer]);
                     }
 
-                    if (!notFinished) return;
+                    if(!notFinished) return;
                 });
         }
-    } catch (e) {
+    } catch (e){
         // log any errors that come
         attemptingGuess.delete(inputData.guild.id)
-        if (e == "DiscordAPIError: Unknown Message") return;
+        if(e == "DiscordAPIError: Unknown Message") return;
         console.log("Discord.js Akinator Error:")
         console.log(e);
     }

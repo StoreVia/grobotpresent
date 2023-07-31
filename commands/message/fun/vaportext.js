@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageVaporText extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "vaportext",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageVaporText extends Command {
   			description: "Convert Normal Text To Vapor Text.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 
 		let msgdefer = await client.functions.deferReply().message(message);
         let string = args.join(" ");

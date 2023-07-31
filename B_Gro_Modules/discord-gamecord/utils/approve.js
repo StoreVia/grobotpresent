@@ -5,22 +5,22 @@ const cu = "GroBot";
 
 
 module.exports = class Approve extends events {
-  constructor(options = {}) {
+  constructor(options = {}){
 
-    if (!options.embed) options.embed = {};
-    if (!options.embed.requestTitle) options.embed.requestTitle = options.embed.title;
-    if (!options.embed.requestColor) options.embed.requestColor = options.embed.color;
-    if (!options.embed.rejectTitle) options.embed.rejectTitle = options.embed.title;
-    if (!options.embed.rejectColor) options.embed.rejectColor = options.embed.color;
+    if(!options.embed) options.embed = {};
+    if(!options.embed.requestTitle) options.embed.requestTitle = options.embed.title;
+    if(!options.embed.requestColor) options.embed.requestColor = options.embed.color;
+    if(!options.embed.rejectTitle) options.embed.rejectTitle = options.embed.title;
+    if(!options.embed.rejectColor) options.embed.rejectColor = options.embed.color;
 
-    if (!options.buttons) options.buttons = {};
-    if (!options.buttons.accept) options.buttons.accept = 'Accept';
-    if (!options.buttons.reject) options.buttons.reject = 'Reject';
+    if(!options.buttons) options.buttons = {};
+    if(!options.buttons.accept) options.buttons.accept = 'Accept';
+    if(!options.buttons.reject) options.buttons.reject = 'Reject';
 
-    if (!options.reqTimeoutTime) options.reqTimeoutTime = 30000;
-    if (!options.requestMessage) options.requestMessage = '{opponent}, {player} Has Invited You For Game.';
-    if (!options.rejectMessage) options.rejectMessage = 'The Player Rejected To Play With You.';
-    if (!options.reqTimeoutMessage) options.reqTimeoutMessage = `Game Canceled As Player Didn't Respond.`;
+    if(!options.reqTimeoutTime) options.reqTimeoutTime = 30000;
+    if(!options.requestMessage) options.requestMessage = '{opponent}, {player} Has Invited You For Game.';
+    if(!options.rejectMessage) options.rejectMessage = 'The Player Rejected To Play With You.';
+    if(!options.reqTimeoutMessage) options.reqTimeoutMessage = `Game Canceled As Player Didn't Respond.`;
 
     super();
     this.options = options;
@@ -29,13 +29,13 @@ module.exports = class Approve extends events {
   }
 
   
-  async sendMessage(content) {
-    if (this.options.isSlashGame) return await this.message.editReply(content);
+  async sendMessage(content){
+    if(this.options.isSlashGame) return await this.message.editReply(content);
     else return await this.message.channel.send(content);
   }
 
 
-  async approve() {
+  async approve(){
     return new Promise(async resolve => {
 
       const embed = new EmbedBuilder()
@@ -55,11 +55,11 @@ module.exports = class Approve extends events {
 
       collector.on('collect', async btn => {
         await btn.deferUpdate().catch(e => {});
-        if (btn.user.id === this.opponent.id) collector.stop(btn.customId.split('_')[1]);
+        if(btn.user.id === this.opponent.id) collector.stop(btn.customId.split('_')[1]);
       })
 
       collector.on('end', async (_, reason) => {
-        if (reason === 'accept') return resolve(msg);
+        if(reason === 'accept') return resolve(msg);
 
         const embed = new EmbedBuilder()
         .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
@@ -68,7 +68,7 @@ module.exports = class Approve extends events {
         .setTitle(this.options.embed.rejectTitle)
         .setDescription(formatMessage(this.options, 'rejectMessage'))
 
-        if (reason === 'time') embed.setDescription(formatMessage(this.options, 'reqTimeoutMessage'));
+        if(reason === 'time') embed.setDescription(formatMessage(this.options, 'reqTimeoutMessage'));
         this.emit('gameOver', { result: reason, player: this.message.author, opponent: this.opponent });
         await msg.edit({ content: null, embeds: [embed], components: [] });
         return resolve(false);

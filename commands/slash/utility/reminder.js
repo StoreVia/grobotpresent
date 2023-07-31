@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const ms = require("ms");
 
 module.exports = class Reminder extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('reminder')
@@ -22,7 +22,7 @@ module.exports = class Reminder extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
         
     let user = interaction.user;
     let time = interaction.options.getString("time")

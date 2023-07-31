@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageTwoZeroFourEight extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "2048",
   			category: "games",
@@ -11,8 +11,8 @@ module.exports = class MessageTwoZeroFourEight extends Command {
   			description: "Play 2048 Game.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
-        await client.functions.games(message).twozerofoureight(false);
+        await client.functions.games(message, false).twozerofoureight();
 	}
 };

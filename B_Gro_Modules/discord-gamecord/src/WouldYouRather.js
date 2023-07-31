@@ -6,36 +6,36 @@ const cu = `GroBot`;
 
 
 module.exports = class WouldYouRather extends events {
-  constructor(options = {}) {
+  constructor(options = {}){
 
-    if (!options.isSlashGame) options.isSlashGame = false;
-    if (!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
-    if (typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
-    if (typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
-
-
-    if (!options.embed) options.embed = {};
-    if (!options.embed.title) options.embed.title = 'Would You Rather';
-    if (!options.embed.color) options.embed.color = '#5865F2';
-
-    if (!options.buttons) options.buttons = {};
-    if (!options.buttons.option1) options.buttons.option1 = 'Option 1';
-    if (!options.buttons.option2) options.buttons.option2 = 'Option 2';
-    if (!options.errMessage) options.errMessage = 'Unable To Connect To Api. Try Again Later.';
-    if (!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+    if(!options.isSlashGame) options.isSlashGame = false;
+    if(!options.message) throw new TypeError('NO_MESSAGE: No message option was provided.');
+    if(typeof options.message !== 'object') throw new TypeError('INVALID_MESSAGE: message option must be an object.');
+    if(typeof options.isSlashGame !== 'boolean') throw new TypeError('INVALID_COMMAND_TYPE: isSlashGame option must be a boolean.');
 
 
-    if (typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
-    if (typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
-    if (typeof options.embed.color !== 'string') throw new TypeError('INVALID_EMBED: embed color must be a string.');
-    if (typeof options.buttons !== 'object') throw new TypeError('INVALID_BUTTON: buttons option must be an object.');
-    if (typeof options.buttons.option1 !== 'string') throw new TypeError('INVALID_BUTTON: option1 button must be a string.');
-    if (typeof options.buttons.option2 !== 'string') throw new TypeError('INVALID_BUTTON: option2 button must be a string.');
-    if (typeof options.buttonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
-    if (typeof options.errMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Error message option must be a string.');
-    if (options.playerOnlyMessage !== false) {
-      if (!options.playerOnlyMessage) options.playerOnlyMessage = 'This Interaction Is Not For You.';
-      if (typeof options.playerOnlyMessage !== 'string') throw new TypeError('INVALID_MESSAGE: playerOnly Message option must be a string.');
+    if(!options.embed) options.embed = {};
+    if(!options.embed.title) options.embed.title = 'Would You Rather';
+    if(!options.embed.color) options.embed.color = '#5865F2';
+
+    if(!options.buttons) options.buttons = {};
+    if(!options.buttons.option1) options.buttons.option1 = 'Option 1';
+    if(!options.buttons.option2) options.buttons.option2 = 'Option 2';
+    if(!options.errMessage) options.errMessage = 'Unable To Connect To Api. Try Again Later.';
+    if(!options.buttonStyle) options.buttonStyle = 'PRIMARY';
+
+
+    if(typeof options.embed !== 'object') throw new TypeError('INVALID_EMBED: embed option must be an object.');
+    if(typeof options.embed.title !== 'string') throw new TypeError('INVALID_EMBED: embed title must be a string.');
+    if(typeof options.embed.color !== 'string') throw new TypeError('INVALID_EMBED: embed color must be a string.');
+    if(typeof options.buttons !== 'object') throw new TypeError('INVALID_BUTTON: buttons option must be an object.');
+    if(typeof options.buttons.option1 !== 'string') throw new TypeError('INVALID_BUTTON: option1 button must be a string.');
+    if(typeof options.buttons.option2 !== 'string') throw new TypeError('INVALID_BUTTON: option2 button must be a string.');
+    if(typeof options.buttonStyle !== 'string') throw new TypeError('INVALID_BUTTON_STYLE: button style must be a string.');
+    if(typeof options.errMessage !== 'string') throw new TypeError('INVALID_MESSAGE: Error message option must be a string.');
+    if(options.playerOnlyMessage !== false){
+      if(!options.playerOnlyMessage) options.playerOnlyMessage = 'This Interaction Is Not For You.';
+      if(typeof options.playerOnlyMessage !== 'string') throw new TypeError('INVALID_MESSAGE: playerOnly Message option must be a string.');
     }
 
     super();
@@ -45,24 +45,24 @@ module.exports = class WouldYouRather extends events {
   }
 
 
-  async sendMessage(content) {
-    if (this.options.isSlashGame) return await this.message.editReply(content);
+  async sendMessage(content){
+    if(this.options.isSlashGame) return await this.message.editReply(content);
     else return await this.message.channel.send(content);
   }
 
-  async getWyrQuestion() {
+  async getWyrQuestion(){
     return await fetch('https://api.aniket091.xyz/wyr').then(res => res.json()).then(res => res?.data).catch(e => { return {} });
   }
 
 
-  async startGame() {
-    if (this.options.isSlashGame) {
-      if (!this.message.deferred) await this.message.deferReply().catch(e => {});
+  async startGame(){
+    if(this.options.isSlashGame){
+      if(!this.message.deferred) await this.message.deferReply().catch(e => {});
       this.message.author = this.message.user;
     }
 
     this.data = await this.getWyrQuestion();
-    if (!this.data.title) return this.sendMessage({ content: this.options.errMessage });
+    if(!this.data.title) return this.sendMessage({ content: this.options.errMessage });
 
 
     const embed = new EmbedBuilder()
@@ -85,8 +85,8 @@ module.exports = class WouldYouRather extends events {
 
     collector.on('collect', async btn => {
       await btn.deferUpdate().catch(e => {});
-      if (btn.user.id !== this.message.author.id) {
-        if (this.options.playerOnlyMessage) btn.followUp({ content: formatMessage(this.options, 'playerOnlyMessage'), ephemeral: true });
+      if(btn.user.id !== this.message.author.id){
+        if(this.options.playerOnlyMessage) btn.followUp({ content: formatMessage(this.options, 'playerOnlyMessage'), ephemeral: true });
         return;
       }
 
@@ -96,7 +96,7 @@ module.exports = class WouldYouRather extends events {
   }
 
 
-  async gameOver(msg, result) {
+  async gameOver(msg, result){
     const WouldYouRatherGame = { player: this.message.author, question: this.data, selected: this.data['option'+result] };
     this.emit('gameOver', { result: 'finish', ...WouldYouRatherGame });
 
@@ -111,7 +111,7 @@ module.exports = class WouldYouRather extends events {
     .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: 'Details', value: `**Title:** ${this.data.title}\n**Author:** ${this.data.author}` })
 
-    if (result === '1') embed.setDescription(`**1. ${this.data.option1} (${prnt1}%)**\n2. ${this.data.option2} (${prnt2})%`);
+    if(result === '1') embed.setDescription(`**1. ${this.data.option1} (${prnt1}%)**\n2. ${this.data.option2} (${prnt2})%`);
     else embed.setDescription(`1. ${this.data.option1} (${prnt1}%)\n**2. ${this.data.option2} (${prnt2})%**`);
     
     return await msg.edit({ embeds: [embed], components: [] });    

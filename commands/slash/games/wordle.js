@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Wordle } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionWordle extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('wordle')
@@ -13,7 +13,7 @@ module.exports = class InteractionWordle extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         new Wordle({
             message: interaction,

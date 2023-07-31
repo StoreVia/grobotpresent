@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageKnowWhatIMeme extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "knowwhatimeme",
   			category: "activities",
@@ -11,7 +11,7 @@ module.exports = class MessageKnowWhatIMeme extends Command {
   			description: "Use KnowWhatIMeme Activity.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 		
         let voicechannelcheck = await client.functions.voiceChannel().message(message);
 		let msgdefer = await client.functions.deferReply().message(message);

@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageYoutube extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "youtube",
   			category: "activities",
@@ -11,7 +11,7 @@ module.exports = class MessageYoutube extends Command {
   			description: "Use Youtube Activity.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 		
         let voicechannelcheck = await client.functions.voiceChannel().message(message);
 

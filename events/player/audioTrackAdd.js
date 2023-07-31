@@ -2,13 +2,13 @@ const PlayerEvent = require('../../structures/PlayerEventClass');
 const Discord = require(`discord.js`);
 
 module.exports = class AudioTrackAdd extends PlayerEvent {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'audioTrackAdd',
 			category: 'player',
 		});
 	}
-	async run(queue, track) {
+	async run(queue, track){
         
 		const client = this.client;
 

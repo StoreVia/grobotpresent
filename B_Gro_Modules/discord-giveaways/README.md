@@ -77,7 +77,7 @@ You can pass an options object to customize the giveaways. Here is a list of the
 client.on('interactionCreate', (interaction) => {
     const ms = require('ms');
 
-    if (interaction.isChatInputCommand() && interaction.commandName === 'start') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'start'){
         // /start 2d 1 Awesome prize!
         // Will create a giveaway with a duration of two days, with one winner and the prize will be "Awesome prize!"
 
@@ -123,14 +123,14 @@ const giveaway =
     client.giveawaysManager.giveaways.find((g) => g.guildId === interaction.guildId && g.messageId === query);
 
 // If no giveaway was found
-if (!giveaway) return interaction.reply(`Unable to find a giveaway for \`${query}\`.`);
+if(!giveaway) return interaction.reply(`Unable to find a giveaway for \`${query}\`.`);
 ```
 
 ### Reroll a giveaway
 
 ```js
 client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'reroll') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'reroll'){
         const messageId = interaction.options.getString('message_id');
         client.giveawaysManager
             .reroll(messageId)
@@ -156,7 +156,7 @@ client.on('interactionCreate', (interaction) => {
 
 ```js
 client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'edit') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'edit'){
         const messageId = interaction.options.getString('message_id');
         client.giveawaysManager
             .edit(messageId, {
@@ -186,7 +186,7 @@ client.on('interactionCreate', (interaction) => {
 
 ```js
 client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'delete') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'delete'){
         const messageId = interaction.options.getString('message_id');
         client.giveawaysManager
             .delete(messageId)
@@ -208,7 +208,7 @@ client.on('interactionCreate', (interaction) => {
 
 ```js
 client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'end') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'end'){
         const messageId = interaction.options.getString('message_id');
         client.giveawaysManager
             .end(messageId)
@@ -228,7 +228,7 @@ client.on('interactionCreate', (interaction) => {
 
 ```js
 client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'pause') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'pause'){
         const messageId = interaction.options.getString('message_id');
         client.giveawaysManager
             .pause(messageId)
@@ -254,7 +254,7 @@ client.on('interactionCreate', (interaction) => {
 
 ```js
 client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand() && interaction.commandName === 'unpause') {
+    if(interaction.isChatInputCommand() && interaction.commandName === 'unpause'){
         const messageId = interaction.options.getString('message_id');
         client.giveawaysManager
             .unpause(messageId)

@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextI
 var rand = require("random-key");
 
 module.exports = class Update extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('devpremium')
@@ -19,7 +19,7 @@ module.exports = class Update extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         if(interaction.user.id != process.env.developer_id){
             await interaction.deferReply()

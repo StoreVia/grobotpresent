@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionFlipText extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('fliptext')
@@ -16,7 +16,7 @@ module.exports = class InteractionFlipText extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		
 		await interaction.deferReply();
         await interaction.followUp({ content: `${await client.functions.filpText(await client.functions.getOptions(interaction).string(`text`))}`});

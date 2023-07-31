@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { TicTacToe } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionTicTacToe extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('tictactoe')
@@ -17,7 +17,7 @@ module.exports = class InteractionTicTacToe extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
         const opponent = interaction.options.getUser('user');
         new TicTacToe({
             message : interaction,

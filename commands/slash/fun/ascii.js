@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const figlet = require('figlet');
 
 module.exports = class InteractionAscii extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('ascii')
@@ -17,7 +17,7 @@ module.exports = class InteractionAscii extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {   
+	async run(client, interaction){   
         
         const text = await client.functions.getOptions(interaction).string(`text`);
 

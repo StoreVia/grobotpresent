@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionHowGay extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('howgay')
@@ -16,7 +16,7 @@ module.exports = class InteractionHowGay extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         const user = await client.functions.getOptions(interaction).user('user');
         let gaypercentage = await client.functions.randomNum(100).whole();

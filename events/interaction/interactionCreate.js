@@ -6,20 +6,20 @@ const ms = require("parse-ms-2");
 var rand = require("random-key");
 
 module.exports = class InteractionCreate extends Event {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'interactionCreate',
 			category: 'guild',
 		});
 	}
-	async run(interaction) {
+	async run(interaction){
 
 		const client = this.client;
 		
 //commandruneventstart
-		if (interaction.type === InteractionType.ApplicationCommand) {
+		if(interaction.type === InteractionType.ApplicationCommand){
 			const command = client.commands.get(interaction.commandName);
-			if(interaction.user.bot) {
+			if(interaction.user.bot){
 				return;
 			}
 			if(!interaction.inGuild() && interaction.type === InteractionType.ApplicationCommand){
@@ -77,21 +77,21 @@ module.exports = class InteractionCreate extends Event {
 						}
 					}
 				}
-			} catch (e) {
+			} catch (e){
 				console.log(e);
 				await interaction.deferReply({ ephemeral: true });
 				return await interaction.followUp({ content: `> An Error Has Occured.` });
 			}
-		} else if (interaction.isAutocomplete()) {
+		} else if(interaction.isAutocomplete()){
 			const command = interaction.client.commands.get(interaction.commandName);
 	
-			if (!command) {
+			if(!command){
 				console.error(`No command matching ${interaction.commandName} was found.`);
 				return;
 			}
 			try {
 				await command.autocomplete(client, interaction);
-			} catch (error) {
+			} catch (error){
 				console.error(error);
 			}
 		}
@@ -102,7 +102,7 @@ module.exports = class InteractionCreate extends Event {
 		const welcomedb = client.db.table(`welcome`);
 		const welcomecheck = await welcomedb.get(`${interaction.guild.id}`);
 
-		if(interaction.customId === 'WelcomeTextSet') {
+		if(interaction.customId === 'WelcomeTextSet'){
     		await interaction.reply({ content: `> Done✅. Welcome Channel Was Now Set And Text Updated.`, ephemeral: true })
     		.then(() => {
       			const text = interaction.fields.getTextInputValue('text');
@@ -111,21 +111,21 @@ module.exports = class InteractionCreate extends Event {
 				})
     		})
   		}
-		if(interaction.customId === 'myModalWelcomeTextEdit') {
+		if(interaction.customId === 'myModalWelcomeTextEdit'){
 			await interaction.reply({ content: `> Done✅. Welcome Channel Text Now Updated.`, ephemeral: true })
 			.then(() => {
 				const text1 = interaction.fields.getTextInputValue('text1');
 				db.set(`welcometext_${interaction.guild.id}`, text1)
 			})
 		}
-		if(interaction.customId === 'myModalDmUserNew') {
+		if(interaction.customId === 'myModalDmUserNew'){
 			await interaction.reply({ content: `> Done✅. Welcome User Dm Was Now Set.`, ephemeral: true })
 			.then(() => {
 				const text2 = interaction.fields.getTextInputValue('text2');
 				db.set(`welcomedmtext_${interaction.guild.id}`, text2)
 			})
 		}
-		if(interaction.customId === 'myModalDmUserTextEdit') {
+		if(interaction.customId === 'myModalDmUserTextEdit'){
 			await interaction.reply({ content: `> Done✅. User Dm Text Message Was Now Updated.`, ephemeral: true })
 			.then(() => {
 				const text3 = interaction.fields.getTextInputValue('text3');
@@ -178,7 +178,7 @@ module.exports = class InteractionCreate extends Event {
 		let ticketblockcheck = await ticketblockdb.get(`${interaction.guild.id}`)
 		let ticketblockarray = Array.isArray(ticketblockcheck) ? ticketblockcheck : [];
 
-		if(interaction.customId === 'ticketopen') {
+		if(interaction.customId === 'ticketopen'){
 			if(!ticketcheck){
 				if(interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
 					await interaction.deferReply({ ephemeral: true })
@@ -195,7 +195,7 @@ module.exports = class InteractionCreate extends Event {
 					} else if(!ticketblockcheck.includes(`${interaction.user.id}`)){
 						ticketOpen()
 					}
-				} catch(e) {
+				} catch(e){
 					ticketOpen()
 				}
 			}
@@ -211,7 +211,6 @@ module.exports = class InteractionCreate extends Event {
 						.setStyle(Discord.ButtonStyle.Success),
 		  			new Discord.ButtonBuilder()
 						.setLabel('Stop')
-						.setEmoji(`🛑`)
 						.setCustomId('tistop')
 						.setStyle(Discord.ButtonStyle.Danger),
 				);
@@ -242,7 +241,7 @@ module.exports = class InteractionCreate extends Event {
 						let a = messages.filter(m => m.author.bot !== true).map(m =>
 							`\n ${new Date(m.createdTimestamp).toLocaleString('en-EN')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
 						).reverse().join('\n');
-						if (a.length < 1) a = "Nothing"
+						if(a.length < 1) a = "Nothing"
 						var paste = new PrivateBinClient("https://privatebin.net/");
 						var result = await paste.uploadContent(a, {uploadFormat: 'markdown'})
 
@@ -313,7 +312,7 @@ module.exports = class InteractionCreate extends Event {
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 
-		async function ticketOpen() {
+		async function ticketOpen(){
 			const role = ticketcheck.details.supportRole;
 			const category1 = ticketcheck.details.category;
 			const category = client.channels.cache.get(category1)

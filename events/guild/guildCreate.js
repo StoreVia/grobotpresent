@@ -3,13 +3,13 @@ const Discord = require(`discord.js`)
 const version = require(`../../package.json`).version;
 
 module.exports = class GuildCreate extends Event {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'guildCreate',
 			category: 'guild',
 		});
 	}
-	async run(guild) {
+	async run(guild){
 
 		const client = this.client;
 

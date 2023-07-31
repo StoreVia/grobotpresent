@@ -12,7 +12,7 @@ const statuses = {
 const db = require("quick.db");
 
 module.exports = class Userinfo extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('beg')
@@ -22,7 +22,7 @@ module.exports = class Userinfo extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     await interaction.deferReply();
     let user = interaction.user;
@@ -30,7 +30,7 @@ module.exports = class Userinfo extends Command {
     let amount = Math.floor(Math.random() * 101);
     let beg = await db.fetch(`beg_${user.id}`);
 
-    if (beg !== null && timeout - (Date.now() - beg) > 0) {
+    if(beg !== null && timeout - (Date.now() - beg) > 0){
         let time = ms(timeout - (Date.now() - beg));
         let timeEmbed = new EmbedBuilder()
             .setColor(`${process.env.ec}`)

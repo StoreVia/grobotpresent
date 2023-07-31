@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Play extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('play')
@@ -16,7 +16,7 @@ module.exports = class Play extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {   
+	async run(client, interaction){   
 
         const query = interaction.options.getString(`search`);
 		const clientVoice = interaction.guild.members.me.voice.channel;

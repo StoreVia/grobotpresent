@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 
 module.exports = class InteractionPing extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('hug')
@@ -17,7 +17,7 @@ module.exports = class InteractionPing extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
     await interaction.deferReply();
     const string = await client.functions.getOptions(interaction).user(`user`);

@@ -6,13 +6,13 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Embed
 const titlecase = require(`titlecase`);
 
 module.exports = class ReadyEvent extends Event {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'ready',
 			once: true,
 		});
 	}
-	async run() {
+	async run(){
 		
 		const client = this.client;
 
@@ -33,7 +33,7 @@ module.exports = class ReadyEvent extends Event {
 				const random = Math.floor(Math.random() * sub.length)
 				if(!channel){
 					return
-				} else if(channel) {
+				} else if(channel){
 					fetch(`https://www.reddit.com/r/${sub[random]}/random/.json`)
 					.then((res) => res.json())
 					.then(async(response) => {

@@ -9,7 +9,7 @@ const { Player } = require('discord-player');
 require('dotenv').config();
 
 module.exports = class BotClient extends Client {
-	constructor(...opt) {
+	constructor(...opt){
 		super({
 			opt,
 			partials: [
@@ -67,21 +67,21 @@ module.exports = class BotClient extends Client {
 		new CommandHandler(this).build('../developer_commands');
 	}
 
-	async login() {
+	async login(){
 		await super.login(process.env.token);
 	}
 
-	exit() {
-		if (this.quitting) return;
+	exit(){
+		if(this.quitting) return;
 		this.quitting = true;
 		this.destroy();
 	}
 
-	fetchSlashCommand(cmd) {
+	fetchSlashCommand(cmd){
 		return this.commands.get(cmd);
 	}
 
-	fetchMessageCommand(cmd) {
+	fetchMessageCommand(cmd){
 		return this.messagecommands.get(cmd);
 	}
 };

@@ -3,13 +3,13 @@ const { EmbedBuilder } = require('discord.js');
 const titlecase = require(`titlecase`);
 
 module.exports = class MessageCreate extends Event {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'messageCreate',
 			category: 'guild',
 		});
 	}
-	async run(message) {
+	async run(message){
 
 		const client = this.client;
 
@@ -28,7 +28,7 @@ module.exports = class MessageCreate extends Event {
                 message.content = message.content
                     .replace(/@(everyone)/gi, "everyone")
                     .replace(/@(here)/gi, "here");
-                if(chatbotcheck) {
+                if(chatbotcheck){
                     if(message.channel.id === chatbotcheck){
                         let text = message.content;
                         fetch(`http://api.brainshop.ai/get?bid=154409&key=iaRW35CrLdHBpOBW&uid=${message.author.id}&msg=${encodeURIComponent(text)}`)

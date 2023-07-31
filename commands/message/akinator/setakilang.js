@@ -2,7 +2,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageSetAkiLang extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "setakilang",
   			category: "akinator",
@@ -12,7 +12,7 @@ module.exports = class MessageSetAkiLang extends Command {
   			description: "Set Your Akinator Language.",
 		});
 	}
-	async run(client, message, args) {
+	async run(client, message, args){
 		
         let string = args.join(" ").toLowerCase();
         let langdb = client.db.table(`akinatorlanguage`);
@@ -44,9 +44,9 @@ module.exports = class MessageSetAkiLang extends Command {
             const filter = i => i.customId;
 		    const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
             collector.on('collect', async i => {
-			    if (i.user.id != message.author.id) {
+			    if(i.user.id != message.author.id){
 				    await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			    } else if(i.customId === "sallang") {
+			    } else if(i.customId === "sallang"){
 				    await i.reply({ embeds: [await client.functions.akilangEmbed()], ephemeral: true });
                 } else if(i.customId === "salstop"){
 					buttonRow.components.map(component=> component.setDisabled(true));
@@ -54,7 +54,7 @@ module.exports = class MessageSetAkiLang extends Command {
 				}
 		    })
 		    collector.on('end', async (_, reason) => {
-			    if (reason === 'idle' || reason === 'user') {
+			    if(reason === 'idle' || reason === 'user'){
 				    buttonRow.components.map(component=> component.setDisabled(true));
 				    return await msg.edit({ components: [buttonRow] });
 			    }

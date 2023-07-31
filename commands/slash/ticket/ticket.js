@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, ButtonStyle, ButtonBuilder, Permissio
 const db = require(`quick.db`);
 
 module.exports = class Ticker extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('ticket')
@@ -113,7 +113,7 @@ module.exports = class Ticker extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         
         const ticketdb = client.db.table(`ticket`)
@@ -403,7 +403,7 @@ module.exports = class Ticker extends Command {
                         await interaction.deferReply({ ephemeral: true })
                         return await interaction.followUp({ content: `> The User Was Already Blocked From Making Ticket.` })
                     }
-                } catch(e) {
+                } catch(e){
                     ticketblockdb.push(`${interaction.guild.id}`, `${user1.id}`)
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> Done✅. Blocked User From Creating Ticket.` })
@@ -431,7 +431,7 @@ module.exports = class Ticker extends Command {
                         await interaction.deferReply({ ephemeral: true })
                         return await interaction.followUp({ content: `> Done✅. Unblocked User From Creating Ticket.` })
                     }
-                } catch(e) {
+                } catch(e){
                     await interaction.deferReply({ ephemeral: true })
                     return await interaction.followUp({ content: `> The User Was Not Blocked To Unblock.` })
                 }
@@ -445,7 +445,7 @@ module.exports = class Ticker extends Command {
             if(title.length > 256){
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
-            } else if(!ticketembedcheck) {
+            } else if(!ticketembedcheck){
                 ticketembeddb.set(`${interaction.guild.id}`, { title: title })
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })

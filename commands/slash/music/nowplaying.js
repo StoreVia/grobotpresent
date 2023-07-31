@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const ms = require("parse-ms-2");
 
 module.exports = class NowPlaying extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('nowplaying')
@@ -13,7 +13,7 @@ module.exports = class NowPlaying extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {   
+	async run(client, interaction){   
         
         const part = Math.floor((queue.currentTime / queue.songs[0].duration) * 30);
 

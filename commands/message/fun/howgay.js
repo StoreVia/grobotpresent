@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageHowGay extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "howgay",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageHowGay extends Command {
   			description: "Gay Calculator(Fun).",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let user = message.mentions.members.first();
         let gaypercentage = await client.functions.randomNum(100).whole();

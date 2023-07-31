@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageFlood extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "flood",
   			category: "games",
@@ -11,8 +11,8 @@ module.exports = class MessageFlood extends Command {
   			description: "Play Flood Game.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
-        await client.functions.games(message).flood(false);
+        await client.functions.games(message, false).flood();
 	}
 };

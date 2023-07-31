@@ -3,7 +3,7 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Embed
 const fs = require('fs');
 
 module.exports = class TruthOrDare extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('truthordare')
@@ -14,7 +14,7 @@ module.exports = class TruthOrDare extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		
 		await interaction.deferReply();
 
@@ -30,12 +30,12 @@ module.exports = class TruthOrDare extends Command {
 					.setStyle(ButtonStyle.Danger),
             )
 
-		function readFileLines(filename) {
+		function readFileLines(filename){
   			const content = fs.readFileSync(filename, 'utf-8');
 			const lines = content.split('\n').map(line => line.trim().replace(/,+$/, '')).filter(line => line !== '');
   			return lines;
 		}
-		function pickRandomLine(lines) {
+		function pickRandomLine(lines){
 			const randomIndex = Math.floor(Math.random() * lines.length);
 			return lines[randomIndex];
 		}
@@ -45,7 +45,7 @@ module.exports = class TruthOrDare extends Command {
 		const truthLines = readFileLines(truthFilePath);
 		const dareLines = readFileLines(dareFilePath);
 
-		function pickRandomLineFromFile(filename) {
+		function pickRandomLineFromFile(filename){
 			const lines = readFileLines(filename);
 			const randomLine = pickRandomLine(lines);
 			return { file: filename, line: randomLine };
@@ -71,7 +71,7 @@ module.exports = class TruthOrDare extends Command {
 		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
 
         collector.on('collect', async i => {
-			if (i.user.id != interaction.user.id) {
+			if(i.user.id != interaction.user.id){
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			} else if(i.customId === "tod"){
 				const randomLine1 = Math.random() < 0.5 ? pickRandomLineFromFile(truthFilePath) : pickRandomLineFromFile(dareFilePath);
@@ -94,7 +94,7 @@ module.exports = class TruthOrDare extends Command {
 		})
 
 		collector.on('end', async (_, reason) => {
-			if (reason === 'idle' || reason === 'user') {
+			if(reason === 'idle' || reason === 'user'){
 				buttonRow.components.map(component=> component.setDisabled(true));
 				await interaction.editReply({ components: [buttonRow] });
 			}

@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class InteractionFootBall extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('football')
@@ -12,7 +12,7 @@ module.exports = class InteractionFootBall extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         
         const componentsArray = await client.functions.buttons(`Left`, `left`, ButtonStyle.Secondary, `Middle`, String(Math.random()), ButtonStyle.Primary, `Right`, `right`, ButtonStyle.Secondary);

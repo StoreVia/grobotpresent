@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
 module.exports = class Help extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('help')
@@ -13,7 +13,7 @@ module.exports = class Help extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		const selectMenuRow = new ActionRowBuilder()
 			.addComponents(
@@ -98,13 +98,13 @@ module.exports = class Help extends Command {
 		const collector = i1.createMessageComponentCollector({ filter, idle: 60000 });
 
 		collector.on('collect', async i => {
-			if (i.user.id != interaction.user.id) {
+			if(i.user.id != interaction.user.id){
 				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			}
 
 			const selected = i.values[0];
 
-			if (i.customId === 'hlpcmd') {
+			if(i.customId === 'hlpcmd'){
 				let akinator = ["`/akinator`",]
 				let akinatordata = akinator.join("\n");
 
@@ -275,7 +275,7 @@ module.exports = class Help extends Command {
 	   	})
 
 	   collector.on('end', async (_, reason) => {
-    		if (reason === 'idle') {
+    		if(reason === 'idle'){
 				selectMenuRow.components.map(component=> component.setDisabled(true));
 				await interaction.editReply({ components: [selectMenuRow] });
         	}

@@ -4,7 +4,7 @@ messages = require('../../../giveaway_utility/message');
 const ms = require('ms');
 
 module.exports = class Giveaway extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('giveaway')
@@ -96,7 +96,7 @@ module.exports = class Giveaway extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
         
         let subcommand = interaction.options.getSubcommand();
         
@@ -110,7 +110,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'create') {
+        if(subcommand === 'create'){
             const channel1 = channel('channel');
             const duration1 = string('duration');
             const duration = ms(duration1)
@@ -128,7 +128,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'delete') {
+        if(subcommand === 'delete'){
             const query = string(`query`);
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
@@ -142,7 +142,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'end') {
+        if(subcommand === 'end'){
             const query = string(`query`);
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
@@ -162,7 +162,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'pause') {
+        if(subcommand === 'pause'){
             const query = string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
@@ -182,7 +182,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'resume') {
+        if(subcommand === 'resume'){
             const query = string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
@@ -202,7 +202,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (subcommand === 'edit') {
+        if(subcommand === 'edit'){
             const query = string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             const newprize = string('prize');
@@ -243,7 +243,7 @@ module.exports = class Giveaway extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////        
 
-        if (subcommand === 'reroll') {
+        if(subcommand === 'reroll'){
             const query = string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){

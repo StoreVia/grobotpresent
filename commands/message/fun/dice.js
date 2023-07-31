@@ -2,7 +2,7 @@ const Command = require('../../../structures/MessageCommandClass');
 const { ButtonStyle } = require(`discord.js`);
 
 module.exports = class MessageDice extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "dice",
   			category: "fun",
@@ -12,7 +12,7 @@ module.exports = class MessageDice extends Command {
   			description: "Roll Dice.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let buttonRow = await client.functions.buttons(`Roll Again`, `dice`, ButtonStyle.Secondary, `Stop`, `distop`, ButtonStyle.Danger);
 		let randomNum = await client.functions.randomNum(6).natural();

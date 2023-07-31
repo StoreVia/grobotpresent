@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const fetch = require('node-fetch');
 
 module.exports = class Covid extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('covid')
@@ -18,10 +18,10 @@ module.exports = class Covid extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 		await interaction.deferReply();
 
-        if (interaction.options.getSubcommand() === 'all') {
+        if(interaction.options.getSubcommand() === 'all'){
 
             fetch(`https://disease.sh/v3/covid-19/all`)
             .then((res) => res.json())

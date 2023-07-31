@@ -3,7 +3,7 @@ const { SlashCommandBuilder, AttachmentBuilder  } = require('discord.js');
 const canvacord = require("canvacord");
 
 module.exports = class Image extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('image')
@@ -43,7 +43,7 @@ module.exports = class Image extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		await interaction.deferReply();
         

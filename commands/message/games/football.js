@@ -2,7 +2,7 @@ const Command = require('../../../structures/MessageCommandClass');
 const { ButtonStyle } = require('discord.js');
 
 module.exports = class MessageFootBall extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "football",
   			category: "games",
@@ -12,7 +12,7 @@ module.exports = class MessageFootBall extends Command {
   			description: "Play FootBall Game.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
         let msgdefer = await client.functions.deferReply().message(message);
         const componentsArray = await client.functions.buttons(`Left`, `left`, ButtonStyle.Secondary, `Middle`, String(Math.random()), ButtonStyle.Primary, `Right`, `right`, ButtonStyle.Secondary);

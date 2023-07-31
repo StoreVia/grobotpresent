@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder  } = require('discord.js');
 
 module.exports = class InteractionActivity extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('activity')
@@ -32,7 +32,7 @@ module.exports = class InteractionActivity extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links', 'Manage Guild'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         let channel = await client.functions.voiceChannel().interaction(interaction);
         let activity = await client.functions.getOptions(interaction).string("name");

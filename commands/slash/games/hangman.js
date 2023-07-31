@@ -2,7 +2,7 @@ const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class InteractionHangMan extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('hangman')
@@ -12,8 +12,8 @@ module.exports = class InteractionHangMan extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
         
-		await client.functions.games(interaction).hangMan(true);
+		await client.functions.games(interaction, true).hangMan(true);
 	}
 };

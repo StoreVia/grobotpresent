@@ -3,7 +3,7 @@ const db = require(`quick.db`);
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Updates extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('updates')
@@ -14,7 +14,7 @@ module.exports = class Updates extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         const updateget = await client.db.get(`update`);
 		let updatetext = null;

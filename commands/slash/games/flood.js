@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Flood } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionFlood extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('flood')
@@ -22,9 +22,9 @@ module.exports = class InteractionFlood extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
 		let difficulty = await client.functions.getOptions(interaction).string(`difficulty`);
-		await client.functions.games(interaction).flood(true, difficulty);
+		await client.functions.games(interaction, true).flood(difficulty);
 	}
 };

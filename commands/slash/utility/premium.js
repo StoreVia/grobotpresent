@@ -6,7 +6,7 @@ const { increment } = require('libsodium-wrappers');
 const ms = require(`parse-ms-2`);
 
 module.exports = class Ping extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('premium')
@@ -26,7 +26,7 @@ module.exports = class Ping extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction) {
+	async run(client, interaction){
 
         const keys = client.db.table('premium')
         const used = client.db.table('premiumused')
@@ -66,7 +66,7 @@ module.exports = class Ping extends Command {
                         }
                     }
                 }
-            } catch(e) {
+            } catch(e){
                 console.log(e)
                 return interaction.followUp({ content: `> Premium Key Not Found.` })
             }

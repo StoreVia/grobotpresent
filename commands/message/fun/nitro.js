@@ -1,7 +1,7 @@
 const Command = require('../../../structures/MessageCommandClass');
 
 module.exports = class MessageNitro extends Command {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: "nitro",
   			category: "fun",
@@ -11,7 +11,7 @@ module.exports = class MessageNitro extends Command {
   			description: "Get Free Nitro Link.",
 		});
 	}
-	async run(client, message) {
+	async run(client, message){
 
 		let msgdefer = await client.functions.deferReply().message(message);
 		let msg = await msgdefer.edit({ content:``, embeds: [await client.functions.embedBuild().description(`Discord Nitro Payment Started!`).build()]});

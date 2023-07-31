@@ -4,23 +4,23 @@ const db = require(`quick.db`);
 const Discord = require(`discord.js`);
 
 module.exports = class GuildMemberAdd extends Event {
-	constructor(client) {
+	constructor(client){
 		super(client, {
 			name: 'guildMemberRemove',
 			category: 'guild',
 		});
 	}
-	async run(member) {
+	async run(member){
 
         const client = this.client;
 
         let server = db.fetch(`leave_${member.guild.id}`)
         let guildCh = client.channels.cache.get(server)
 
-        if (!server) {
+        if(!server){
             return;
         }
-        if (server) {
+        if(server){
             let text = db.fetch(`leavetext_${member.guild.id}`) || "<MemberMention>, Just Left The Server."
             const text1 = text.replace('<MemberMention>', `${member}`)
                 .replace('<MemberCount>', `${member.guild.memberCount}`)
