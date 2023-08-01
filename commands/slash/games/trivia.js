@@ -1,6 +1,5 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const { Trivia } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionTrivia extends Command {
 	constructor(client){
@@ -15,13 +14,6 @@ module.exports = class InteractionTrivia extends Command {
 	}
 	async run(client, interaction){
 
-        new Trivia({
-            message: interaction,
-            isSlashGame: true,
-            embed: {
-              title: 'Trivia',
-              color: `${process.env.ec}`,
-            },
-          }).startGame();
+        await client.functions.games(interaction, true).trivia();
 	}
 };

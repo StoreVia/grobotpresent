@@ -1,5 +1,4 @@
 const Command = require('../../../structures/MessageCommandClass');
-const { PermissionsBitField } = require('discord.js');
 
 module.exports = class MessageChatBotDelete extends Command {
 	constructor(client){

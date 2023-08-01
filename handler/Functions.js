@@ -70,6 +70,7 @@ module.exports = class Functions {
     }
     return { dice, meme }
   }
+  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -741,7 +742,38 @@ module.exports = class Functions {
         othersMessage: 'You are not allowed to use buttons for this message!',
       }).startGame();
     }
-    return { ctfRandom, footBallRandom, twozerofoureight, catchTheFish, flood, footBall, hangMan, rockPaperScissors, slots, snake }
+    function tictactoe(opponent){
+      new TicTacToe({
+        message : interact,
+        isSlashGame: torf,
+        opponent: opponent,
+        embed: {
+          title: 'Tic Tac Toe',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    function trivia(){
+      new Trivia({
+        message: interact,
+        isSlashGame: torf,
+        embed: {
+          title: 'Trivia',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    function wordle(){
+      new Wordle({
+        message: interact,
+        isSlashGame: torf,
+        embed: {
+          title: 'Wordle',
+          color: `${process.env.ec}`,
+        },
+      }).startGame();
+    }
+    return { ctfRandom, footBallRandom, twozerofoureight, catchTheFish, flood, footBall, hangMan, rockPaperScissors, slots, snake, tictactoe, trivia, wordle }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

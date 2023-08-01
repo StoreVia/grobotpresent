@@ -27,7 +27,7 @@ module.exports = class Trivia extends events {
     if(!options.difficulty) options.difficulty = difficulties[Math.floor(Math.random()*difficulties.length)];
 
     if(!options.winMessage) options.winMessage = 'You Have Won The Game. The Correct Answer Is **{answer}**';
-    if(!options.loseMessage) options.loseMessage = 'You Have Lost The Game. BTW The The Correct Answer Is **{answer}**';
+    if(!options.loseMessage) options.loseMessage = 'You Have Lost The Game. BTW The The Correct Answer Is **{answer}**.';
     if(!options.errMessage) options.errMessage = 'Unable to fetch question data! Please try again.';
 
 
@@ -79,7 +79,7 @@ module.exports = class Trivia extends events {
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setDescription(`**${this.trivia.question}**\n\n**Difficulty:** ${this.trivia.difficulty}\n**Category:** ${this.trivia.category}`)
+    .setDescription(`**${this.trivia.question}**`)
     .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: '\u200b', value: this.options.embed.description });
 
@@ -114,7 +114,7 @@ module.exports = class Trivia extends events {
     .setFooter({ text: `${cu} - ${process.env.year} ©`, iconURL: process.env.iconurl })
     .setColor(this.options.embed.color)
     .setTitle(this.options.embed.title)
-    .setDescription(`**${this.trivia.question}**\n\n**Difficulty:** ${this.trivia.difficulty}\n**Category:** ${this.trivia.category}`)
+    .setDescription(`**${this.trivia.question}**`)
     .setAuthor({ name: this.message.author.username, iconURL: this.message.author.displayAvatarURL({ dynamic: true }) })
     .addFields({ name: '\u200b', value: this.options.embed.description });
 

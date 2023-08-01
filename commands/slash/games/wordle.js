@@ -15,13 +15,6 @@ module.exports = class InteractionWordle extends Command {
 	}
 	async run(client, interaction){
 
-        new Wordle({
-            message: interaction,
-            isSlashGame: true,
-            embed: {
-              title: 'Wordle',
-              color: `${process.env.ec}`,
-            },
-          }).startGame();
+        await client.functions.games(interaction, true).wordle();
 	}
 };

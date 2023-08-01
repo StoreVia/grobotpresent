@@ -1,6 +1,5 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const { TicTacToe } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionTicTacToe extends Command {
 	constructor(client){
@@ -8,25 +7,18 @@ module.exports = class InteractionTicTacToe extends Command {
 			data: new SlashCommandBuilder()
 				.setName('tictactoe')
 				.setDescription('Play TicTacToe Game.')
-                .addUserOption(option =>
-                    option.setName('user')
-                        .setDescription(`With Which User You Want To Play.`)
-                        .setRequired(true)),
+        .addUserOption(option =>
+          option.setName('user')
+              .setDescription(`With Which User You Want To Play.`)
+              .setRequired(true)),
 			usage: 'tictactoe',
 			category: 'Games',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
 	async run(client, interaction){
-        const opponent = interaction.options.getUser('user');
-        new TicTacToe({
-            message : interaction,
-            isSlashGame: true,
-            opponent: opponent,
-            embed: {
-              title: 'Tic Tac Toe',
-              color: `${process.env.ec}`,
-            },
-          }).startGame();
+
+    const opponent = interaction.options.getUser('user');
+    await client.functions.games(interaction, true).tictactoe(opponent)
 	}
 };

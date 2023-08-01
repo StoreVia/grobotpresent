@@ -1,6 +1,5 @@
 const Command = require('../../../structures/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const { Slots } = require('../../../B_Gro_Modules/discord-gamecord')
 
 module.exports = class InteractionSlots extends Command {
 	constructor(client){

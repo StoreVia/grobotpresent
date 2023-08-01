@@ -32,7 +32,7 @@ module.exports = class InteractionChatBot extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(!await client.functions.permsCheck(`manageGuild`)){
+        if(!await client.functions.permsCheck(`manageGuild`).interaction(interaction)){
             return await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
         }
 
