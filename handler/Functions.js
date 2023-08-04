@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder, ModalBuilder, TextInputBuilder } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
 const akinator = require("../B_Gro_Modules/discord.js-akinator");
@@ -337,6 +337,29 @@ module.exports = class Functions {
       return random;
     }
     return { whole, natural }
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  modal(){
+    function builder(label, id){
+      const modalBuild = new ModalBuilder()
+			  .setCustomId(id)
+			  .setTitle(label);
+      return modalBuild;
+    }
+    function text(label, id, style){
+      const textBuild = new TextInputBuilder()
+			  .setCustomId(id)
+			  .setLabel(label)
+			  .setStyle(style);
+      return textBuild;
+    }
+    function action(comp){
+      const actionBuild = new ActionRowBuilder().addComponents(comp);
+      return actionBuild;
+    }
+    return { builder, text, action }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

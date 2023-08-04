@@ -33,7 +33,17 @@ module.exports = class MessageGiveawayCreate extends Command {
 				if(i.user.id != message.author.id){
 					return await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 				} else if(i.customId === "gcfill"){
-					gcfill
+					const description = new ModalBuilder()
+                		.setCustomId('myModalDescription')
+                		.setTitle('Ticket System Configuration.')
+                		.addComponents(
+							new ActionRowBuilder()
+								.addComponents(
+									new TextInputBuilder()
+                                		.setCustomId('text')
+                                		.setLabel("Set Ticket Panel Embed Description.")
+                                		.setStyle(TextInputStyle.Paragraph)))
+										
 				} else if(i.customId === "gccancel"){
 					buttonRow.components.map(component=> component.setDisabled(true));
 					return await i.update({ components: [buttonRow] })
