@@ -7,6 +7,9 @@ const { QuickDB, JSONDriver } = require("quick.db");
 const jsonDriver = new JSONDriver();
 const { GiveawaysManager } = require("../B_Gro_Modules/discord-giveaways");
 const { Player } = require('discord-player');
+const { Server } = require("socket.io");
+const Express = require("express");
+const http = require("http");
 require('dotenv').config();
 
 module.exports = class BotClient extends Client {
@@ -51,6 +54,13 @@ module.exports = class BotClient extends Client {
 		this.db = new QuickDB({ driver: jsonDriver });
 		this.player = new Player(this);
 		this.functions = new Functions(this);
+		//123
+		this.server = Express();
+    	this.server.use("/", require("../C_Website"));
+    	this.http = http.createServer(this.server);
+		this.http.listen(3000);
+    	this.io = new Server(this.http);
+		//123
 		this.giveawaysManager = new GiveawaysManager(this, {
 			storage: "./giveaway_utility/giveaways.json",
 			updateCountdownEvery: 5000,
