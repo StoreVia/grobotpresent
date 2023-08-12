@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType } = require('discord.js');
 messages = require('../../../giveaway_utility/message');
 const ms = require('ms');

@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Events } = require('discord.js');
 const version = require(`../../../package.json`).version;
 

@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const facts = require(`../../../A_Gro_db/facts.json`);
 const titlecase = require(`titlecase`);

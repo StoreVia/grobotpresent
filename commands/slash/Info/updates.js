@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const db = require(`quick.db`);
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 

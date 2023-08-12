@@ -1,6 +1,6 @@
-const BaseEvent = require('../structures/EventClass');
-const PlayerEvent = require('../structures/PlayerEventClass');
-const ProcessEvent = require('../structures/ProcessEventClass');
+const BaseEvent = require('../structures/Events/EventClass');
+const PlayerEvent = require('../structures/Events/PlayerEventClass');
+const ProcessEvent = require('../structures/Events/ProcessEventClass');
 const path = require('path');
 const fs = require('fs').promises;
 

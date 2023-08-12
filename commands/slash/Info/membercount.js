@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class MemberCount extends Command {

@@ -1,4 +1,4 @@
-const Command = require('../../structures/CommandClass');
+const Command = require('../../structures/Commands/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 var rand = require("random-key");
 

@@ -1,5 +1,5 @@
 const { ButtonStyle } = require('discord.js');
-const Command = require('../../../structures/MessageCommandClass');
+const Command = require('../../../structures/Commands/MessageCommandClass');
 
 module.exports = class MessageSetAkiLang extends Command {
 	constructor(client){

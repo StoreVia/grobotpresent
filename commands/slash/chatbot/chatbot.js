@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = class InteractionChatBot extends Command {

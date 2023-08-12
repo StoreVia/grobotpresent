@@ -1,4 +1,4 @@
-const Command = require('../../../structures/MessageCommandClass');
+const Command = require('../../../structures/Commands/MessageCommandClass');
 
 module.exports = class MessageCatSay extends Command {
 	constructor(client){

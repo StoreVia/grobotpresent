@@ -1,4 +1,4 @@
-const Event = require('../../structures/EventClass');
+const Event = require('../../structures/Events/EventClass');
 const { EmbedBuilder } = require('discord.js');
 const titlecase = require(`titlecase`);
 

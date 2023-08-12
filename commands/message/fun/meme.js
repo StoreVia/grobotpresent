@@ -1,4 +1,4 @@
-const Command = require('../../../structures/MessageCommandClass');
+const Command = require('../../../structures/Commands/MessageCommandClass');
 const { ButtonStyle } = require(`discord.js`);
 const titlecase = require(`titlecase`);
 

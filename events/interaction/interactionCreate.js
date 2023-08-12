@@ -1,4 +1,4 @@
-const Event = require('../../structures/EventClass');
+const Event = require('../../structures/Events/EventClass');
 const { InteractionType, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const Discord = require(`discord.js`)
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');

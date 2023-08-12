@@ -1,4 +1,4 @@
-const PlayerEvent = require('../../structures/PlayerEventClass');
+const PlayerEvent = require('../../structures/Events/PlayerEventClass');
 const Discord = require(`discord.js`);
 
 module.exports = class AudioTrackAdd extends PlayerEvent {

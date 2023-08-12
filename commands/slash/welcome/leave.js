@@ -1,4 +1,4 @@
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType, StringSelectMenuBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, Embed, ButtonStyle, ButtonBuilder } = require('discord.js');
 
 const db = require(`quick.db`)

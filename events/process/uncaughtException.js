@@ -1,4 +1,4 @@
-const ProcessEvent = require('../../structures/ProcessEventClass');
+const ProcessEvent = require('../../structures/Events/ProcessEventClass');
 
 module.exports = class UncaughtException extends ProcessEvent {
 	constructor(client){

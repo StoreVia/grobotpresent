@@ -1,4 +1,4 @@
-const Event = require('../../structures/EventClass');
+const Event = require('../../structures/Events/EventClass');
 const Discord = require(`discord.js`)
 const version = require(`../../package.json`).version;
 

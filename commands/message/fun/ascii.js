@@ -1,4 +1,4 @@
-const Command = require('../../../structures/MessageCommandClass');
+const Command = require('../../../structures/Commands/MessageCommandClass');
 const figlet = require('figlet');
 
 module.exports = class MessageAscii extends Command {

@@ -1,4 +1,4 @@
-const Event = require('../../structures/EventClass');
+const Event = require('../../structures/Events/EventClass');
 const colors = require(`colors`)
 const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor } = require('@discord-player/extractor');
 const fetch = require('node-fetch');

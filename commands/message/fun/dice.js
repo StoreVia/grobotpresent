@@ -1,4 +1,4 @@
-const Command = require('../../../structures/MessageCommandClass');
+const Command = require('../../../structures/Commands/MessageCommandClass');
 const { ButtonStyle } = require(`discord.js`);
 
 module.exports = class MessageDice extends Command {

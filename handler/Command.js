@@ -1,5 +1,5 @@
-const BaseCommand = require('../structures/CommandClass');
-const MessageCommand = require('../structures/MessageCommandClass');
+const BaseCommand = require('../structures/Commands/CommandClass');
+const MessageCommand = require('../structures/Commands/MessageCommandClass');
 const path = require('path');
 const { readdir, lstat } = require('fs').promises;
 

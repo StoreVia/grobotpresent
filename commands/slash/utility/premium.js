@@ -1,5 +1,5 @@
 const { useMetadata } = require('discord-player');
-const Command = require('../../../structures/CommandClass');
+const Command = require('../../../structures/Commands/CommandClass');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { P } = require('flip-text/lib/chars');
 const { increment } = require('libsodium-wrappers');
