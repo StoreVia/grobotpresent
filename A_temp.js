@@ -24,6 +24,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 		if(!await client.functions.permsCheck(`manageGuild`).message(message)){
             return msgdefer.edit({ content: `> You Need "Manage Guild" Permission To Use This Command.`});
         } else {
+			console.log(`working`)
     		let prize, channel, winnerCount, duration, cancelled;
 			const filter = (m) => m.author.id === message.author.id
 			let cancelEmbed = await client.functions.embedBuild().description(`Timeout! You Can't Respond To This Command. Please Use This Command Again.`).build();

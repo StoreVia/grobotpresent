@@ -50,6 +50,7 @@
     "npm": "^9.1.2",
     "opusscript": "^0.0.8",
     "parse-ms-2": "^1.0.0",
+    "parsec": "^2.0.2",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4",
     "popcat-wrapper": "^1.5.4",
