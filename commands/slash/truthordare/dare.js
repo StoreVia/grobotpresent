@@ -1,6 +1,6 @@
 const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
-const dare = require(`../../../A_Gro_db/dare.json`);
+const dare = require(`../../../A_Jsons/dare.json`);
 
 module.exports = class Dare extends Command {
 	constructor(client){

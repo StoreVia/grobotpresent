@@ -1,14 +1,14 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder, ModalBuilder, TextInputBuilder } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
-const akinator = require("../B_Gro_Modules/discord.js-akinator");
+const akinator = require("../B_Modules/discord.js-akinator");
 const fs = require('fs');
 const https = require('https');
 https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs_mozilla_bundle/ca_bundle/ca_intermediate_root_bundle.pem');
 const titlecase = require(`titlecase`);
 const ms = require(`ms`);
-const roasts = require(`../A_Gro_db/roast.json`);
-const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Gro_Modules/discord-gamecord')
+const roasts = require(`../A_Jsons/roast.json`);
+const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Modules/discord-gamecord')
 
 module.exports = class Functions {
   constructor(client){

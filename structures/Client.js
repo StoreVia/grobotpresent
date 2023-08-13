@@ -5,7 +5,7 @@ const EventHandler = require('../handler/Event');
 const Functions = require('../handler/Functions');
 const { QuickDB, JSONDriver } = require("quick.db");
 const jsonDriver = new JSONDriver();
-const { GiveawaysManager } = require("../B_Gro_Modules/discord-giveaways");
+const { GiveawaysManager } = require("../B_Modules/discord-giveaways");
 const { Player } = require('discord-player');
 const { Server } = require("socket.io");
 const Express = require("express");
@@ -60,7 +60,7 @@ module.exports = class BotClient extends Client {
 		this.http.listen(3000);
     	this.io = new Server(this.http);
 		this.giveawaysManager = new GiveawaysManager(this, {
-			storage: "./giveaway_utility/giveaways.json",
+			storage: "./giveawayUtility/giveaways.json",
 			updateCountdownEvery: 5000,
 			default: {
 			  botsCanWin: false,
@@ -73,7 +73,7 @@ module.exports = class BotClient extends Client {
 		new EventHandler(this).build('../events');
 		new CommandHandler(this).build('../commands/slash');
 		new CommandHandler(this).build('../commands/message');
-		new CommandHandler(this).build('../developer_commands');
+		new CommandHandler(this).build('../developerCommands');
 	}
 
 	async login(){

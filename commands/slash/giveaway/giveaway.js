@@ -1,6 +1,6 @@
 const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType } = require('discord.js');
-messages = require('../../../giveaway_utility/message');
+messages = require('../../../giveawayUtility/message');
 const ms = require('ms');
 
 module.exports = class Giveaway extends Command {
