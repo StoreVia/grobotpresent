@@ -128,7 +128,7 @@ module.exports = class Giveaway extends Command {
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else {
-                await client.functions.giveaway().delete(giveaway.messageId);
+                await client.functions.giveaway().delet(giveaway.messageId);
                 interaction.followUp({content: `> Done✅. Giveaway Deleted.` })
             }
         }

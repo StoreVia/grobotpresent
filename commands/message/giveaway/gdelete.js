@@ -24,7 +24,7 @@ module.exports = class MessageGiveawayCreate extends Command {
             if(!giveaway){
                 return await msgdefer.edit({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else {
-                await client.functions.giveaway().delete(giveaway.messageId);
+                await client.functions.giveaway().delee(giveaway.messageId);
                 return await msgdefer.edit({content: `> Done✅. Giveaway Deleted.` });
             }
         }
