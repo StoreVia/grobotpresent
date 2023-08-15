@@ -18,7 +18,7 @@ module.exports = class InteractionTicTacToe extends Command {
 	}
 	async run(client, interaction){
 
-    const opponent = interaction.options.getUser('user');
+    const opponent = await client.functions.getOptions(interaction).user('user');
     await client.functions.games(interaction, true).tictactoe(opponent)
 	}
 };

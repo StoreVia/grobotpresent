@@ -18,7 +18,7 @@ module.exports = class InteractionRockPaperScissors extends Command {
 	}
 	async run(client, interaction){
 
-    	let opponent = interaction.options.getUser('user');
+    	let opponent = await client.functions.getOptions(interaction).user('user');
     	await client.functions.games(interaction, true).rockPaperScissors(opponent);
 	}
 };

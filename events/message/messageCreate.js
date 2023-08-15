@@ -60,7 +60,7 @@ module.exports = class MessageCreate extends Event {
                     .setColor(`${process.env.ec}`)
                 return message.reply({ embeds: [embed] });
             } else {
-                return command.run(client, message, args, args.join(" ").split("++").filter(Boolean), message.member, args.join(" "), prefix);
+                return command.run(client, message, args);
             }
         }
 

@@ -41,7 +41,7 @@ module.exports = class Giveaway extends Command {
                         .setDescription('Delete A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
-                            .setDescription('Enter Giveaway Message Id (Or) Prize.')
+                            .setDescription('Enter Giveaway Message Id Or Prize.')
                             .setRequired(true)))
                 .addSubcommand(subcommand =>
                     subcommand
@@ -98,9 +98,8 @@ module.exports = class Giveaway extends Command {
 	}
 	async run(client, interaction){
         
-        let subcommand = interaction.options.getSubcommand();
-        
         await interaction.deferReply({ ephemeral: true })
+        let subcommand = await client.functions.getOptions(interaction).subcommand();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,39 +110,33 @@ module.exports = class Giveaway extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'create'){
-            const channel1 = channel('channel');
-            const duration1 = string('duration');
+            const channel = await client.functions.getOptions(interaction).channel('channel');
+            const duration1 = await client.functions.getOptions(interaction).string('duration');
             const duration = ms(duration1)
-            const winnerCount = integer('winnercount');
-            const prize = string('prize');
-            const hosted = user('user');
-            const ping = role(`ping`)
-            if(ping){
-                db.set(`giveawayping_${interaction.guild.id}`, ping.id)
-                gstart(channel1, prize, duration, winnerCount, hosted);
-            } else {
-                gstart(channel1, prize, duration, winnerCount, hosted);
-            }
+            const winnerCount = await client.functions.getOptions(interaction).integer('winnercount');
+            const prize = await client.functions.getOptions(interaction).string('prize');
+            const hosted = await client.functions.getOptions(interaction).user('hosted');
+            await client.functions.giveaway().start(channel, prize, duration, winnerCount, hosted || interaction.user);
+            return interaction.followUp({ content: `> Done✅. Giveaway Started In ${channel}` })
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'delete'){
-            const query = string(`query`);
+            const query = await client.functions.getOptions(interaction).string(`query`);
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
             } else {
-                client.giveawaysManager.delete(giveaway.messageId).then(() => {
-                    interaction.followUp({content: `> Done✅. Giveaway Deleted.` })
-                })
+                await client.functions.giveaway().delete(giveaway.messageId);
+                interaction.followUp({content: `> Done✅. Giveaway Deleted.` })
             }
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'end'){
-            const query = string(`query`);
+            const query = await client.functions.getOptions(interaction).string(`query`);
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
@@ -163,7 +156,7 @@ module.exports = class Giveaway extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'pause'){
-            const query = string('query');
+            const query = await client.functions.getOptions(interaction).string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
@@ -183,7 +176,7 @@ module.exports = class Giveaway extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'resume'){
-            const query = string('query');
+            const query = await client.functions.getOptions(interaction).string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
@@ -203,10 +196,10 @@ module.exports = class Giveaway extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'edit'){
-            const query = string('query');
+            const query = await client.functions.getOptions(interaction).string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
-            const newprize = string('prize');
-            const newwinnercount = integer('winnercount');
+            const newprize = await client.functions.getOptions(interaction).string('prize');
+            const newwinnercount = await client.functions.getOptions(interaction).integer('winnercount');
 
             if(newprize && newwinnercount){
                 client.giveawaysManager.edit(giveaway.messageId, {
@@ -244,7 +237,7 @@ module.exports = class Giveaway extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////        
 
         if(subcommand === 'reroll'){
-            const query = string('query');
+            const query = await client.functions.getOptions(interaction).string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct Query (or) Try By Entering MessageId.` })
@@ -257,46 +250,7 @@ module.exports = class Giveaway extends Command {
             }
         }
 
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        function string(text){
-            let stringInput = interaction.options.getString(text);
-            return stringInput;
-        }
-        function user(usr){
-            let usrInput = interaction.options.getUser(usr);
-            return usrInput;
-        }
-        function channel(chl){
-            let chlInput = interaction.options.getChannel(chl);
-            return chlInput;
-        }
-        function integer(int){
-            let intInput = interaction.options.getInteger(int);
-            return intInput;
-        }
-        function number(num){
-            let numInput = interaction.options.getNumber(num);
-            return numInput;
-        }
-        function role(rle){
-            let rleInput = interaction.options.getRole(rle);
-            return rleInput;
-        }
-        function gstart(channel1, prize, duration, winnerCount, hosted){
-            return client.giveawaysManager.start(channel1, {
-                prize,
-                duration,
-                winnerCount,
-                messages,
-                hostedBy: hosted || interaction.user,
-            }).then(() => {
-                interaction.followUp({content: `> Done✅. Giveaway Started In ${channel1}`})
-            }).catch((err) => {
-                interaction.followUp({ content: '> Failed To Start Giveaway. Please Make Sure You Have Entered Correct Details.'})
-            })
-        }
-
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };

@@ -103,6 +103,23 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  giveaway(){
+    let client = this.client;
+    function start(channel, prize, duration, winnerCount, user){
+      return client.giveawaysManager.start(channel, {
+        prize,
+        duration,
+        winnerCount,
+        messages,
+        hostedBy: user,
+      });
+    }
+    function delet(id){
+      return client.giveawaysManager.delete(id);
+    }
+    return { start, delet };
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   eightBall(){

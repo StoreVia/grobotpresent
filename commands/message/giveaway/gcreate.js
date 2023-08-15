@@ -66,12 +66,12 @@ module.exports = class MessageGiveawayCreate extends Command {
 						} else if (winnerCount < 1){
 							await m.delete().catch(() => { return });
 							return await failed("WinnerCount Must Be More Than One Number. Try Again.", "WinnerCount", "Please Send Giveaway WinnerCount.");
-						} else if (winnerCount > 20){
+						} else if (winnerCount > 1000){
 							await m.delete().catch(() => { return });
-							return await failed("WinnerCount Must Be Less Than 20. Try Again.", "WinnerCount", "Please Send Giveaway WinnerCount.");
+							return await failed("WinnerCount Must Be Less Than 100. Try Again.", "WinnerCount", "Please Send Giveaway WinnerCount.");
 						} else {
 							winnerCount = winnerCount;
-							await waitingEmbed("Please Send Giveaway Duration");
+							await waitingEmbed("Please Send Giveaway Duration Eg: 10s, 10min, 10h, 10d");
 							await m.delete().catch(() => { return });
 					 	}
 					  	break;
@@ -79,22 +79,16 @@ module.exports = class MessageGiveawayCreate extends Command {
 					case !duration:{
 						if(!(duration = parsec(m.content).duration)){
 							await m.delete().catch(() => { return });
-							return await failed("Please Provide Valid Duration As Mentioned In Embed. Try Again.", "Duration", "Please Send Giveaway Duration.");
+							return await failed("Please Provide Valid Duration As Mentioned In Embed. Try Again.", "Duration", "Please Send Giveaway Duration Eg: 10s, 10min, 10h, 10d.");
 						} else if (duration > parsec("20d").duration){
 							await m.delete().catch(() => { return });
-							return await failed("Giveaway Duration Must To Less Than 20 Days. Try Again.", "Duration", "Please Send Giveaway Duration.");
+							return await failed("Giveaway Duration Must To Less Than 20 Days. Try Again.", "Duration", "Please Send Giveaway Duration Eg: 10s, 10min, 10h, 10d.");
 						} else {
 							duration = duration;
 							await m.delete().catch(() => { return });
 							await msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`Giveaway Started In ${channel} Checkout!`).build()]});
 					  	}
-					  	return client.giveawaysManager.start(channel, {
-							prize,
-							duration,
-							winnerCount,
-							messages,
-							hostedBy: message.author,
-					  	});
+						await client.functions.giveaway().start(channel, prize, duration, winnerCount, message.author);
 					}
 				}
 			})
