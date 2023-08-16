@@ -3,7 +3,7 @@ const { SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelTy
 messages = require('../../../giveawayUtility/message');
 const ms = require('ms');
 
-module.exports = class Giveaway extends Command {
+module.exports = class InteractionGiveaway extends Command {
 	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
@@ -54,7 +54,7 @@ module.exports = class Giveaway extends Command {
                .addSubcommand(subcommand =>
                     subcommand
                         .setName('pause')
-                        .setDescription('Pause A Giveaways.')
+                        .setDescription('Pause A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
                                 .setDescription('Enter Giveaway Message Id (Or) Prize.')
@@ -62,7 +62,7 @@ module.exports = class Giveaway extends Command {
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('resume')
-                        .setDescription('Resume A Giveaways.')
+                        .setDescription('Resume A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
                                 .setDescription('Enter Giveaway Message Id (Or) Prize.')
@@ -143,11 +143,11 @@ module.exports = class Giveaway extends Command {
             } else if(giveaway.ended){
                 interaction.followUp({ content: `> This Giveaway Has Been Already Ended. Else Try By Entering Message Id.` })
             } else {
-                client.giveawaysManager.end(giveaway.messageId).then(() => {
+                await client.functions.giveaway().end(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Ended.` })
                 }).catch((e) => {
                     if(e.includes(`already ended`)){
-                        interaction.followUp({ content: `> Please Try To Enter Message Id As There Are Many Giveaway's With The Same Prize.` })
+                        interaction.followUp({ content: `> This Giveaway Has Been Already Ended. Else Try By Entering Message Id.` })
                     } 
                 })
             }
@@ -160,14 +160,16 @@ module.exports = class Giveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else if(giveaway.paused){
+                interaction.followUp({ content: `> This Giveaway Has Been Already Paused. Else Try By Entering Message Id.` })
             } else {
                 client.giveawaysManager.pause(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Paused.` })
                 }).catch((e) => {
                     if(e.includes(`already paused`)){
-                        interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
+                        interaction.followUp({ content: `> This Giveaway Has Been Already Paused. Else Try By Entering Message Id.` })
                     } else if(e.includes(`already ended`)){
-                        interaction.followUp({ content: `> Please Try To Enter Message Id As There Are Many Giveaway's With The Same Prize.` })
+                        interaction.followUp({ content: `> This Giveaway Was Ended And Can't Be Paused. Else Try By Entering Message Id.` })
                     } 
                 })
             }
@@ -180,14 +182,16 @@ module.exports = class Giveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
+            } else if(giveaway.unpaused){
+                interaction.followUp({ content: `> This Giveaway Was Not Paused. Else Try By Entering Message Id.` })
             } else {
                 client.giveawaysManager.unpause(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Resumed.` })
                 }).catch((e) => {
                     if(e.includes(`not paused`)){
-                        interaction.followUp({ content: `> This Giveaway Has Been Already Paused.` })
+                        interaction.followUp({ content: `> This Giveaway Was Not Paused. Else Try By Entering Message Id.` })
                     } else if(e.includes(`already ended`)){
-                        interaction.followUp({ content: `> Please Try To Enter Message Id As There Are Many Giveaway's With The Same Prize.` })
+                        interaction.followUp({ content: `> This Giveaway Was Ended And Can't Be Resumed. Else Try By Entering Message Id.` })
                     } 
                 })
             }

@@ -117,7 +117,10 @@ module.exports = class Functions {
     function delet(id){
       return client.giveawaysManager.delete(id);
     }
-    return { start, delet };
+    function end(id){
+      return client.giveawaysManager.end(id);
+    }
+    return { start, delet, end };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
