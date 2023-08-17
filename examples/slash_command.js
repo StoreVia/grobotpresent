@@ -1,7 +1,7 @@
 const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 
-module.exports = class InteractionHangMan extends Command {
+module.exports = class Interaction extends Command {
 	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
