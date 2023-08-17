@@ -160,10 +160,8 @@ module.exports = class InteractionGiveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
-            } else if(giveaway.paused){
-                interaction.followUp({ content: `> This Giveaway Has Been Already Paused. Else Try By Entering Message Id.` })
             } else {
-                client.giveawaysManager.pause(giveaway.messageId).then(() => {
+                client.functions.giveaway().pause(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Paused.` })
                 }).catch((e) => {
                     if(e.includes(`already paused`)){
@@ -182,10 +180,8 @@ module.exports = class InteractionGiveaway extends Command {
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
             if(!giveaway){
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.` })
-            } else if(giveaway.unpaused){
-                interaction.followUp({ content: `> This Giveaway Was Not Paused. Else Try By Entering Message Id.` })
             } else {
-                client.giveawaysManager.unpause(giveaway.messageId).then(() => {
+                client.functions.giveaway().resume(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Resumed.` })
                 }).catch((e) => {
                     if(e.includes(`not paused`)){

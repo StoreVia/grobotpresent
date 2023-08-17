@@ -120,7 +120,13 @@ module.exports = class Functions {
     function end(id){
       return client.giveawaysManager.end(id);
     }
-    return { start, delet, end };
+    function pause(id){
+      return client.giveawaysManager.pause(id);
+    }
+    function resume(id){
+      return client.giveawaysManager.unpause(id);
+    }
+    return { start, delet, end, pause, resume };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
