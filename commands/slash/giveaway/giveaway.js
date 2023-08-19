@@ -11,8 +11,7 @@ module.exports = class InteractionGiveaway extends Command {
 				.setDescription('Create Giveaways.')
                 .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('create')
+                    subcommand.setName('create')
                         .setDescription('Create A Giveaway.')
                         .addChannelOption(option =>
                             option.setName('channel')
@@ -36,48 +35,42 @@ module.exports = class InteractionGiveaway extends Command {
                                 .setDescription('Select Host Or Leave It.')
                                 .setRequired(false)))
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('delete')
+                    subcommand.setName('delete')
                         .setDescription('Delete A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
                             .setDescription('Enter Giveaway Message Id Or Prize.')
                             .setRequired(true)))
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('end')
+                    subcommand.setName('end')
                         .setDescription('End A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
                                 .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true)))
                .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('pause')
+                    subcommand.setName('pause')
                         .setDescription('Pause A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
                                 .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('resume')
+                    subcommand.setName('resume')
                         .setDescription('Resume A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
                                 .setDescription('Enter Giveaway Message Id (Or) Prize.')
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName(`reroll`)
-                        .setDescription(`Reroll A Giveaway`)
+                    subcommand.setName(`reroll`)
+                        .setDescription(`ReRoll A Giveaway`)
                         .addStringOption(option =>
                             option.setName(`query`)
                                 .setDescription(`Enter Giveaway Message Id (Or) Prize.`)
                                 .setRequired(true)))
                 .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('edit')
+                    subcommand.setName('edit')
                         .setDescription('Edit A Giveaway.')
                         .addStringOption(option =>
                             option.setName('query')
@@ -198,33 +191,23 @@ module.exports = class InteractionGiveaway extends Command {
         if(subcommand === 'edit'){
             const query = await client.functions.getOptions(interaction).string('query');
             const giveaway = client.giveawaysManager.giveaways.find((g) => g.prize === query && g.guildId === interaction.guild.id) || client.giveawaysManager.giveaways.find((g) => g.messageId === query && g.guildId === interaction.guild.id);
-            const newprize = await client.functions.getOptions(interaction).string('prize');
-            const newwinnercount = await client.functions.getOptions(interaction).integer('winnercount');
+            const newPrize = await client.functions.getOptions(interaction).string('prize');
+            const newWc = await client.functions.getOptions(interaction).integer('winnercount');
 
-            if(newprize && newwinnercount){
-                client.giveawaysManager.edit(giveaway.messageId, {
-                    addTime: 5000,
-                    newWinnerCount: newwinnercount,
-                    newPrize: newprize
-                }).then(() => {
+            if(newPrize && newWc){
+                await client.functions.giveaway().edit(giveaway.messageId, `${newWc},${newPrize}(wp)`).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.', ephemeral:true});
                 });
-            } else if(newprize){
-                client.giveawaysManager.edit(giveaway.messageId, {
-                    addTime: 5000,
-                    newPrize: newprize
-                }).then(() => {
+            } else if(newPrize){
+                await client.functions.giveaway().edit(giveaway.messageId, `${newPrize}(pri)`).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.followUp({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.', ephemeral:true});
                 });
-            } else if(newwinnercount){
-                client.giveawaysManager.edit(giveaway.messageId, {
-                    addTime: 5000,
-                    newWinnerCount: newwinnercount
-                }).then(() => {
+            } else if(newWc){
+                await client.functions.giveaway().edit(giveaway.messageId, `${newWc}(win)`).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Updated.`})
                 }).catch((err) => {
                     interaction.reply({ content: '> No Giveaway Found. Please Make Sure You Have Entered Correct MessageId/Prize.', ephemeral:true});
@@ -243,8 +226,8 @@ module.exports = class InteractionGiveaway extends Command {
                 interaction.followUp({ content: `> No Giveaway Found. Please Make Sure You Have Entered Correct Query (or) Try By Entering MessageId.` })
             } else if(!giveaway.ended){
                 interaction.followUp({ content: `> The Giveaway isn't Ended To Reroll.` })
-            }else {
-                client.giveawaysManager.reroll(giveaway.messageId).then(() => {
+            } else {
+                await client.functions.giveaway().reRoll(giveaway.messageId).then(() => {
                     interaction.followUp({content: `> Done✅. Giveaway Rerolled.` })
                 })
             }

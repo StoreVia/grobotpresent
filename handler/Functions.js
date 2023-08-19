@@ -126,7 +126,32 @@ module.exports = class Functions {
     function resume(id){
       return client.giveawaysManager.unpause(id);
     }
-    return { start, delet, end, pause, resume };
+    async function edit(id, string){
+      if(string.includes(`win`)){
+        let winnerCount = await string.replace(/\(win\)/g, '');
+        await client.giveawaysManager.edit(id, {
+          addTime: 5000,
+          newWinnerCount: winnerCount
+        })
+      } else if(string.includes(`pri`)){
+        await client.giveawaysManager.edit(id, {
+          addTime: 5000,
+          newPrize: string.replace(/\(pri\)/g, '')
+        })
+      } else if(string.includes(`wp`)){
+        let text = string.replace(/\(wp\)/g, '')
+        let part = text.split(',');
+        await client.giveawaysManager.edit(id, {
+          addTime: 5000,
+          newWinnerCount: part[0],
+          newPrize: part[1]
+        })
+      }
+    }
+    function reRoll(id){
+      return client.giveawaysManager.reroll(id);
+    }
+    return { start, delet, end, pause, resume, edit, reRoll };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

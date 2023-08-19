@@ -13,7 +13,6 @@ module.exports = class MessageTrivia extends Command {
 	}
 	async run(client, message){
 
-        
         await client.functions.games(message, false).trivia();
 	}
 };

@@ -1,10 +1,1 @@
-{
-    "json":[],
-    "premiumactivated":[{"id":"1079794484130365561","value":{"keyandtime":"0yTBegbWZh59XOCnKiqHlf3iLOevLl, 1691166232256"}}],
-    "updates":[],
-    "premium":[{"id":"premium","value":["0yTBegbWZh59XOCnKiqHlf3iLOevLl"]}],
-    "premiumused":[{"id":"premium","value":["0yTBegbWZh59XOCnKiqHlf3iLOevLl"]}],
-    "welcome":[],
-    "ticket":[],
-    "ticketblock":[]
-}
+{"json":[],"premiumactivated":[{"id":"1079794484130365561","value":{"keyandtime":"0yTBegbWZh59XOCnKiqHlf3iLOevLl, 1691166232256"}}],"updates":[],"premium":[{"id":"premium","value":["0yTBegbWZh59XOCnKiqHlf3iLOevLl"]}],"premiumused":[{"id":"premium","value":["0yTBegbWZh59XOCnKiqHlf3iLOevLl"]}],"welcome":[],"ticket":[],"ticketblock":[],"akinatorlanguage":[{"id":"1079794484130365561","value":"en"}]}

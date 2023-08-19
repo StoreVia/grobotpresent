@@ -12,7 +12,6 @@ module.exports = class MessageWordle extends Command {
 		});
 	}
 	async run(client, message){
-
         
         await client.functions.games(message, false).wordle();
 	}

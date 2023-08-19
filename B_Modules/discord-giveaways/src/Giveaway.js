@@ -620,9 +620,7 @@ class Giveaway extends EventEmitter {
             if(typeof options.newImage === 'string') this.image = options.newImage;
             if(typeof options.newPrize === 'string') this.prize = options.newPrize;
             if(options.newExtraData) this.extraData = options.newExtraData;
-            if(Number.isInteger(options.newWinnerCount) && options.newWinnerCount > 0 && !this.isDrop){
-                this.winnerCount = options.newWinnerCount;
-            }
+            if(options.newWinnerCount) this.winnerCount = options.newWinnerCount;
             if(Number.isFinite(options.addTime) && !this.isDrop){
                 this.endAt = this.endAt + options.addTime;
                 if(this.endTimeout) clearTimeout(this.endTimeout);

@@ -1,5 +1,4 @@
 const Command = require('../../../structures/Commands/MessageCommandClass');
-const parsec = require("parsec");
 
 module.exports = class MessageGiveawayPause extends Command {
 	constructor(client){

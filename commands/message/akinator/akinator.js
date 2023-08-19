@@ -17,9 +17,10 @@ module.exports = class MessageAkinator extends Command {
         let langdbcheck = await langdb.get(`${message.author.id}`);
 
         if(!langdbcheck){
-            return message.reply(`Please Select Your Akinator Language By Using Following Comamnd :\n> \`${process.env.prefix}setakilang\``)
+			let msgdefer = await client.functions.deferReply().message(message);
+            return msgdefer.edit({ content: `Please Select Your Akinator Language By Using Following Comamnd :\n> \`${process.env.prefix}setakilang\`` })
         } else {
-            return await client.functions.akinator(message, langdbcheck);
+            return await client.functions.akinator(message, langdbcheck)
         }
 	}
 };
