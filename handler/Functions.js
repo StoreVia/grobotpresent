@@ -10,6 +10,7 @@ const ms = require(`ms`);
 const roasts = require(`../A_Jsons/roast.json`);
 const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Modules/discord-gamecord');
 const canvacord = require("canvacord");
+const version = require(`../package.json`).version;
 
 module.exports = class Functions {
   constructor(client){
@@ -98,7 +99,27 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  botInfo(api, latency){
+    const client = this.client;
+    const thisT = this;
+    const buttonRow = this.buttons('Website', `${process.env.website}(url)`, ButtonStyle.Link, 'Invite', `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands(url)`, ButtonStyle.Link,'Top.gg', `https://top.gg/bot/${client.user.id}(url)`, ButtonStyle.Link);
+    const promises = [ client.shard.fetchClientValues('guilds.cache.size'), client.shard.broadcastEval(c => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)) ];
+    Promise.all(promises).then(async(results) => {
+      let embed = await thisT.embedBuild().title(`🤖 Bot Info - \`${client.user.username}\``).description(`**Please Support Us By Voting On Top.gg**`).thumbnail(`${process.env.iconurl}`).ibvfields(`✉️ InviteMe`, `[InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, `🟢 Api`, `\`${api} ms\``, `🏓 Latency`, `\`${latency} ms\``, `🏠 Guilds`, `${results[0].reduce((acc, guildCount) => acc + guildCount, 0)}`, `👥 Users`, `${results[1].reduce((acc, memberCount) => acc + memberCount, 0)}`, `🤖 TotalCmds`, `${process.env.commands_count} Cmds`, `🤖 Version`, `\`\`\`> v${version}\`\`\``).footer().build();
+      return { buttonRow, embed };
+    });
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async avatar(usr, size, torf){
+    let buttonRow = await this.buttons(`Png`, `${await image(`png`)}(url)`, ButtonStyle.Link, `Jpg`, `${await image(`jpg`)}(url)`, ButtonStyle.Link, `Webp`, `${await image(`webp`)}(url)`, ButtonStyle.Link);
+    let embed = await this.embedBuild().title(`${torf ? usr.user.username : usr.username}'s Avatar`).description(`> Click One Of The Formats You Like.\n> PNG(Recommended)`).image(await image(`png`)).footer().build();
+    async function image(extension){
+      return usr.displayAvatarURL({ size: await size, dynamic: true, extension: extension })
+    }
+    return { embed, buttonRow }
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -407,10 +428,19 @@ module.exports = class Functions {
       embed.addFields(...realFields);
       return this;
     }
+    function ibvfields(...fieldSets){
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 2){
+        const [name, value] = fieldSets.slice(i, i + 2);
+        realFields.push({ name: `**${name}: **`, value: `> ${value}`, inline: true });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
     function build(){
       return embed;
     }
-    return { author, title, description, thumbnail, image, url, fields, ifields, bfields, ibfields, color, footer, build };
+    return { author, title, description, thumbnail, image, url, fields, ifields, bfields, ibfields, ibvfields, color, footer, build };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -456,15 +486,24 @@ module.exports = class Functions {
     const buttonRow = new ActionRowBuilder();
     for (let i = 0; i < values.length; i += 3){
       const [label, customId, style] = values.slice(i, i + 3);
-      const button = new ButtonBuilder()
-        .setLabel(`${label.replace(/\(disabled\)/g, '')}`)
-        .setCustomId(`${customId}`)
-        .setDisabled(label.includes(`disabled`) ? true : false)
-        .setStyle(style);
-      buttonRow.addComponents(button);
+      if(customId.includes(`url`)){
+        const button = new ButtonBuilder()
+          .setLabel(`${label.replace(/\(disabled\)/g, '')}`)
+          .setURL(`${customId.replace(/\(url\)/g, '')}`)
+          .setDisabled(label.includes(`disabled`) ? true : false)
+          .setStyle(style);
+        buttonRow.addComponents(button);
+      } else {
+        const button = new ButtonBuilder()
+          .setLabel(`${label.replace(/\(disabled\)/g, '')}`)
+          .setCustomId(`${customId}`)
+          .setDisabled(label.includes(`disabled`) ? true : false)
+          .setStyle(style);
+        buttonRow.addComponents(button);
+      }
+    }
+    return buttonRow;
   }
-  return buttonRow;
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -532,10 +571,10 @@ module.exports = class Functions {
     function user(){
       return `> Mention A User To Use This Command.`
     }
-    function user(){
+    function text(){
       return `> Enter Some Text Use This Command.`
     }
-    return { bug, vc, user }
+    return { bug, vc, user, text }
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
