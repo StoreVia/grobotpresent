@@ -1,14 +1,14 @@
 const Command = require('../../../structures/Commands/MessageCommandClass');
 
-module.exports = class MessageBlur extends Command {
+module.exports = class MessageWasted extends Command {
 	constructor(client){
 		super(client, {
-			name: "blur",
+			name: "wasted",
   			category: "image",
-  			alias: ["blr"],
+  			alias: ["wstd", "wst"],
   			cooldown: 3,
-  			usage: `${process.env.prefix}blur <userMention>`,
-  			description: "Add Blur Image Effect.",
+  			usage: `${process.env.prefix}wasted <userMention>`,
+  			description: "Add Wasted Image Effect.",
 		});
 	}
 	async run(client, message){
@@ -19,7 +19,7 @@ module.exports = class MessageBlur extends Command {
         if(!user){
             return await msgdefer.edit({ content: await client.functions.errorMsg().user() })
         } else {
-            return await msgdefer.edit({ content: ``, files: [await client.functions.image(user).blur()] })
+            return await msgdefer.edit({ content: ``, files: [await client.functions.image(user).wasted()] })
         }
 	}
 };

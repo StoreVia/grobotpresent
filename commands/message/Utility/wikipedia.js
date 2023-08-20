@@ -8,7 +8,7 @@ module.exports = class MessagePing extends Command {
   			category: "utility",
   			alias: ["wiki", "wp"],
   			cooldown: 3,
-  			usage: `${process.env.prefix}wikipedia`,
+  			usage: `${process.env.prefix}wikipedia <string>`,
   			description: "Search Something In Wikipedia.",
 		});
 	}

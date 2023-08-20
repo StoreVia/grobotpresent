@@ -4,7 +4,7 @@ module.exports = class MessagePing extends Command {
 	constructor(client){
 		super(client, {
 			name: "ping",
-  			category: "Info",
+  			category: "info",
   			alias: ["stats"],
   			cooldown: 3,
   			usage: `${process.env.prefix}ping`,
