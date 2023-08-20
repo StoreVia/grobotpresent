@@ -8,7 +8,7 @@ module.exports = class MessageGiveawayEnd extends Command {
   			category: "giveaway",
   			alias: ["ge", "giveawayend"],
   			cooldown: 3,
-  			usage: `${process.env.prefix}gend <giveaway messageId or Prize>`,
+  			usage: `${process.env.prefix}gend <giveaway messageId or prize>`,
   			description: "End A Giveaway.",
 		});
 	}

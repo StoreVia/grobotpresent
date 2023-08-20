@@ -7,7 +7,7 @@ module.exports = class MessageFlipText extends Command {
   			category: "fun",
   			alias: ["ft", "flptxt"],
   			cooldown: 3,
-  			usage: `${process.env.prefix}fliptext <string>`,
+  			usage: `${process.env.prefix}fliptext <text>`,
   			description: "Flip Text UpsideDown.",
 		});
 	}

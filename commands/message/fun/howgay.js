@@ -18,7 +18,7 @@ module.exports = class MessageHowGay extends Command {
 		let msgdefer = await client.functions.deferReply().message(message);
 
         if(!user){
-			return msgdefer.edit({ content: `> Mention A User To Calculate Gay Percentage.` })
+			return msgdefer.edit({ content: await client.functions.errorMsg().user() })
 		} else {
             return await msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${user} Is ${gaypercentage}% Gay`).build()]});
         }

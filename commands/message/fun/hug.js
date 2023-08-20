@@ -18,11 +18,11 @@ module.exports = class MessageHug extends Command {
 		let msgdefer = await client.functions.deferReply().message(message);
 
 		if(!user){
-			return msgdefer.edit({ content: `> Mention Someone To Hug.` })
+			return msgdefer.edit({ content: await client.functions.errorMsg().user() })
 		} else if(user.id === message.author.id){
-			return msgdefer.edit({ files: [attachment], content: `${message.author} You Can't Hug Yourselft. Come I Will Hug You 🥰.` })
+			return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${message.author} You Can't Hug Yourselft. Come I Will Hug You 🥰.`).image(`attachment://hug.png`).footer().build()], files: [await attachment] })
 		} else {
-			return msgdefer.edit({ files: [attachment],content: `${message.author} Hugs ${user}, Awww How Cute 🥰.` })
+			return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${message.author} Hugs ${user}, Awww How Cute 🥰.`).image(`attachment://hug.png`).footer().build()], files: [await attachment] })
 		}
 	}
 };

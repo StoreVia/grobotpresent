@@ -8,7 +8,8 @@ https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs
 const titlecase = require(`titlecase`);
 const ms = require(`ms`);
 const roasts = require(`../A_Jsons/roast.json`);
-const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Modules/discord-gamecord')
+const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Modules/discord-gamecord');
+const canvacord = require("canvacord");
 
 module.exports = class Functions {
   constructor(client){
@@ -100,6 +101,15 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  image(){
+    async function blur(usr){
+      let image = await canvacord.Canvas.blur(usr.displayAvatarURL({ extension: 'png' }));
+      let attachment = new AttachmentBuilder(image, { name: "blur.png"});
+      return await attachment;
+    }
+    return { blur };
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,9 +265,7 @@ module.exports = class Functions {
   async hug(){
     let response = await fetch(`${process.env.srapi}/animu/hug`);
     let data = await response.json();
-    const link = data.link;
-    let attachment = new AttachmentBuilder(link);
-    return attachment;
+    return await new AttachmentBuilder(data.link, { name: 'hug.png' });
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -448,7 +456,7 @@ module.exports = class Functions {
   deferReply(){
     const client = this.client;
     function message(msg){
-      return msg.reply({ content: `> ${client.user.username} Is Thinking...` })
+      return msg.channel.send({ content: `> ${client.user.username} Is Thinking...` })
     }
     return { message }
   }
@@ -492,7 +500,10 @@ module.exports = class Functions {
     function vc(){
       return `> Please Make Sure You Are In A Voice Channel.`
     }
-    return { bug, vc }
+    function user(){
+      return `> Mention A User To Use This Command.`
+    }
+    return { bug, vc, user }
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

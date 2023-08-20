@@ -7,7 +7,7 @@ module.exports = class MessageGiveawayReRoll extends Command {
   			category: "giveaway",
   			alias: ["grr", "giveawayrer", "giveawayrroll", "giveawayreroll"],
   			cooldown: 3,
-  			usage: `${process.env.prefix}greroll <giveaway messageId or Prize>`,
+  			usage: `${process.env.prefix}greroll <giveaway messageId or prize>`,
   			description: "ReRoll A Giveaway.",
 		});
 	}
