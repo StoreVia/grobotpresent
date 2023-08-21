@@ -97,6 +97,34 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  help(){
+    const selectMenuRow = new ActionRowBuilder()
+			.addComponents(
+				new StringSelectMenuBuilder()
+					.setPlaceholder('Select An Option')
+					.setCustomId('hlpcmd')
+					.setDisabled(false)
+					.setMaxValues(1)
+					.setOptions([
+            { label: 'Activities', value: 'activities', emoji: '🚀' },
+						{ label: 'Akinator', value: 'akinator', emoji: '🧞' },
+						{ label: 'Chatbot', value: 'chatbot', emoji: '🤖' },
+            { label: 'Economy', value: 'economy', emoji: '🏛️' },
+						{ label: 'Fun', value: 'fun', emoji: '🎯' },
+						{ label: 'Mini Player Games', value: 'games', emoji: '🎮' },
+						{ label: 'Giveaway', value: 'giveaway', emoji: '🎉' },
+						{ label: 'Image', value: 'image', emoji: '🖼️' },
+						{ label: 'Info', value: 'info', emoji: '🌐' },
+            { label: 'Moderation', value: 'moderation', emoji: '🛡️' },
+            { label: 'Music', value: 'music', emoji: '🎶' },
+						{ label: 'Ticket', value: 'ticket',	emoji: '🎫' },
+						{ label: 'Truth Or Dare', value: 'tod', emoji: '🎭' },
+						{ label: 'Utility', value: 'utility', emoji: '🔨' },
+						{ label: 'Welcome', value: 'welcome', emoji: '👋' },
+					]),
+			);
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async botInfo(api, latency){

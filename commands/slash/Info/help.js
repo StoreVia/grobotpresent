@@ -6,7 +6,7 @@ module.exports = class Help extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('help')
-				.setDescription('Gives List Of Commands Of Bot.')
+				.setDescription('Gives List Of Bot Commands.')
 				.setDMPermission(true),
 			usage: 'help',
 			category: 'Info',
@@ -14,72 +14,6 @@ module.exports = class Help extends Command {
 		});
 	}
 	async run(client, interaction){
-
-		const selectMenuRow = new ActionRowBuilder()
-			.addComponents(
-				new StringSelectMenuBuilder()
-					.setPlaceholder('Select An Option')
-					.setCustomId('hlpcmd')
-					.setDisabled(false)
-					.setMaxValues(1)
-					.setOptions([
-						{
-							label: 'Akinator',
-							value: 'akinator',
-							emoji: '🧞',
-						},
-						{
-							label: 'Chatbot',
-							value: 'chatbot',
-							emoji: '🤖',
-						},
-						{
-							label: 'Fun',
-							value: 'fun',
-							emoji: '🎯',
-						},
-						{
-							label: 'Mini Player Games',
-							value: 'games',
-							emoji: '🎮',
-						},
-						{
-							label: 'Giveaway',
-							value: 'giveaway',
-							emoji: '🎉',
-						},
-						{
-							label: 'Image',
-							value: 'image',
-							emoji: '🖼️',
-						},
-						{
-							label: 'Info',
-							value: 'info',
-							emoji: '🌐',
-						},
-						{
-							label: 'Ticket',
-							value: 'ticket',
-							emoji: '🎫',
-						},
-						{
-							label: 'Truth Or Dare',
-							value: 'tod',
-							emoji: '🎭',
-						},
-						{
-							label: 'Utility',
-							value: 'utility',
-							emoji: '🔨',
-						},
-						{
-							label: 'Welcome',
-							value: 'welcome',
-							emoji: '👋',
-						},
-					]),
-			);
 
 		await interaction.deferReply();
 		
