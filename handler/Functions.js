@@ -99,15 +99,13 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  botInfo(api, latency){
+  async botInfo(api, latency){
     const client = this.client;
     const thisT = this;
     const buttonRow = this.buttons('Website', `${process.env.website}(url)`, ButtonStyle.Link, 'Invite', `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands(url)`, ButtonStyle.Link,'Top.gg', `https://top.gg/bot/${client.user.id}(url)`, ButtonStyle.Link);
-    const promises = [ client.shard.fetchClientValues('guilds.cache.size'), client.shard.broadcastEval(c => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)) ];
-    Promise.all(promises).then(async(results) => {
-      let embed = await thisT.embedBuild().title(`🤖 Bot Info - \`${client.user.username}\``).description(`**Please Support Us By Voting On Top.gg**`).thumbnail(`${process.env.iconurl}`).ibvfields(`✉️ InviteMe`, `[InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, `🟢 Api`, `\`${api} ms\``, `🏓 Latency`, `\`${latency} ms\``, `🏠 Guilds`, `${results[0].reduce((acc, guildCount) => acc + guildCount, 0)}`, `👥 Users`, `${results[1].reduce((acc, memberCount) => acc + memberCount, 0)}`, `🤖 TotalCmds`, `${process.env.commands_count} Cmds`, `🤖 Version`, `\`\`\`> v${version}\`\`\``).footer().build();
-      return { buttonRow, embed };
-    });
+    const results = await Promise.all([ client.shard.fetchClientValues('guilds.cache.size'), client.shard.broadcastEval((c) => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0))]);
+    let embed = await thisT.embedBuild().title(`🤖 Bot Info - \`${client.user.username}\``).description(`**Please Support Us By Voting On Top.gg**`).thumbnail(`${process.env.iconurl}`).ibfields(`✉️ InviteMe`, `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, `🟢 Api`, `> \`${api} ms\``, `🏓 Latency`, `> \`${latency} ms\``, `🏠 Guilds`, `> ${await results[0].reduce((acc, guildCount) => acc + guildCount, 0)}`, `👥 Users`, `> ${await results[1].reduce((acc, memberCount) => acc + memberCount, 0)}`, `🤖 TotalCommands`, `> ${process.env.commands_count} Cmds`, `🤖 Version`, `\`\`\`> v${version}\`\`\``).footer().build();
+    return await { buttonRow, embed };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

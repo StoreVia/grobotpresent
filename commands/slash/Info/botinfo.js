@@ -1,6 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
-const version = require(`../../../package.json`).version;
 
 module.exports = class Botinfo extends Command {
 	constructor(client){
@@ -17,6 +16,11 @@ module.exports = class Botinfo extends Command {
 	async run(client, interaction){
 
 		await interaction.deferReply();
-		return await interaction.followUp({ embeds: [client.functions.botInfo("-", "-")] }).then((msg) =>  msg.edit({ embeds: [client.functions.botInfo(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp)] }));
+		let firstEmbed = await client.functions.botInfo("-", "-");
+
+		return await interaction.followUp({ embeds: [firstEmbed.embed], components: [firstEmbed.buttonRow] }).then(async(msg) => {
+			let secoundEmbed = await client.functions.botInfo(Math.floor(client.ws.ping), msg.createdTimestamp - interaction.createdTimestamp);
+			msg.edit({ embeds: [secoundEmbed.embed] });
+		})
 	}
 };
