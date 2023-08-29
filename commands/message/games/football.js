@@ -6,7 +6,7 @@ module.exports = class MessageFootBall extends Command {
 		super(client, {
 			name: "football",
   			category: "games",
-  			alias: ["ft", "fotbal"],
+  			alias: ["fb", "fotbal"],
   			cooldown: 3,
   			usage: `${process.env.prefix}football`,
   			description: "Play FootBall Game.",

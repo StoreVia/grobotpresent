@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder, ModalBuilder, TextInputBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder, ModalBuilder, TextInputBuilder, StringSelectMenuBuilder } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
 const akinator = require("../B_Modules/discord.js-akinator");
@@ -70,7 +70,10 @@ module.exports = class Functions {
 			  }
 		  });
     }
-    return { dice, meme }
+    function help(int){
+
+    }
+    return { dice, meme, help };
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,11 +96,23 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  async memberCount(interact){
+    const guild = interact.guild;
+		const members = await guild.members.fetch();
+		const botMembers = members.filter(member => member.user.bot);
+		const realMembers = members.filter(member => !member.user.bot);
+    
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  help(){
+  invite(){
+    return this.embedBuild().title(`Invite Me`).description(`Invite \`${this.client.user.username}\` Bot Now - [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=8&scope=bot%20applications.commands)`).thumbnail(`${process.env.iconurl}`).footer().build();
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async help(){
     const selectMenuRow = new ActionRowBuilder()
 			.addComponents(
 				new StringSelectMenuBuilder()
@@ -123,6 +138,9 @@ module.exports = class Functions {
 						{ label: 'Welcome', value: 'welcome', emoji: '👋' },
 					]),
 			);
+    const buttonRow = await this.buttons(`Message`, `msg`, ButtonStyle.Secondary, `Slash`, `slsh`, ButtonStyle.Secondary, `Stop`, `stp`, ButtonStyle.Danger);
+    const embed = await this.embedBuild().title(`Help`).description(`Select One Of The Options Below.`).thumbnail(`${process.env.iconurl}`).footer().build();
+    return { embed, buttonRow, selectMenuRow };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -855,7 +873,7 @@ module.exports = class Functions {
         if(reason === 'idle' || reason === 'user'){
           gameEnded = true;
           componentsArray.components.map(component=> component.setDisabled(true));
-          await msg.edit({ components: [componentsArray, extension.buttons(`GameEndDueToInactivity(disabled)`, `gedti`, ButtonStyle.Secondary)] });
+          await msg.edit({ components: [componentsArray] });
         }
       });
     }

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/now-ui-kit.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700,800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/img/GroBot Rocket Logo.jpg">
+    <link rel="icon" type="image/x-icon" href="/img/GroBot Round.png">
 </head>
 <style>
 body{
@@ -208,13 +208,12 @@ body{
         <form action="" class="buttons-class">
             <a class="form-button" href="https://dsc.gg/invgrobot" role="button" target="_blank">Invite</a>
             <a class="form-button" href="https://dsc.gg/grobotcommunity" role="button" target="_blank">Discord</a>
-            <a class="form-button" href="/dashboard" role="button">Login</a>
             <div class="dropdown">
                 <button class="dropbtn">Others...</button>
                 <div class="dropdown-content">
-                  <a href="#">Privacy Policy</a>
-                  <a href="#">Terms Of Service</a>
-                  <a href="#">StoreVia</a>
+                  <a href="javascript:void(0);" onclick="openPrivacyPolicy();" >Privacy Policy</a>
+                  <a href="javascript:void(0);" onclick="openTermsOfService();" >Terms Of Service</a>
+                  <a href="https://storevia.netlify.app" role="button">StoreVia</a>
                 </div>
               </div>
         </form>
@@ -225,6 +224,12 @@ body{
 <script>
     if(/Lapi|Windows/i.test(navigator.userAgent)){
         window.location.href = "/";
+    }
+    function openPrivacyPolicy() {
+        window.open('/privacypolicy', '_blank', 'width=800,height=800,left=' + (screen.width - 800) / 2 + ',top=' + (screen.height - 800) / 2);
+    }
+    function openTermsOfService() {
+        window.open('/termsofservice', '_blank', 'width=800,height=800,left=' + (screen.width - 800) / 2 + ',top=' + (screen.height - 800) / 2);
     }
 </script>
 </html>

@@ -47,7 +47,7 @@ module.exports = class Wordle extends events {
 
   async getBoardImage(){
     const guess = this.guessed.length ? '&guessed='+this.guessed.join(',') : '';
-    return await new AttachmentBuilder('https://api.aniket091.xyz/wordle?word=' + this.word + guess, { name: 'wordle.png' });
+    return await new AttachmentBuilder('https://api.gamecord.xyz/wordle?word=' + this.word + guess, { name: 'wordle.png' });
   }
 
 

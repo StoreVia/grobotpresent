@@ -1,5 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Invite extends Command {
 	constructor(client){
@@ -14,17 +14,8 @@ module.exports = class Invite extends Command {
 		});
 	}
 	async run(client, interaction){
-		await interaction.deferReply();
 
-		const embed = new EmbedBuilder()
-        	.setTitle("Invite Me")
-        	.setThumbnail(`${process.env.iconurl}`)
-        	.setColor(`${process.env.ec}`)
-        	.setDescription(`Invite \`${client.user.username}\` Bot Now - [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`)
-        	.setFooter({
-        		text: `${client.user.username} - ${process.env.year} ©`, 
-        		iconURL: process.env.iconurl
-      		});
-		return await interaction.followUp({ embeds: [embed] });
+		await interaction.deferReply();
+		return await interaction.followUp({ embeds: [await client.functions.invite()] });
 	}
 };

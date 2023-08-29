@@ -7,9 +7,6 @@ const deploy = async () => {
 
 	const commandData = [];
 	const privateData = [];
-	function devPrefix(name){
-		return `dev${name}`;
-	}	
 
 	fs.readdirSync('./commands/slash').forEach(async category => {
 		const commands = fs.readdirSync(`./commands/slash/${category}/`).filter(cmd => cmd.endsWith('.js'));

@@ -8,7 +8,8 @@ api.use("/", express.static(join(__dirname, "..", "html")));
 api.use(session({ secret: "GroBot", resave: true, saveUninitialized: false }));
 //apiInitializationEnd
 
-function redirectToHome(req, res, next) {
+//redirectFunctionStart
+function redirect(req, res, next) {
   const allowedPaths = ["/", "/dashboard", "/mobile", "/privacypolicy", "/termsofservice"];
   const requestedPath = req.path;
   if (!allowedPaths.includes(requestedPath)) {
@@ -17,10 +18,11 @@ function redirectToHome(req, res, next) {
     next();
   }
 }
+//redirectFunctionEnd
 
 //RouterStart
 const router = express.Router();
-router.use(redirectToHome);
+router.use(redirect);
 router.get("/", (req, res) => {
   res.sendFile(join(__dirname, "..", "html", "index.html"));
 });

@@ -16,20 +16,12 @@ module.exports = class Help extends Command {
 	async run(client, interaction){
 
 		await interaction.deferReply();
-		
-		let embed = new EmbedBuilder()
-  			.setTitle('Help')
-			.setThumbnail(`${process.env.iconurl}`)
-  			.setDescription(`Select One Of The Options Below.`)
-  			.setFooter({
-      			text: `${client.user.username} - ${process.env.year} ©`, 
-     			iconURL: process.env.iconurl
-   			})
-        	.setColor(`${process.env.ec}`);
-		const i1 = await interaction.followUp({ embeds: [embed], components: [selectMenuRow] });
+		let functions = await client.functions.help();
+		const msg = await interaction.followUp({ embeds: [await functions.embed], components: [await functions.selectMenuRow, await functions.buttonRow] });
+		return await client.functions.collector(msg).help(interaction);
 
 		const filter = i => i.customId === 'hlpcmd';
-		const collector = i1.createMessageComponentCollector({ filter, idle: 60000 });
+		const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
 
 		collector.on('collect', async i => {
 			if(i.user.id != interaction.user.id){

@@ -58,15 +58,14 @@ module.exports = class TwoZeroFourEight extends events {
     }
   }
 
-
   async sendMessage(content){
     if(this.options.isSlashGame) return await this.message.editReply(content);
     else return await this.message.channel.send(content);
   }
 
   async getBoardImage(){
-    const url = 'https://api.aniket091.xyz/2048?board=' + this.gameBoard.map(c => chars[c]).join('');
-    return await new AttachmentBuilder(url, { name: 'gameboard.png' });
+    const url = 'https://api.gamecord.xyz/2048?board=' + this.gameBoard.map(c => chars[c]).join('');
+    return await new AttachmentBuilder(url, { name: 'gameboard.png' })
   }
 
 

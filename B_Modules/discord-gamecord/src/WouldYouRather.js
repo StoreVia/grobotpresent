@@ -51,7 +51,7 @@ module.exports = class WouldYouRather extends events {
   }
 
   async getWyrQuestion(){
-    return await fetch('https://api.aniket091.xyz/wyr').then(res => res.json()).then(res => res?.data).catch(e => { return {} });
+    return await fetch('https://api.gamecord.xyz/wyr').then(res => res.json()).then(res => res?.data).catch(e => { return {} });
   }
 
 

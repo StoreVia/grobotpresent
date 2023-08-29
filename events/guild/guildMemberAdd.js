@@ -41,7 +41,7 @@ module.exports = class GuildMemberAdd extends Event {
                 .replace('<ServerName>', `${member.guild.name}`)
                 .replace('<ServerId>', `${member.guild.id}`);
             
-            member.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th Member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}], components: [row]})
+            member.send({ content: `${text1}`, files: [{ attachment: `https://api.gamecord.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th Member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}], components: [row]})
         }
 
         if(!server){
@@ -56,7 +56,7 @@ module.exports = class GuildMemberAdd extends Event {
                 .replace('<ServerName>', `${member.guild.name}`)
                 .replace('<ServerId>', `${member.guild.id}`);
     
-            guildCh.send({ content: `${text1}`, files: [{ attachment: `https://api.aniket091.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}]})
+            guildCh.send({ content: `${text1}`, files: [{ attachment: `https://api.gamecord.xyz/welcomecard?avatar=${member.user.displayAvatarURL({ dynamic: true, size: 4096, extension: "jpg" })}&name=${member.user.username}&title=Welcome&message=${member.guild.memberCount}th member&background=${backgroundurl}&textcolor=${color}&avatarcolor=${avatarcolor}`, name: 'image.png'}]})
         }
 	}
 };

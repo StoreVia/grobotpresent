@@ -9,6 +9,7 @@ module.exports = class CommandClass {
 	}
 
 	async build(dir){
+		
 		const filePath = path.join(__dirname, dir);
 		const files = await readdir(filePath);
 		for(const file of files){

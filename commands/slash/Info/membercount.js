@@ -34,6 +34,6 @@ module.exports = class MemberCount extends Command {
       			text: `${client.user.username} - ${process.env.year} ©`, 
       			iconURL: process.env.iconurl
 			})
-		return await interaction.followUp({ embeds: [embed] });
+		return await interaction.followUp({ embeds: [await client.functions.memberCount(interaction)] });
 	}
 };
