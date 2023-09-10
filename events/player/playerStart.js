@@ -11,7 +11,7 @@ module.exports = class PlayerStart extends PlayerEvent {
 	async run(queue, track){
 
 		const client = this.client;
-
+        
         let embed = new Discord.EmbedBuilder()
             .setAuthor({
                 name: `Now Playing ♪`,

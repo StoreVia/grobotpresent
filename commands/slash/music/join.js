@@ -28,7 +28,7 @@ module.exports = class Join extends Command {
 		} else if(!memberVoice){
             await interaction.deferReply({ ephemeral: true });
 			interaction.followUp({ content: `> Please Join A Voice Channel.` })
-        } else if(!clientVoice){//code
+        } else if(!clientVoice){
 			await interaction.deferReply({ ephemeral: true });
 			interaction.followUp({ content: `> I Was Already In Your Voice Channel.` })   
         }
