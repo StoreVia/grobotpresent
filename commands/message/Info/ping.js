@@ -13,6 +13,6 @@ module.exports = class MessagePing extends Command {
 	}
 	async run(client, message){
 
-		message.reply({ embeds: [client.functions.pingEmbed("-", "-")] }).then((msg) =>  msg.edit({ embeds: [client.functions.pingEmbed(Math.floor(client.ws.ping), msg.createdTimestamp - message.createdTimestamp)] }));
+		message.channel.send({ embeds: [client.functions.pingEmbed("-", "-")] }).then((msg) =>  msg.edit({ embeds: [client.functions.pingEmbed(Math.floor(client.ws.ping), msg.createdTimestamp - message.createdTimestamp)] }));
 	}
 };

@@ -1,5 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Help extends Command {
 	constructor(client){
@@ -18,7 +18,7 @@ module.exports = class Help extends Command {
 		await interaction.deferReply();
 		let functions = await client.functions.help();
 		const msg = await interaction.followUp({ embeds: [await functions.embed], components: [await functions.selectMenuRow, await functions.buttonRow] });
-		return await client.functions.collector(msg).help(interaction);
+		return await client.functions.collector(msg).help(interaction, functions.embed, functions.selectMenuRow, functions.buttonRow);
 
 		const filter = i => i.customId === 'hlpcmd';
 		const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });

@@ -26,7 +26,7 @@ module.exports = class Functions {
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
       collector.on('collect', async (i) => {
 			  if(i.user.id != userId){
-				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+				  return await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			  } else if(i.customId === `dice`){
 				  i.update({ embeds: [embed.setDescription(`🎲 You Got \`${await Math.floor(Math.random() * 6) + 1}\``)], components: [buttonRow]})
 			  } else if(i.customId === `distop`){
@@ -46,7 +46,7 @@ module.exports = class Functions {
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
       collector.on('collect', async i => {
 			  if(i.user.id != userId){
-				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+				  return await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
 			  } 
 			  if(i.customId === "meme"){
 				  buttonRow.components.map(component=> component.setDisabled(true));
@@ -70,8 +70,36 @@ module.exports = class Functions {
 			  }
 		  });
     }
-    function help(int){
+    function help(int, embed, select, button){
+      let type = "";
 
+      const filter = i => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+      collector.on('collect', async i => {
+			  if(i.user.id != int.user.id){
+				  return await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+			  }
+        if(i.customId === "msg"){
+          type = "msg";
+          await select.components.map(component => component.setDisabled(false));
+          await button.components.map(component => component.setDisabled(true));
+          await embed.setDescription(`Select One Of The Option Below.`);
+          return await i.update({ embeds: [embed], components: [select, button] })
+        }
+        if(i.customId === "activities"){
+          
+          
+          if(type != ""){
+            if(type === "msg"){
+
+            } else {
+
+            }
+          } else {
+
+          }
+        }
+      })
     }
     return { dice, meme, help };
   }
@@ -97,11 +125,11 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async memberCount(interact){
-    const guild = interact.guild;
-		const members = await guild.members.fetch();
+		const members = await interact.guild.members.fetch();
 		const botMembers = members.filter(member => member.user.bot);
 		const realMembers = members.filter(member => !member.user.bot);
     
+    return this.embedBuild().title(`Member Count - \`${interact.guild.name}\``).ibvfields(`Members`, `\`${realMembers.size.toLocaleString()}\``, `Bots`, `\`${botMembers.size.toLocaleString()}\``, `Total`, `\`${members.size.toLocaleString()}\``).footer().build();
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +146,7 @@ module.exports = class Functions {
 				new StringSelectMenuBuilder()
 					.setPlaceholder('Select An Option')
 					.setCustomId('hlpcmd')
-					.setDisabled(false)
+					.setDisabled(true)
 					.setMaxValues(1)
 					.setOptions([
             { label: 'Activities', value: 'activities', emoji: '🚀' },
@@ -136,10 +164,12 @@ module.exports = class Functions {
 						{ label: 'Truth Or Dare', value: 'tod', emoji: '🎭' },
 						{ label: 'Utility', value: 'utility', emoji: '🔨' },
 						{ label: 'Welcome', value: 'welcome', emoji: '👋' },
+						{ label: '\u200b', value: '\u200b' },
+						{ label: 'Stop', value: 'stp', emoji: '🛑' },
 					]),
 			);
     const buttonRow = await this.buttons(`Message`, `msg`, ButtonStyle.Secondary, `Slash`, `slsh`, ButtonStyle.Secondary, `Stop`, `stp`, ButtonStyle.Danger);
-    const embed = await this.embedBuild().title(`Help`).description(`Select One Of The Options Below.`).thumbnail(`${process.env.iconurl}`).footer().build();
+    const embed = await this.embedBuild().title(`Help`).description(`Select One Of The Button Below.`).thumbnail(`${process.env.iconurl}`).footer().build();
     return { embed, buttonRow, selectMenuRow };
   }
 
