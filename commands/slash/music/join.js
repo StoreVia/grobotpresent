@@ -12,10 +12,10 @@ module.exports = class Join extends Command {
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
 		});
 	}
-	async run(client, interaction){   
-
+	async run(client, interaction){
+		
 		const clientVoice = interaction.guild.members.me.voice.channel;
-        const memberVoice = interaction.member.voice.channel;
+        const memberVoice = await client.functions.voiceChannel().interaction(interaction);
 
 		if(clientVoice){
 			if(clientVoice != memberVoice){
@@ -29,8 +29,9 @@ module.exports = class Join extends Command {
             await interaction.deferReply({ ephemeral: true });
 			interaction.followUp({ content: `> Please Join A Voice Channel.` })
         } else if(!clientVoice){
+			//joinfunction
 			await interaction.deferReply({ ephemeral: true });
-			interaction.followUp({ content: `> I Was Already In Your Voice Channel.` })   
+			interaction.followUp({ content: `> Joined.` })   
         }
 	}
 };
