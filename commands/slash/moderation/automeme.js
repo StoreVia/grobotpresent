@@ -1,8 +1,7 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, PermissionFlagsBits, ChannelType } = require('discord.js');
-const db = require(`quick.db`)
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
-module.exports = class Avatar extends Command {
+module.exports = class AutoMeme extends Command {
 	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
@@ -37,7 +36,7 @@ module.exports = class Avatar extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
+        if(!await client.functions.permsCheck(`manageGuild`).interaction(interaction)){
             await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`})
         }
 
@@ -65,7 +64,7 @@ module.exports = class Avatar extends Command {
                 return await interaction.followUp({ content: `> Automeme Was Not Bounded To Any Channel.`})
             } else if(automemecheck){
                 await automemedb.delete(`${interaction.guild.id}`);
-                return await interaction.followUp({ content: `> Chatbot Was Now Deleted In <#${automemecheck}>.`})
+                return await interaction.followUp({ content: `> Automeme Was Now Deleted In <#${automemecheck}>.`})
             }
         }  
 

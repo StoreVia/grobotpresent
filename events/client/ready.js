@@ -2,7 +2,7 @@ const Event = require('../../structures/Events/EventClass');
 const colors = require(`colors`)
 const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor } = require('@discord-player/extractor');
 const fetch = require('node-fetch');
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const titlecase = require(`titlecase`);
 
 module.exports = class ReadyEvent extends Event {
@@ -13,7 +13,6 @@ module.exports = class ReadyEvent extends Event {
 		});
 	}
 	async run(){
-		
 		const client = this.client;
 
 		setInterval(()=>{

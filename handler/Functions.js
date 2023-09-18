@@ -11,6 +11,14 @@ const roasts = require(`../A_Jsons/roast.json`);
 const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Modules/discord-gamecord');
 const canvacord = require("canvacord");
 const version = require(`../package.json`).version;
+const moment = require('moment');
+const formattor = new Intl.ListFormat(`en-GB`, { style: `narrow`, type: `conjunction` })
+const statuses = {
+  "online" : "🟢",
+  "idle" : "🌙",
+  "dnd" : "🔴",
+  "offline" : "⚫️",
+}  
 
 module.exports = class Functions {
   constructor(client){
@@ -87,16 +95,10 @@ module.exports = class Functions {
           return await i.update({ embeds: [embed], components: [select, button] })
         }
         if(i.customId === "activities"){
-          
-          
-          if(type != ""){
-            if(type === "msg"){
+          if(type === "msg"){
 
-            } else {
-
-            }
           } else {
-
+            
           }
         }
       })
@@ -118,9 +120,63 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async userInfo(interact, option, msg){
+    let client = this;
+    const flag = { 
+      TEAM_PSEUDO_USER: 'Team User', 
+      BugHunterLevel1: 'Bug Hunter',
+      BugHunterLevel2: 'Bug Buster',
+      CertifiedModerator: 'Discord Certified Moderator',
+      HypeSquadOnlineHouse1: 'House of Bravery',
+      HypeSquadOnlineHouse2: 'House of Brilliance',
+      HypeSquadOnlineHouse3: 'House of Balance',
+      Hypesquad: 'HypeSquad Event Attendee',
+      Partner: 'Discord Partner',
+      PremiumEarlySupporter: 'Early Nitro Supporter',
+      STAFF: 'Discord Staff',
+      VerifiedBot: 'Verified Bot',
+      VerifiedDeveloper: 'Verified Developer',
+      ActiveDeveloper: 'Active Developer'
+    };
+
+    if(option === true){
+      let UserOption = client.getOptions(interact).user('user') || interact.user;
+      let UserOption1 = client.getOptions(interact).member('user') || interact.member;
+      let target = await interact.guild.members.fetch(UserOption.id)
+      let userFlags = UserOption.flags.toArray();
+      let filteredFlags = userFlags.filter(f => f in flag);
+      let flog = await filteredFlags.length ? formattor.format(filteredFlags.map(flags => flag[flags])) : "None" ;
+      let discriminator = UserOption.discriminator === "0" ? "`DNU`" : `#${UserOption.discriminator}`;
+      let content = `**DiscordUserSince: **<t:${Math.floor((UserOption.createdAt)/1000)}:R>\n**ServerJoined: ** <t:${Math.floor((UserOption1.joinedAt)/1000)}:R>`;
+      let embed = await client.embedBuild().title(`Userinfo of \`${UserOption.username}\``).thumbnail(UserOption.displayAvatarURL({dynamic: true})).author(`${UserOption.username}`, UserOption.displayAvatarURL({dynamic: true, size: 2048})).fields(`Username`, `> ${UserOption.username}`, true, `Tag`, `> ${discriminator}`, true, `Id`, `> ${UserOption.id}`, true, `Avatar`, `> [ClickHere](${UserOption.displayAvatarURL({ size: 4096, dynamic: true, format: "png" })})`, true, `Bot`, `> ${UserOption.bot ? "\`✅\`" : "\`❌\`"}`, true, `Status`, `> \`${statuses[UserOption1.presence ? UserOption1.presence.status : "offline"]}\``, true, `Roles`, `> ${target.roles.cache.map(r => r).join(' ').replace("@everyone", "") || "NONE"}`, false, `DiscordUserSince`, `\`\`\`> ${moment(UserOption.createdAt).format(`DD-MM-YYYY`)}\`\`\``, true, `ServerJoined`, `\`\`\`> ${moment(UserOption1.joinedAt).format(`DD-MM-YYYY`)}\`\`\``, true, `Flages`, `\`\`\`> ${flog.replace(`, `, `\n> `)}\`\`\``, false).footer().build();
+      return await { embed, content }
+    } else {
+      let UserOption = msg;
+      let target = await interact.guild.members.fetch(UserOption.id)
+      let userFlags = UserOption.user.flags.toArray();
+      let filteredFlags = userFlags.filter(f => f in flag);
+      let flog = await filteredFlags.length ? formattor.format(filteredFlags.map(flags => flag[flags])) : "None" ;
+      let discriminator = UserOption.user.discriminator === "0" ? "`DNU`" : `#${UserOption.user.discriminator}`;
+      let content = `**DiscordUserSince: **<t:${Math.floor((UserOption.user.createdAt)/1000)}:R>\n**ServerJoined: ** <t:${Math.floor((UserOption.joinedAt)/1000)}:R>`;
+      let embed = await client.embedBuild().title(`Userinfo of \`${UserOption.user.username}\``).thumbnail(UserOption.displayAvatarURL({dynamic: true})).author(`${UserOption.username}`, UserOption.displayAvatarURL({dynamic: true, size: 2048})).fields(`Username`, `> ${UserOption.username}`, true, `Tag`, `> ${discriminator}`, true, `Id`, `> ${UserOption.id}`, true, `Avatar`, `> [ClickHere](${UserOption.displayAvatarURL({ size: 4096, dynamic: true, format: "png" })})`, true, `Bot`, `> ${UserOption.bot ? "\`✅\`" : "\`❌\`"}`, true, `Status`, `> \`${statuses[UserOption.presence ? UserOption.presence.status : "offline"]}\``, true, `Roles`, `> ${target.roles.cache.map(r => r).join(' ').replace("@everyone", "") || "NONE"}`, false, `DiscordUserSince`, `\`\`\`> ${moment(UserOption.user.createdAt).format(`DD-MM-YYYY`)}\`\`\``, true, `ServerJoined`, `\`\`\`> ${moment(UserOption.joinedAt).format(`DD-MM-YYYY`)}\`\`\``, true, `Flages`, `\`\`\`> ${flog.replace(`, `, `\n> `)}\`\`\``, false).footer().build();
+      return await { embed, content }
+    }
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async updates(){
+    const updateget = await this.client.db.get(`update`);
+		let updatetext = null;
+		let id = null;
+		if(!updateget) updatetext = "None"
+		if(updateget) [updatetext, id] = updateget.textandid.split(',')
+    return await this.embedBuild().title(`Updates`).description(`\`\`\`${await updatetext}\`\`\``).footer().build();
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -662,6 +718,10 @@ module.exports = class Functions {
       let usrInput = interaction.options.getUser(usr);
       return usrInput;
     }
+    function member(mbr){
+      let usrInput = interaction.options.getMember(mbr);
+      return usrInput;
+    }
     function channel(chl){
       let chlInput = interaction.options.getChannel(chl);
       return chlInput;
@@ -682,7 +742,7 @@ module.exports = class Functions {
       let suCommandInput = interaction.options.getSubcommand();
       return suCommandInput;
     }
-    return { string, user, channel, integer, number, role, subcommand }
+    return { string, user, member, channel, integer, number, role, subcommand }
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

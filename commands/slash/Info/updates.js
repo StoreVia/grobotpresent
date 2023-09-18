@@ -1,13 +1,12 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const db = require(`quick.db`);
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Updates extends Command {
 	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('updates')
-				.setDescription('Get Latest Updates Everyday.')
+				.setDescription('Get Latest Update Note.')
 				.setDMPermission(true),
 			usage: 'updates',
 			category: 'Info',
@@ -16,22 +15,7 @@ module.exports = class Updates extends Command {
 	}
 	async run(client, interaction){
 
-        const updateget = await client.db.get(`update`);
-		let updatetext = null;
-		let id = null;
-		if(!updateget) updatetext = "None"
-		if(updateget) [updatetext, id] = updateget.textandid.split(',')
-		 
-
 		await interaction.deferReply();
-		let embed = new EmbedBuilder()
-            .setTitle(`Updates`)
-            .setDescription(`\`\`\`${updatetext}\`\`\``)
-			.setColor(`${process.env.ec}`)
-            .setFooter({
-                text: `${client.user.username} - ${process.env.year} ©`,
-                iconURL: process.env.iconurl
-            });
-		interaction.followUp({ embeds: [embed] })
+		interaction.followUp({ embeds: [await client.functions.updates(interaction)] })
 	}
 };
