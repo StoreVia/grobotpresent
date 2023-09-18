@@ -1,1 +1,3 @@
-pm2_Windows_ExucutionPolicy_Error : "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted"(PoweShell_Admin).
+If Any Error Occured And If It Was Listed Below It May Help You.
+
+error1: pm2_Windows_ExucutionPolicy_Error : "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted"(PoweShell_Admin).
