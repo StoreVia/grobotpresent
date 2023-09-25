@@ -13,12 +13,13 @@ const canvacord = require("canvacord");
 const version = require(`../package.json`).version;
 const moment = require('moment');
 const formattor = new Intl.ListFormat(`en-GB`, { style: `narrow`, type: `conjunction` })
+const { joinVoiceChannel } = require('@discordjs/voice');
 const statuses = {
   "online" : "🟢",
   "idle" : "🌙",
   "dnd" : "🔴",
   "offline" : "⚫️",
-}  
+};
 
 module.exports = class Functions {
   constructor(client){
@@ -116,11 +117,30 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  async play(vc, query, interact){
+    return await this.client.player.play(vc, query, {
+      nodeOptions: {
+        metadata: interact,
+        volume: 100
+      }
+    })
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async nowPlaying(){
+    
+  }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async joinVc(channel){
+    return await joinVoiceChannel({
+      channelId: channel.id,
+      guildId: channel.guild.id,
+      adapterCreator: channel.guild.voiceAdapterCreator,
+    });
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

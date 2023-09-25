@@ -29,7 +29,7 @@ module.exports = class Join extends Command {
             await interaction.deferReply({ ephemeral: true });
 			interaction.followUp({ content: `> Please Join A Voice Channel.` })
         } else if(!clientVoice){
-			//joinfunction
+			await client.functions.joinVc(memberVoice);
 			await interaction.deferReply({ ephemeral: true });
 			interaction.followUp({ content: `> Joined.` })   
         }

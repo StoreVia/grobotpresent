@@ -18,9 +18,9 @@ module.exports = class Play extends Command {
 	}
 	async run(client, interaction){   
 
-        const query = interaction.options.getString(`search`);
+        const query = await client.functions.getOptions(interaction).string(`search`);
 		const clientVoice = interaction.guild.members.me.voice.channel;
-        const memberVoice = interaction.member.voice.channel;
+        const memberVoice = await client.functions.voiceChannel().interaction(interaction);
 
 		if(clientVoice){
 			if(clientVoice != memberVoice){
@@ -29,11 +29,7 @@ module.exports = class Play extends Command {
 			} else if(clientVoice === memberVoice){
 				await interaction.deferReply();
 				interaction.followUp({ content: `🔍Searching...` })
-				await client.player.play(memberVoice, query, {
-					nodeOptions: {
-						metadata: interaction
-					}
-				})
+				await client.functions.play(memberVoice, query, interaction);
 			}
 		} else if(!memberVoice){
 			await interaction.deferReply({ ephemeral: true });
@@ -41,12 +37,7 @@ module.exports = class Play extends Command {
 		} else if(memberVoice){
 			await interaction.deferReply();
 			interaction.followUp({ content: `🔍Searching...` })
-			await client.player.play(memberVoice, query, {
-				nodeOptions: {
-					metadata: interaction,
-					volume: 100
-				}
-			})
+			await client.functions.play(memberVoice, query, interaction);
 		}
 	}
 };
