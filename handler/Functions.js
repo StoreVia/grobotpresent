@@ -117,12 +117,20 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async play(vc, query, interact){
+  async play(vc, query, interact, statement){
     return await this.client.player.play(vc, query, {
       nodeOptions: {
-        metadata: interact,
-        volume: 100
-      }
+        metadata: {
+          channel: interact.channel,
+          client: interact.guild.members.me,
+          requestedBy: statement ? interact.user : interact.author,
+        },
+        selfDeaf: true,
+        volume: 100,
+        leaveOnEmpty: true,
+        leaveOnEmptyCooldown: 60000,
+        leaveOnEnd: true,
+      },  
     })
   }
 
@@ -518,8 +526,8 @@ module.exports = class Functions {
       embed.setDescription(description);
       return this;
     }
-    function color(){
-      embed.setColor(`#000000`);
+    function color(clr){
+      embed.setColor(clr);
       return this;
     }
     function author(text, iconurl){
@@ -569,11 +577,38 @@ module.exports = class Functions {
       embed.addFields(...realFields);
       return this;
     }
+    function vfields(...fieldSets){
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 3){
+        const [name, value, inline] = fieldSets.slice(i, i + 3);
+        realFields.push({ name , value: `> ${value}`, inline });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
     function ibfields(...fieldSets){
       const realFields = [];
       for (let i = 0; i < fieldSets.length; i += 2){
         const [name, value] = fieldSets.slice(i, i + 2);
         realFields.push({ name: `**${name}: **`, value, inline: true });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
+    function bvfields(...fieldSets){
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 2){
+        const [name, value] = fieldSets.slice(i, i + 2);
+        realFields.push({ name: `**${name}: **`, value: `> ${value}`, inline });
+      }
+      embed.addFields(...realFields);
+      return this;
+    }
+    function ivfields(...fieldSets){
+      const realFields = [];
+      for (let i = 0; i < fieldSets.length; i += 2){
+        const [name, value] = fieldSets.slice(i, i + 2);
+        realFields.push({ name , value: `> ${value}`, inline: true });
       }
       embed.addFields(...realFields);
       return this;
@@ -590,7 +625,7 @@ module.exports = class Functions {
     function build(){
       return embed;
     }
-    return { author, title, description, thumbnail, image, url, fields, ifields, bfields, ibfields, ibvfields, color, footer, build };
+    return { author, title, description, thumbnail, image, url, fields, ifields, bfields, ibfields, vfields, bvfields, ivfields, ibvfields, color, footer, build };
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

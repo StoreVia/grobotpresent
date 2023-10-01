@@ -29,7 +29,7 @@ module.exports = class Play extends Command {
 			} else if(clientVoice === memberVoice){
 				await interaction.deferReply();
 				interaction.followUp({ content: `🔍Searching...` })
-				await client.functions.play(memberVoice, query, interaction);
+				await client.functions.play(memberVoice, query, interaction, "y");
 			}
 		} else if(!memberVoice){
 			await interaction.deferReply({ ephemeral: true });
@@ -37,7 +37,7 @@ module.exports = class Play extends Command {
 		} else if(memberVoice){
 			await interaction.deferReply();
 			interaction.followUp({ content: `🔍Searching...` })
-			await client.functions.play(memberVoice, query, interaction);
+			await client.functions.play(memberVoice, query, interaction, "y");
 		}
 	}
 };

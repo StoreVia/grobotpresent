@@ -1,6 +1,6 @@
 const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { useQueue } = require('discord-player');
+const { useTimeline, useQueue } = require("discord-player");
 
 module.exports = class NowPlaying extends Command {
 	constructor(client){
@@ -16,38 +16,15 @@ module.exports = class NowPlaying extends Command {
 	async run(client, interaction){   
         
         const queue = useQueue(interaction.guild.id);
-        const track = queue.currentTrack;
-        const part = Math.floor((queue.currentTime / track.duration) * 30);
-
+        const { timestamp, volume, paused, pause, resume, setVolume, setPosition, track } = useTimeline(interaction.guild.id);
+        const part = Math.floor((timestamp.current.value / timestamp.total.value) * 30);
+        
         if(!queue){
             await interaction.deferReply({ ephemeral: true })
             interaction.followUp({ content: `> There Is Nothing In Queue Now.` })
         } else if(queue){
             await interaction.deferReply()
-            const embed = new EmbedBuilder()
-                .setAuthor({ 
-                    name: track.playing ? 'Song Pause...' : 'Now Playing...', 
-                    iconURL: process.env.music_iconurl
-                })
-                .setColor(`${process.env.ec}`)
-                .setThumbnail(`${track.thumbnail}`)
-                .setDescription(`**[${track.title}](${track.url})**`)
-                .addFields(
-                    { name: `Author: `, value: `> ${track.author}`, inline: true },
-                    { name: `RequestedBy: `, value: `> ${queue.user}`, inline: true },
-                    { name: `Volume: `, value: `> ${queue.volume}%`, inline: true },
-                    { name: `Views: `, value: `> ${track.views}`, inline: true },
-                    // { name: `Likes: `, value: `> ${track.likes}`, inline: true },
-                    // { name: `Filters: `, value: `> ${queue.filters.names.join(', ') || 'None'}`, inline: true },
-                    // { name: `Live: `, value: `> ${track.is_live ? "\`✔️\`" : "\`❌\`"}`, inline: true },
-                    // { name: `AgeRestricted: `, value: `> ${track.age_restricted ? "\`✔️\`" : "\`❌\`"}`, inline: true },
-                    // { name: `CurrentDuration: `, value: `> \`[${queue.formattedCurrentTime} / ${track.formattedDuration}]\``, inline: true },
-                    // { name: `ProgressBar: `, value: `\`\`\`♪ ${'━'.repeat(part) + '🔵' + '━'.repeat(30 - part)}\`\`\``, inline: true }
-                )
-                .setFooter({
-                    text: `${client.user.username} - ${process.env.year} ©`, 
-                    iconURL: process.env.iconurl
-                })
+            const embed = await client.functions.embedBuild().author(track.playing ? 'Song Pause...' : 'Now Playing...', `${process.env.music_iconurl}`).description(`**[${track.title}](${track.url})**`).thumbnail(`${track.thumbnail}`).bfields(`Author`, `> ${track.author}`, true, `Volume`, `> ${queue.node.volume}%`, true, `Live`, `> ${track.is_live ? "\`✔️\`" : "\`❌\`"}`, true,  `CurrentDuration`, `> \`[${timestamp.current.label} / ${timestamp.total.label}]\``, true,  `Filters`, `> ${queue.filter || 'None'}`, true,  `ProgressBar`, `\`\`\`♪ ${'━'.repeat(part) + '🔵' + '━'.repeat(30 - part)}\`\`\``, false).footer().build();
             interaction.followUp({ embeds: [embed] })
         }
 	}
