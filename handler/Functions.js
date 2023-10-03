@@ -118,6 +118,7 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async play(vc, query, interact, statement){
+    let this1 = this;
     return await this.client.player.play(vc, query, {
       nodeOptions: {
         metadata: {
@@ -131,6 +132,9 @@ module.exports = class Functions {
         leaveOnEmptyCooldown: 60000,
         leaveOnEnd: true,
       },  
+    }).catch(() => {
+      const embed = this1.embedBuild().title(`Error Encountered`).description(`**Reasons May Be: **\n> Only Spotify, Souncloud, AppleMusic Allowed.\n> Internal Error.\n\n**Note: ** If You Think This Is A Bug Please Report By Using "/report" Command.`).footer().build();
+      interact.channel.send({ embeds: [embed] })
     })
   }
 

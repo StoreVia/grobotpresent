@@ -13,6 +13,7 @@ module.exports = class ReadyEvent extends Event {
 		});
 	}
 	async run(){
+		
 		const client = this.client;
 
 		setInterval(()=>{
