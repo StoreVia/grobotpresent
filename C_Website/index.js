@@ -9,10 +9,10 @@ api.use(session({ secret: "GroBot", resave: true, saveUninitialized: false }));
 //apiInitializationEnd
 
 //redirectFunctionStart
-function redirect(req, res, next) {
+function redirect(req, res, next){
   const allowedPaths = ["/", "/dashboard", "/mobile", "/privacypolicy", "/termsofservice"];
   const requestedPath = req.path;
-  if (!allowedPaths.includes(requestedPath)) {
+  if(!allowedPaths.includes(requestedPath)){
     res.sendFile(join(__dirname, "..", "html", "others", "error.html"));
   } else {
     next();

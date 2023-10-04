@@ -9,10 +9,12 @@ module.exports = class Command {
     }
 
     async autocomplete(){
+
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Autocomplete Method.`);
     }
 
     async run(){
+        
         throw new Error(`The Slash Command ${this.name} Doesn't Have Any Run Method.`);
     }
 };

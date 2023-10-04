@@ -27,7 +27,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 			const collector = message.channel.createMessageCollector({ filter, time: 60000 });
 			collector.on('collect', async m => {
 				if(cancelled === true) return;
-      			if (m.content === "cancel") {
+      			if(m.content === "cancel"){
         			collector.stop();
         			cancelled = true;
 					await m.delete().catch(() => { return });
@@ -63,10 +63,10 @@ module.exports = class MessageGiveawayCreate extends Command {
 						if(!(winnerCount = parseInt(m.content))){
 							await m.delete().catch(() => { return });
 							return await failed("The Number Of WinnerCount Must Be An Integer. Try Again.", "WinnerCount", "Please Send Giveaway WinnerCount.");
-						} else if (winnerCount < 1){
+						} else if(winnerCount < 1){
 							await m.delete().catch(() => { return });
 							return await failed("WinnerCount Must Be More Than One Number. Try Again.", "WinnerCount", "Please Send Giveaway WinnerCount.");
-						} else if (winnerCount > 1000){
+						} else if(winnerCount > 1000){
 							await m.delete().catch(() => { return });
 							return await failed("WinnerCount Must Be Less Than 100. Try Again.", "WinnerCount", "Please Send Giveaway WinnerCount.");
 						} else {
@@ -80,7 +80,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 						if(!(duration = parsec(m.content).duration)){
 							await m.delete().catch(() => { return });
 							return await failed("Please Provide Valid Duration As Mentioned In Embed. Try Again.", "Duration", "Please Send Giveaway Duration Eg: 10s, 10min, 10h, 10d.");
-						} else if (duration > parsec("20d").duration){
+						} else if(duration > parsec("20d").duration){
 							await m.delete().catch(() => { return });
 							return await failed("Giveaway Duration Must To Less Than 20 Days. Try Again.", "Duration", "Please Send Giveaway Duration Eg: 10s, 10min, 10h, 10d.");
 						} else {
@@ -103,7 +103,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 			let embed = await client.functions.embedBuild().description(`${description}, In Next 60 Seconds.`).build();
 			await msgdefer.edit({ content: ``, embeds: [embed] })
 		}
-		async function failed(options, ...cancel) {
+		async function failed(options, ...cancel){
 			if(typeof cancel[0] === "boolean"){
 			  (cancelled = true) && (await msgdefer.edit({ content: `${options}` }));
 			} else {

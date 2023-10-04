@@ -31,7 +31,7 @@ module.exports = class MessageGiveawayEdit extends Command {
                     if(args[1].toLowerCase().includes("w", "wi", "win", "winn", "winne", "winner", "winners")){
                         if(!parseInt(args[2])){
                             return msgdefer.edit({ content: `> The Number Of WinnerCount Must Be An Integer.` });
-						} else if (args[2] < 1){
+						} else if(args[2] < 1){
                             return msgdefer.edit({ content: `> WinnerCount Must Be More Than One Number.` });
 						} else {
                             await client.functions.giveaway().edit(giveaway.messageId, `${parseInt(args[2])}(win)`).then(() => {

@@ -5,6 +5,7 @@ module.exports = class PlayerEvent {
 	}
 
 	async run(){
+		
 		throw new Error(`This Event "${this.name}" Does Not Have A Run Method.`);
 	}
 };

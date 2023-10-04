@@ -27,7 +27,7 @@ module.exports = class NowPlaying extends Command {
 				const part = Math.floor((timestamp.current.value / timestamp.total.value) * 30);
 				const embed = await client.functions.embedBuild().author(track.playing ? 'Song Pause...' : 'Now Playing...', `${process.env.music_iconurl}`).description(`[${track.title}](${track.url})`).thumbnail(`${track.thumbnail}`).bfields(`Author`, `> ${track.author}`, true, `Volume`, `> ${queue.node.volume}%`, true, `Live`, `> ${track.is_live ? "\`✔️\`" : "\`❌\`"}`, true,  `CurrentDuration`, `> \`[${timestamp.current.label} / ${timestamp.total.label}]\``, true,  `Filters`, `> ${queue.filter || 'None'}`, true,  `ProgressBar`, `\`\`\`♪ ${'━'.repeat(part) + '🔵' + '━'.repeat(30 - part)}(${timestamp.progress}%)\`\`\``, false).footer().build();
             	interaction.followUp({ embeds: [embed] })
-			} catch(e) {
+			} catch(e){
 				let embed = await client.functions.embedBuild().description(`Any Songs Aren't Playing Right Now. Please Try Again Later.`).build();
 				interaction.followUp({ embeds: [embed] });
 			}

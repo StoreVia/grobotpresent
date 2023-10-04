@@ -7,6 +7,7 @@ module.exports = class Event {
 	}
 
 	async run(){
+		
 		throw new Error(`This Event "${this.name}" Does Not Have A Run Method.`);
 	}
 };

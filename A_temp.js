@@ -37,7 +37,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 			const collector = message.channel.createMessageComponentCollector({ filter, time: 60000 });
 			collector.on("collect", async (m) => {
 				if(cancelled === true) return;
-				async function failed(options, ...cancel) {
+				async function failed(options, ...cancel){
 					if(typeof cancel[0] === "boolean"){
 					  (cancelled = true) && (await msgdefer.edit({ content: `${options}` }));
 					} else {
@@ -45,7 +45,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 					  return await waitingEmbed(...cancel);
 					}
 				}
-      			if (m.content === "cancel") {
+      			if(m.content === "cancel"){
         			collector.stop();
         			cancelled = true;
         			return await msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`Giveaway Creation Cancelled.`).build()]});
@@ -74,9 +74,9 @@ module.exports = class MessageGiveawayCreate extends Command {
 					case !winnerCount:{
 						if(!(_w = parseInt(m.content))){
 							return await failed("The number of winners must be an integer.", "Winner Count", "Please send the giveaway winner count.");
-						} else if (_w < 1){
+						} else if(_w < 1){
 							return await failed("Winner count must be more than 1.", "Winner Count", "Please send the giveaway winner count.");
-						} else if (_w > 15){
+						} else if(_w > 15){
 							return await failed("Winner count must be less than 15.", "Winner Count", "Please send the giveaway winner count.");
 						} else {
 							winnerCount = _w;
@@ -87,7 +87,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 					case !duration:{
 						if(!(_d = parsec(m.content).duration)){
 							return await failed("Please provide a valid duration.", "Duration", "Please send the giveaway duration");
-						} else if (_d > parsec("21d").duration){
+						} else if(_d > parsec("21d").duration){
 							return await failed("Duration must be less than 21 days!", "Duration", "Please send the giveaway duration");
 						} else {
 							duration = _d;
