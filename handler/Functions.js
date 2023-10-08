@@ -482,7 +482,7 @@ module.exports = class Functions {
   async hug(){
     let response = await fetch(`${process.env.srapi}/animu/hug`);
     let data = await response.json();
-    return await new AttachmentBuilder(data.link, { name: 'hug.png' });
+    return await new AttachmentBuilder(data.link, { name: 'hug.gif' });
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
