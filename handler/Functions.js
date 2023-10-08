@@ -14,6 +14,7 @@ const version = require(`../package.json`).version;
 const moment = require('moment');
 const formattor = new Intl.ListFormat(`en-GB`, { style: `narrow`, type: `conjunction` })
 const { joinVoiceChannel } = require('@discordjs/voice');
+const { useTimeline, useQueue } = require("discord-player");
 const statuses = {
   "online" : "🟢",
   "idle" : "🌙",
@@ -140,8 +141,12 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async nowPlaying(){
-    
+  async nowPlaying(int){
+    const queue = useQueue(int.guild.id);
+    const { timestamp, track } = useTimeline(int.guild.id);
+    const part = Math.floor((timestamp.current.value / timestamp.total.value) * 30);
+		const embed = await this.embedBuild().author(track.playing ? 'Song Pause...' : 'Now Playing...', `${process.env.music_iconurl}`).description(`[${track.title}](${track.url})`).thumbnail(`${track.thumbnail}`).bfields(`Author`, `> ${track.author}`, true, `Volume`, `> ${queue.node.volume}%`, true, `Live`, `> ${track.is_live ? "\`✔️\`" : "\`❌\`"}`, true,  `CurrentDuration`, `> \`[${timestamp.current.label} / ${timestamp.total.label}]\``, true,  `Filters`, `> ${queue.filter || 'None'}`, true,  `ProgressBar`, `\`\`\`♪ ${'━'.repeat(part) + '🔵' + '━'.repeat(30 - part)}(${timestamp.progress}%)\`\`\``, false).footer().build();
+    return embed;
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
