@@ -26,7 +26,7 @@ module.exports = class InteractionPing extends Command {
     if(string === interaction.user){
       return interaction.followUp({ embeds: [await client.functions.embedBuild().description(`${interaction.user} You Can't Hug Yourselft. Come I Will Hug You 🥰.`).image(`attachment://hug.gif`).footer().build()], files: [await attachment] })
     } else {
-      return interaction.followUp({ embeds: [await client.functions.embedBuild().description(`${interaction.user} Hugs ${user}, Awww How Cute 🥰.`).image(`attachment://hug.gif`).footer().build()], files: [await attachment] })
+      return interaction.followUp({ embeds: [await client.functions.embedBuild().description(`${interaction.user} Hugs ${string}, Awww How Cute 🥰.`).image(`attachment://hug.gif`).footer().build()], files: [await attachment] })
     }
 	}
 };
