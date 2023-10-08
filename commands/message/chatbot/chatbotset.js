@@ -6,7 +6,7 @@ module.exports = class MessageChatBotSet extends Command {
 			name: "chatbotset",
   			category: "chatbot",
   			alias: ["cbs", "chatbs"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}chatbotset <channelMention>`,
   			description: "Set Chatbot Channel.",
 		});

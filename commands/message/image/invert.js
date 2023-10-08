@@ -6,7 +6,7 @@ module.exports = class MessageInvert extends Command {
 			name: "invert",
   			category: "image",
   			alias: ["invrt", "ivrt"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}invert <userMention>`,
   			description: "Add Invert Image Effect.",
 		});

@@ -6,7 +6,7 @@ module.exports = class MessageTicTacToe extends Command {
 			name: "tictactoe",
   			category: "games",
   			alias: ["ttt"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}tictactoe <userMention>`,
   			description: "Play TicTacToe Game.",
 		});

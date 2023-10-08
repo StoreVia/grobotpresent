@@ -6,7 +6,7 @@ module.exports = class MessageJail extends Command {
 			name: "jail",
   			category: "image",
   			alias: ["jal", "jil"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}jail <userMention>`,
   			description: "Add Jail Image Effect.",
 		});

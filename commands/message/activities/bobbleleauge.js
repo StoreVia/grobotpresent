@@ -6,7 +6,7 @@ module.exports = class MessageBubbleLeauge extends Command {
 			name: "bobbleleauge",
   			category: "activities",
   			alias: ["bl"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}bobbleleauge`,
   			description: "Use BobbleLeauge Activity.",
 		});

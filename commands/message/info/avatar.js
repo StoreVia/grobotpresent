@@ -6,7 +6,7 @@ module.exports = class MessageAvatar extends Command {
 			name: "avatar",
   			category: "info",
   			alias: ["avtr", "avt"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}avatar <userMention>`,
   			description: "Get User's Avatar.",
 		});

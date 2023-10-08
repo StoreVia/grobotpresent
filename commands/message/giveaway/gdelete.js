@@ -6,7 +6,7 @@ module.exports = class MessageGiveawayDelete extends Command {
 			name: "gdelete",
   			category: "giveaway",
   			alias: ["gd", "giveawaydelete"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}gdelete <giveaway messageId or prize>`,
   			description: "Delete A Giveaway.",
 		});

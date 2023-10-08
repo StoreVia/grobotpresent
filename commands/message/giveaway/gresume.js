@@ -6,7 +6,7 @@ module.exports = class MessageGiveawayResume extends Command {
 			name: "gresume",
   			category: "giveaway",
   			alias: ["gr", "giveawayresume"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}gresume <giveaway messageId or prize>`,
   			description: "Resume A Giveaway.",
 		});

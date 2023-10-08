@@ -7,7 +7,7 @@ module.exports = class InteractionCatchTheFish extends Command {
 			name: "catchthefish",
   			category: "games",
   			alias: ["ctf"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}ctf <no.of Fishes Below 10>`,
   			description: "Play CatchTheFish Game.",
 		});

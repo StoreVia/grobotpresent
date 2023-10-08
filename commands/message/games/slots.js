@@ -6,7 +6,7 @@ module.exports = class MessageSlots extends Command {
 			name: "slots",
   			category: "games",
   			alias: ["slts"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}slots`,
   			description: "Play Slots Game.",
 		});

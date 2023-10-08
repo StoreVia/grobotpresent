@@ -6,7 +6,7 @@ module.exports = class MessageAutoMemeSet extends Command {
 			name: "automemeset",
   			category: "moderation",
   			alias: ["amemeset", "automset", "automs", "ams"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}automemeset <channelMention>`,
   			description: "Set Automeme Channel(beta).",
 		});

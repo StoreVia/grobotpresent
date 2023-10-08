@@ -6,7 +6,7 @@ module.exports = class MessageSnake extends Command {
 			name: "snake",
   			category: "games",
   			alias: ["snk", "snke", "ske"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}snake`,
   			description: "Play Snake Game.",
 		});

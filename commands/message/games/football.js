@@ -7,7 +7,7 @@ module.exports = class MessageFootBall extends Command {
 			name: "football",
   			category: "games",
   			alias: ["fb", "fotbal"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}football`,
   			description: "Play FootBall Game.",
 		});

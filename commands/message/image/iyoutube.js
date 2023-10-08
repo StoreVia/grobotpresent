@@ -6,7 +6,7 @@ module.exports = class MessageIYoutube extends Command {
 			name: "iyoutube",
   			category: "image",
   			alias: ["iyutbe", "iyt"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}iyoutube <text>`,
   			description: "Add YoutubeComment Image Effect.",
 		});

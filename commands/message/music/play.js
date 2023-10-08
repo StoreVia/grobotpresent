@@ -6,7 +6,7 @@ module.exports = class MessagePlay extends Command {
 			name: "play",
   			category: "music",
   			alias: ["ply"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}play <string>`,
   			description: "Play Music In Voice Channel.",
 		});

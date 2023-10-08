@@ -6,7 +6,7 @@ module.exports = class MessageHowGay extends Command {
 			name: "howgay",
   			category: "fun",
   			alias: ["hg"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}howgay <userMention>`,
   			description: "Gay Calculator(Fun).",
 		});

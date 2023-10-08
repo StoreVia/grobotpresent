@@ -6,7 +6,7 @@ module.exports = class MessageSketchHeads extends Command {
 			name: "sketchhedas",
   			category: "activities",
   			alias: ["sh", "skth"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}sketchhedas`,
   			description: "Use SketchHeads Activity.",
 		});

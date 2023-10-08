@@ -6,7 +6,7 @@ module.exports = class MessageGay extends Command {
 			name: "gay",
   			category: "image",
   			alias: ["gy"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}gay <userMention>`,
   			description: "Add Gay Pride Image Effect.",
 		});

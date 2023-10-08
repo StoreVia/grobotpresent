@@ -6,7 +6,7 @@ module.exports = class MessageLetterLeauge extends Command {
 			name: "letterleauge",
   			category: "activities",
   			alias: ["ll"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}letterleauge`,
   			description: "Use LetterLeauge Activity.",
 		});

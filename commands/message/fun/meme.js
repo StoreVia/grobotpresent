@@ -8,7 +8,7 @@ module.exports = class MessageMeme extends Command {
 			name: "meme",
   			category: "fun",
   			alias: ["mme"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}meme`,
   			description: "Get A Random Meme.",
 		});

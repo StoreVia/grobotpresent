@@ -6,7 +6,7 @@ module.exports = class MessagePokerNight extends Command {
 			name: "pokernight",
   			category: "activities",
   			alias: ["pn"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}pokernight`,
   			description: "Use PokerNight Activity.",
 		});

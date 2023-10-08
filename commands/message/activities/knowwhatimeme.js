@@ -6,7 +6,7 @@ module.exports = class MessageKnowWhatIMeme extends Command {
 			name: "knowwhatimeme",
   			category: "activities",
   			alias: ["kwim"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}jamspace`,
   			description: "Use KnowWhatIMeme Activity.",
 		});

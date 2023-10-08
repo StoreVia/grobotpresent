@@ -56,7 +56,7 @@ module.exports = class MessageCreate extends Event {
         if(command){
             if(client.functions.cmdCoolDown(message, command)){
                 const embed = new EmbedBuilder()
-                    .setDescription(`\`\`\`Time Left: ${cmdCoolDown(message, command)}s\`\`\``)
+                    .setDescription(`**CommandCoolDown**\`\`\`Time Left: ${client.functions.cmdCoolDown(message, command)}s\`\`\``)
                     .setColor(`${process.env.ec}`)
                 return message.reply({ embeds: [embed] });
             } else {

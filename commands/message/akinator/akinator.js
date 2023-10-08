@@ -6,7 +6,7 @@ module.exports = class MessageAkinator extends Command {
 			name: "akinator",
   			category: "akinator",
   			alias: ["aki"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}akinator`,
   			description: "Play Akinator Game.",
 		});

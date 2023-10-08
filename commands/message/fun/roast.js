@@ -6,7 +6,7 @@ module.exports = class MessageRoast extends Command {
 			name: "roast",
   			category: "fun",
   			alias: ["rst"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}roast <userMention>`,
   			description: "Roast Someone.",
 		});

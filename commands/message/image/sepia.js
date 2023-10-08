@@ -6,7 +6,7 @@ module.exports = class MessageSepia extends Command {
 			name: "sepia",
   			category: "image",
   			alias: ["spia", "sp"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}sepia <userMention>`,
   			description: "Add Sepia Image Effect.",
 		});

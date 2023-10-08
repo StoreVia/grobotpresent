@@ -6,7 +6,7 @@ module.exports = class MessageTrivia extends Command {
 			name: "trivia",
   			category: "games",
   			alias: ["trva", "trvia"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}trivia`,
   			description: "Play Trivia Game.",
 		});

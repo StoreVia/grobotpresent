@@ -6,7 +6,7 @@ module.exports = class MessageAutoMemeDelete extends Command {
 			name: "automemedelete",
   			category: "moderation",
   			alias: ["amemedelete", "automdelete", "automd", "amd"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}automemedelete <channelMention>`,
   			description: "Delete Automeme Channel.",
 		});

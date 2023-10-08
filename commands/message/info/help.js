@@ -6,7 +6,7 @@ module.exports = class MessageHelp extends Command {
 			name: "help",
   			category: "info",
   			alias: ["hlp", "command", "commands"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}help`,
   			description: "Gives List Of Bot Commands.",
 		});

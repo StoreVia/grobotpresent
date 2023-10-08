@@ -6,7 +6,7 @@ module.exports = class MessagePuttParty extends Command {
 			name: "puttparty",
   			category: "activities",
   			alias: ["pp"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}puttparty`,
   			description: "Use PuttParty Activity.",
 		});

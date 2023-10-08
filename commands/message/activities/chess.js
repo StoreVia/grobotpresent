@@ -6,7 +6,7 @@ module.exports = class MessageChess extends Command {
 			name: "chess",
   			category: "activities",
   			alias: ["cs"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}chess`,
   			description: "Use Chess Activity.",
 		});

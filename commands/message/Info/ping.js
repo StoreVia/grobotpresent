@@ -6,7 +6,7 @@ module.exports = class MessagePing extends Command {
 			name: "ping",
   			category: "info",
   			alias: ["stats"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}ping`,
   			description: "Gives You Bots Ping.",
 		});

@@ -6,7 +6,7 @@ module.exports = class MessageRockPaperScissors extends Command {
 			name: "rockpaperscissors",
   			category: "games",
   			alias: ["rps"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}rockpaperscissors <userMention>`,
   			description: "Play Rps Game.",
 		});

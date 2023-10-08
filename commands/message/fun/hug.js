@@ -6,7 +6,7 @@ module.exports = class MessageHug extends Command {
 			name: "hug",
   			category: "fun",
   			alias: ["hugg"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}hug <userMention>`,
   			description: "Hug Someone.",
 		});
@@ -20,9 +20,9 @@ module.exports = class MessageHug extends Command {
 		if(!user){
 			return msgdefer.edit({ content: await client.functions.errorMsg().user() })
 		} else if(user.id === message.author.id){
-			return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${message.author} You Can't Hug Yourselft. Come I Will Hug You 🥰.`).image(`attachment://hug.png`).footer().build()], files: [await attachment] })
+			return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${message.author} You Can't Hug Yourselft. Come I Will Hug You 🥰.`).image(`attachment://hug.gif`).footer().build()], files: [await attachment] })
 		} else {
-			return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${message.author} Hugs ${user}, Awww How Cute 🥰.`).image(`attachment://hug.png`).footer().build()], files: [await attachment] })
+			return msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`${message.author} Hugs ${user}, Awww How Cute 🥰.`).image(`attachment://hug.gif`).footer().build()], files: [await attachment] })
 		}
 	}
 };

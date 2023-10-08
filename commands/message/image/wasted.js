@@ -6,7 +6,7 @@ module.exports = class MessageWasted extends Command {
 			name: "wasted",
   			category: "image",
   			alias: ["wstd", "wst"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}wasted <userMention>`,
   			description: "Add Wasted Image Effect.",
 		});

@@ -7,7 +7,7 @@ module.exports = class MessageGiveawayCreate extends Command {
 			name: "gcreate",
   			category: "giveaway",
   			alias: ["gc", "giveawaycreate"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}gcreate`,
   			description: "Create A Giveaway.",
 		});

@@ -6,7 +6,7 @@ module.exports = class MessageChatBotDelete extends Command {
 			name: "chatbotdelete",
   			category: "chatbot",
   			alias: ["cbd", "chatbd"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}chatbotdelete`,
   			description: "Delete Chatbot Channel.",
 		});

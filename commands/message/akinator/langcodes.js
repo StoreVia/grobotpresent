@@ -7,7 +7,7 @@ module.exports = class MessageLangCodes extends Command {
 			name: "languagecodes",
   			category: "akinator",
   			alias: ["lc", "langcodes"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}langcodes`,
   			description: "See Language Codes For Akinator.",
 		});

@@ -6,7 +6,7 @@ module.exports = class MessageSpellCast extends Command {
 			name: "spellcast",
   			category: "activities",
   			alias: ["sc"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}spellcast`,
   			description: "Use SpellCast Activity.",
 		});

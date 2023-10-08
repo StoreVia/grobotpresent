@@ -6,7 +6,7 @@ module.exports = class MessageUpdates extends Command {
 			name: "updates",
   			category: "info",
   			alias: ["upts"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}updates`,
   			description: "Get Latest Update Note.",
 		});

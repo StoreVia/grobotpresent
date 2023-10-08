@@ -6,7 +6,7 @@ module.exports = class MessageJamSpace extends Command {
 			name: "jamspace",
   			category: "activities",
   			alias: ["js"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}jamspace`,
   			description: "Use JamSpace Activity.",
 		});

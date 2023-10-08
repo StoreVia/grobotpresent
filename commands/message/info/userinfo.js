@@ -6,7 +6,7 @@ module.exports = class MessageUserInfo extends Command {
 			name: "userinfo",
   			category: "info",
   			alias: ["userinf", "uinfo", "ui"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}userinfo <userMention>`,
   			description: "Gives You Userinfo.",
 		});

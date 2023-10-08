@@ -6,7 +6,7 @@ module.exports = class MessageBlazing8s extends Command {
 			name: "blazing8s",
   			category: "activities",
   			alias: ["b8", "b8s"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}blazing8s`,
   			description: "Use Blazing8s Activity.",
 		});

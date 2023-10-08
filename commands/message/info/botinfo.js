@@ -6,7 +6,7 @@ module.exports = class MessageBotInfo extends Command {
 			name: "botinfo",
   			category: "info",
   			alias: ["binfo", "boti", "bi"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}botinfo`,
   			description: "Gives You Botinfo.",
 		});

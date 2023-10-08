@@ -6,7 +6,7 @@ module.exports = class MessageVaporText extends Command {
 			name: "vaportext",
   			category: "fun",
   			alias: ["vt", "vprtxt"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}vaportext <text>`,
   			description: "Convert Normal Text To Vapor Text.",
 		});

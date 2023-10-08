@@ -6,7 +6,7 @@ module.exports = class MessageCatSay extends Command {
 			name: "catsay",
   			category: "fun",
   			alias: ["cs"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}catsay <text>`,
   			description: "Make Cat To Say Something.",
 		});

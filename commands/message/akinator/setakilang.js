@@ -7,7 +7,7 @@ module.exports = class MessageSetAkiLang extends Command {
 			name: "setakilang",
   			category: "akinator",
   			alias: ["sal"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}sal <langCode>`,
   			description: "Set Your Akinator Language.",
 		});

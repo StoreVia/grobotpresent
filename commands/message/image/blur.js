@@ -6,7 +6,7 @@ module.exports = class MessageBlur extends Command {
 			name: "blur",
   			category: "image",
   			alias: ["blr"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}blur <userMention>`,
   			description: "Add Blur Image Effect.",
 		});

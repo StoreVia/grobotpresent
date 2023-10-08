@@ -6,7 +6,7 @@ module.exports = class MessageTwoZeroFourEight extends Command {
 			name: "2048",
   			category: "games",
   			alias: ["tzfe", "twozerofoureight"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}2048`,
   			description: "Play 2048 Game.",
 		});

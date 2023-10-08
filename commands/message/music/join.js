@@ -6,7 +6,7 @@ module.exports = class MessageJoin extends Command {
 			name: "join",
   			category: "music",
   			alias: ["jin", "jon"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}join <channelMention>`,
   			description: "Make Bot To Join In Voice Channel.",
 		});

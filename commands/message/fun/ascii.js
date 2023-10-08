@@ -7,7 +7,7 @@ module.exports = class MessageAscii extends Command {
 			name: "ascii",
   			category: "fun",
   			alias: ["asci", "aci"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}ascii <text>`,
   			description: "Convert Normal Text To Ascii Text.",
 		});

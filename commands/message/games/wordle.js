@@ -6,7 +6,7 @@ module.exports = class MessageWordle extends Command {
 			name: "wordle",
   			category: "games",
   			alias: ["wrdl", "wrdle"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}wordle`,
   			description: "Play Wordle Game.",
 		});

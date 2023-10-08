@@ -6,7 +6,7 @@ module.exports = class MessageGiveawayPause extends Command {
 			name: "gpause",
   			category: "giveaway",
   			alias: ["gp", "giveawaypause"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}gpause <giveaway messageId or prize>`,
   			description: "Pause A Giveaway.",
 		});

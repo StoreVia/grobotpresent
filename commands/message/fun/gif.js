@@ -6,7 +6,7 @@ module.exports = class MessageGif extends Command {
 			name: "gif",
   			category: "fun",
   			alias: ["gf"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}gif <string>`,
   			description: "Search For A Gif.",
 		});

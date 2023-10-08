@@ -6,7 +6,7 @@ module.exports = class MessageLandio extends Command {
 			name: "landio",
   			category: "activities",
   			alias: ["lio"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}landio`,
   			description: "Use Land-io Activity.",
 		});

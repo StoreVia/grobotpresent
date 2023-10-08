@@ -6,7 +6,7 @@ module.exports = class MessageNitro extends Command {
 			name: "nitro",
   			category: "fun",
   			alias: ["ntro", "nro"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}nitro`,
   			description: "Get Free Nitro Link.",
 		});

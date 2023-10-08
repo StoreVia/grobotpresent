@@ -6,7 +6,7 @@ module.exports = class MessageTrigger extends Command {
 			name: "trigger",
   			category: "image",
   			alias: ["triger", "trgr"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}trigger <userMention>`,
   			description: "Add Trigger Image Effect.",
 		});

@@ -6,7 +6,7 @@ module.exports = class MessageYoutube extends Command {
 			name: "youtube",
   			category: "activities",
   			alias: ["yt"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}youtube`,
   			description: "Use Youtube Activity.",
 		});

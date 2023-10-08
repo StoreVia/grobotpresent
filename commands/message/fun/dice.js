@@ -7,7 +7,7 @@ module.exports = class MessageDice extends Command {
 			name: "dice",
   			category: "fun",
   			alias: ["dc", "dce"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}dice`,
   			description: "Roll Dice.",
 		});

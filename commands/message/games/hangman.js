@@ -6,7 +6,7 @@ module.exports = class MessageHangMan extends Command {
 			name: "hangman",
   			category: "games",
   			alias: ["hm", "hman"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}hangman`,
   			description: "Play Hangman Game.",
 		});

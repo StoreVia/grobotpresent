@@ -6,7 +6,7 @@ module.exports = class MessageGreyScale extends Command {
 			name: "greyscale",
   			category: "image",
   			alias: ["gryscle", "gscle", "gs"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}greyscale <userMention>`,
   			description: "Add GreyScale Image Effect.",
 		});

@@ -7,7 +7,7 @@ module.exports = class MessageNowPlaying extends Command {
 			name: "nowplaying",
   			category: "music",
   			alias: ["nplying", "nply", "np"],
-  			cooldown: 3,
+  			cooldown: 5,
   			usage: `${process.env.prefix}nowplaying`,
   			description: "Get Details About Current Playing Song.",
 		});
