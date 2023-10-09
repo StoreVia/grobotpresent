@@ -15,6 +15,8 @@ const moment = require('moment');
 const formattor = new Intl.ListFormat(`en-GB`, { style: `narrow`, type: `conjunction` })
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { useTimeline, useQueue } = require("discord-player");
+const { lyricsExtractor } = require('@discord-player/extractor');
+const lyricsClient = lyricsExtractor('-V_Wjr6O6wJELT-3cdDiSOenILzYS4yHQD-CbcV3RNz_UFFhKZVy7WLYRljKcIHp');
 const statuses = {
   "online" : "🟢",
   "idle" : "🌙",
@@ -115,6 +117,12 @@ module.exports = class Functions {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async lyrics(int){
+    let client = this;
+    const { track } = useTimeline(int.guild.id);
+    return await lyricsClient.search(`${track.title}`).then(async(finder) => { return await client.embedBuild().title(`Lyrics For ${track.title}`).description(`${finder.lyrics}`).footer().build() })
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,7 +229,6 @@ module.exports = class Functions {
 		const members = await interact.guild.members.fetch();
 		const botMembers = members.filter(member => member.user.bot);
 		const realMembers = members.filter(member => !member.user.bot);
-    
     return this.embedBuild().title(`Member Count - \`${interact.guild.name}\``).ibvfields(`Members`, `\`${realMembers.size.toLocaleString()}\``, `Bots`, `\`${botMembers.size.toLocaleString()}\``, `Total`, `\`${members.size.toLocaleString()}\``).footer().build();
   }
 

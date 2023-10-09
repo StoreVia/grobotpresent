@@ -2,12 +2,12 @@ const Command = require('../../../structures/Commands/CommandClass');
 const { SlashCommandBuilder } = require('discord.js');
 const { useQueue } = require("discord-player");
 
-module.exports = class NowPlaying extends Command {
+module.exports = class Lyrics extends Command {
 	constructor(client){
 		super(client, {
 			data: new SlashCommandBuilder()
-				.setName('nowplaying')
-				.setDescription('Get Details About Current Playing Song.'),
+				.setName('lyrics')
+				.setDescription('Get Lyrics Of Currently Playing Song.'),
 			usage: 'nowplaying',
 			category: 'music',
 			permissions: ['Use Application Commands', 'Send Messages', 'Embed Links'],
@@ -23,9 +23,9 @@ module.exports = class NowPlaying extends Command {
         } else if(queue){
             await interaction.deferReply()
 			try {
-            	interaction.followUp({ embeds: [await client.functions.nowPlaying(interaction)]})
+            	return await interaction.followUp({ embeds: [await client.functions.lyrics(interaction)]});
 			} catch(e){
-				return await interaction.followUp({ embeds: [await client.functions.embedBuild().description(`Any Songs Aren't Playing Right Now. Please Try Again Later.`).build()]});
+				return await interaction.followUp({ embeds: [await client.functions.embedBuild().description(`Lyrics Not Found. If You Think This A Bug Report By Using "/report" Command.`).build()]});
 			}
         }
 	}
