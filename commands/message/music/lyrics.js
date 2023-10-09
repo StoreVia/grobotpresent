@@ -21,9 +21,9 @@ module.exports = class MessageLyrics extends Command {
             return await msgdefer.edit({ content: `> There Is Nothing In Queue Now.` })
         } else if(queue){
 			try {
-            	return await msgdefer.edit({ embeds: [await client.functions.lyrics(interaction)]});
+            	return await msgdefer.edit({ content: ``, embeds: [await client.functions.lyrics(message)]});
 			} catch(e){
-				return await msgdefer.edit({ embeds: [await client.functions.embedBuild().description(`Lyrics Not Found. If You Think This A Bug Report By Using "/report" Command.`).build()]});
+				return await msgdefer.edit({ content: ``, embeds: [await client.functions.embedBuild().description(`Lyrics Not Found. If You Think This A Bug Report By Using "/report" Command.`).build()]});
 			}
         }
 	}
