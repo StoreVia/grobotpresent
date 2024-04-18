@@ -17,6 +17,7 @@ module.exports = class Userinfo extends Command {
 		});
 	}
 	async run(client, interaction){
+		
         let functions = await client.functions.userInfo(interaction, true);
 
 		await interaction.deferReply();

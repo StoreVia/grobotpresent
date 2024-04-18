@@ -116,6 +116,20 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async wikipedia(query) {
+    fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`)
+		.then((res) => res.json())
+		.then(async (data) => {
+			if(data.type === "disambiguation"){
+				try{
+          const embed = this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}\n\n> Link For This Topic : [Click Me!](${data.content_urls.desktop.page})`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer();
+        } catch(e){
+
+        }
+      }
+    })
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async lyrics(int){
