@@ -114,6 +114,15 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async covid(){
+    return fetch(`https://disease.sh/v3/covid-19/all`)
+    .then((res) => res.json())
+    .then(async(data) => {
+      const embedUpdate = await this.embedBuild().title(`Worldwide Covid-19 Stats`).ibvfields(`AllCases`, `${data.cases.toLocaleString()}`, `Deaths`, `${data.deaths.toLocaleString()}`, `Recovered`, `${data.recovered.toLocaleString()}`, `TodayCases`, `${data.todayCases.toLocaleString()}`, `TodayDeaths`, `${data.todayDeaths.toLocaleString()}`, `Active`, `${data.active.toLocaleString()}`, `Critical`, `${data.critical.toLocaleString()}`, `CasesPerMillion`, `${data.casesPerOneMillion.toLocaleString()}`).thumbnail(`${process.env.covid_thumbnail}`).footer().build();
+      return { embedUpdate }
+    }) 
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async wikipedia(query) {

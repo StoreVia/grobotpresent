@@ -1,7 +1,6 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const Command = require('../../../structures/Commands/MessageCommandClass');
 
-module.exports = class MessagePing extends Command {
+module.exports = class MessageWikipedia extends Command {
 	constructor(client){
 		super(client, {
 			name: "wikipedia",
