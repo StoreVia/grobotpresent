@@ -121,11 +121,21 @@ module.exports = class Functions {
 		.then(async(res) => res.json())
 		.then(async (data) => {
 			if(data.type === "disambiguation"){
-        const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}\n\n> Link For This Topic : [Click Me!](${data.content_urls.desktop.page})`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer().build();
-        return await { embedUpdate }
+        try{
+          const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}\n\n> Link For This Topic : [Click Me!](${data.content_urls.desktop.page})`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer().build();
+          return await { embedUpdate }
+        } catch(e){
+          const embedUpdate = await this.embedBuild().description(`> No Results Found For \`${query}\``).build();
+          return { embedUpdate }
+        }
       } else {
-        const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer().build();
-        return await { embedUpdate }
+        try{
+          const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer().build();
+          return await { embedUpdate }
+        } catch(e){
+          const embedUpdate = await this.embedBuild().description(`> No Results Found For \`${query}\``).build();
+          return { embedUpdate }
+        }
       }
     })
   }

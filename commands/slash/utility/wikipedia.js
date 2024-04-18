@@ -20,13 +20,8 @@ module.exports = class Wikipedia extends Command {
 
 		await interaction.deferReply();
 		const query = await client.functions.getOptions(interaction).string(`query`);
-		
-		try{
-			let embed = await client.functions.wikipedia(query);
-			await interaction.followUp({ embeds: [embed.embedUpdate] });
-		} catch(e){
-			const embedUpdate = this.embedBuild().description(`> No Query Found For \`${query}\``);
-			await interaction.followUp({ embeds: [embedUpdate] });
-		}
+		let embed = await client.functions.wikipedia(query);
+
+		await interaction.followUp({ embeds: [embed.embedUpdate] });
 	}
 };
