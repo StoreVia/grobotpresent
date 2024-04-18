@@ -8,7 +8,7 @@
  * Made By StoreVia Developers
  * Credits :- Professor & Team
  * Contact :- professor.js (Discord)
- * Version :- v1.1
+ * Version :- v0.0
  * BotName :- GroBot
  * Website :- https://www.grobot.netlify.app
 
