@@ -21,7 +21,7 @@ module.exports = class MessagePing extends Command {
 		if(!query){
 			return await msgdefer.edit({ content: `> Enter Some Query To Search In Wikipedia.` })
 		} else {
-			return await msgdefer.edit({ embeds: [embed.embedUpdate] });
+			return await msgdefer.edit({ content: ``, embeds: [embed.embedUpdate] });
 		}
 	}
 };

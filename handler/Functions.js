@@ -749,7 +749,7 @@ module.exports = class Functions {
   deferReply(){
     const client = this.client;
     function message(msg){
-      return msg.channel.send({ content: `> ${client.user.username} Is Thinking...` })
+      return msg.reply({ content: `> ${client.user.username} Is Thinking...` })
     }
     return { message }
   }
