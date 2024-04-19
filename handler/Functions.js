@@ -33,6 +33,27 @@ module.exports = class Functions {
 
   collector(msg){
     const extension = this;
+    function fact(userId, embed, buttonRow){
+      const filter = i => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+      collector.on('collect', async (i) => {
+        if(i.user.id != userId){
+          await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+        } else if(i.customId === "fact"){
+          let embed1 = embed.setDescription(`${await extension.randomFact()}`);
+          await i.update({ embeds: [embed1], components: [buttonRow] });
+        } else if(i.customId === "stop"){
+          buttonRow.components.map(component=> component.setDisabled(true));
+          await i.update({ components: [buttonRow] });
+        }
+      })
+      collector.on('end', async (_, reason) => {
+        if(reason === 'idle' || reason === 'user'){
+          buttonRow.components.map(component=> component.setDisabled(true));
+          return await msg.editReply({ components: [buttonRow] });
+        }
+      });
+    }
     function dice(userId, embed, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
@@ -107,10 +128,16 @@ module.exports = class Functions {
         }
       })
     }
-    return { dice, meme, help };
+    return { fact, dice, meme, help };
   }
   
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async randomFact(){
+    let facts = require(`../A_Jsons/facts.json`);
+    let fact = titlecase(facts[Math.floor(Math.random() * facts.length)]);
+    return fact;
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

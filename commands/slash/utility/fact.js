@@ -1,7 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
-const facts = require(`../../../A_Jsons/facts.json`);
-const titlecase = require(`titlecase`);
+const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class Fact extends Command {
 	constructor(client){
@@ -17,59 +15,12 @@ module.exports = class Fact extends Command {
 	}
 	async run(client, interaction){
 
-        const buttonRow = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setLabel('Next')
-					.setCustomId('fact')
-					.setStyle(ButtonStyle.Secondary),
-				new ButtonBuilder()
-					.setLabel('Stop')
-					.setCustomId('fastop')
-					.setStyle(ButtonStyle.Danger),
-            )
-
 		await interaction.deferReply();
+		let buttonRow = await client.functions.buttons(`Next`, `fact`, ButtonStyle.Secondary, `Stop`, `stop`, ButtonStyle.Danger);
+		let fact = await client.functions.randomFact();
+		let embed = await client.functions.embedBuild().title(`Facts`).thumbnail(`${process.env.fact_thumbnail}`).description(`${fact}`).footer().build();
 
-		let embed = new EmbedBuilder()
-  			.setTitle('Facts')
-    		.setThumbnail(`https://i.imgur.com/ryyJgAK.png`)
-  			.setDescription(titlecase(facts[Math.floor(Math.random() * facts.length)]))
-  			.setFooter({
-      			text: `${client.user.username} - ${process.env.year} ©`, 
-      			iconURL: process.env.iconurl
-    		})
-        	.setColor(`${process.env.ec}`);
 		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });
-
-        const filter = i => i.customId;
-		const collector = message.createMessageComponentCollector({ filter, idle: 60000 });
-
-        collector.on('collect', async i => {
-			if(i.user.id != interaction.user.id){
-				await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
-			} else if(i.customId === "fact"){
-                let embed = new EmbedBuilder()
-  					.setTitle('Facts')
-    				.setThumbnail(`https://i.imgur.com/ryyJgAK.png`)
-  					.setDescription(titlecase(facts[Math.floor(Math.random() * facts.length)]))
-  					.setFooter({
-      					text: `${client.user.username} - ${process.env.year} ©`, 
-      					iconURL: process.env.iconurl
-    				})
-        			.setColor(`${process.env.ec}`);
-				await i.update({ embeds: [embed], components: [buttonRow] });
-			} else if(i.customId === "fastop"){
-				buttonRow.components.map(component=> component.setDisabled(true));
-				await i.update({ components: [buttonRow] });
-			}
-		})
-
-		collector.on('end', async (_, reason) => {
-			if(reason === 'idle' || reason === 'user'){
-				buttonRow.components.map(component=> component.setDisabled(true));
-				return await interaction.editReply({ components: [buttonRow] });
-			}
-		});
+		await client.functions.collector(message).fact(interaction.user.id, embed, buttonRow)
 	}
 };
