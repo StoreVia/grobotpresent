@@ -33,6 +33,49 @@ module.exports = class Functions {
 
   collector(msg){
     const extension = this;
+    function poll(choice1, choice2, embed, buttonRow){
+      let Choice1Votes = 0;
+		  let Choice2Votes = 0;
+      let votedUsers = [];
+      const filter = (i) => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 300000 });
+      collector.on('collect', async (i) => {
+				if(votedUsers.includes(i.user.id)){
+					return await i.reply({ content: 'You Have Already Voted.', ephemeral: true });
+				}
+        if(i.customId === "pchoice1"){
+          Choice1Votes++;
+          votedUsers.push(`${i.user.id}`);
+        } else if(i.customId === "pchoice2"){
+          Choice2Votes++
+          votedUsers.push(`${i.user.id}`);
+        }
+        const Total = Choice1Votes + Choice2Votes;
+        const Percentage1 = (Choice1Votes / Total) * 100 || 0;
+				const Percentage2 = (Choice2Votes / Total) * 100 || 0;
+        embed.setFields(
+          { name: `**OptionA: **`, value:`> ${Math.floor(Percentage1)}%`, inline: true },
+          { name: `**OptionB: **`, value:`> ${Math.floor(Percentage2)}%`, inline: true },
+          { name: `**TotalVotes: **`, value:`> ${Total}`, inline: true }
+        )
+        await i.update({ embeds: [embed] })  
+      })
+      collector.on('end', async (_, reason) => {
+        if(reason === 'idle' || reason === 'user'){
+          buttonRow.components.map(component=> component.setDisabled(true));
+          if(Choice1Votes > Choice2Votes){
+            embed.setDescription(`🅰: **${choice1} - {Majority}**\n\n🅱: **${choice2}**\n\n> **PollEnded: **<t:${Math.floor((Date.now())/1000)}:R>`)
+            return await msg.edit({ embeds: [embed], components: [buttonRow] });  
+          } else if(Choice2Votes > Choice1Votes){
+            embed.setDescription(`🅰: **${choice1}**\n🅱: **${choice2} - {Majority}**\n\n> **PollEnded: **<t:${Math.floor((Date.now())/1000)}:R>`)
+            return await msg.edit({ embeds: [embed], components: [buttonRow] });  
+          } else {
+            embed.setDescription(`🅰: **${choice1} - {Draw}**\n🅱: **${choice2} - {Draw}**\n\n> **PollEnded: **<t:${Math.floor((Date.now())/1000)}:R>`)
+            return await msg.edit({ embeds: [embed], components: [buttonRow] });  
+          }
+        }
+      });
+    }
     function fact(userId, embed, buttonRow){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
@@ -128,7 +171,7 @@ module.exports = class Functions {
         }
       })
     }
-    return { fact, dice, meme, help };
+    return { poll, fact, dice, meme, help };
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

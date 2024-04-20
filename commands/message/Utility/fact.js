@@ -9,7 +9,7 @@ module.exports = class MessageFact extends Command {
   			alias: ["facts", "fct"],
   			cooldown: 5,
   			usage: `${process.env.prefix}fact`,
-  			description: "Gives A Random Fact.(premium).",
+  			description: "Gives A Random Fact.(premium)",
 		});
 	}
 	async run(client, message){
