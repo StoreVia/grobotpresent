@@ -187,7 +187,18 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  
+  async reminder(int, time, reason){
+    let extthis = this;
+    let description = null;
+    if(!reason) description =  `**Reminder ${int.user}**`;
+    if(reason) description =  `**Reminder ${int.user} : ${reason}**`;
+    setTimeout(function(){
+			const reminder = extthis.embedBuild().description(`${description}`).build()
+			int.user.send({ content:`${int.user}`, embeds: [reminder]})
+    }, ms(time));
+    const embed = this.embedBuild().title(`Reminder Started!`).description(`**Ok I Will Remember You In \`${time}\`**\n> Please Make Sure Your Dm Is On.`).footer().build();
+    return { embed }
+  }  
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,6 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const ms = require("ms");
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Reminder extends Command {
 	constructor(client){
@@ -23,32 +22,12 @@ module.exports = class Reminder extends Command {
 		});
 	}
 	async run(client, interaction){
-        
-    let user = interaction.user;
+    
     let time = interaction.options.getString("time")
     let reason = interaction.options.getString("reason");
-    let description = null;
+    let functions = await client.functions.reminder(interaction, time, reason);
 
-    if(!reason) description =  `**Reminder ${user}**`;
-    if(reason) description =  `**Reminder ${user} : ${reason}**`;
-
-    setTimeout(function(){
-			const reminder = new EmbedBuilder()
-		    .setColor(`${process.env.ec}`)
-			  .setDescription(description)
-			user.send({ content:`${user}`, embeds: [reminder]})
-
-    }, ms(time));
-
-		const embed = new EmbedBuilder()
-      .setTitle(`Reminder Started!`)
-		  .setDescription(`**Ok I Will Remember You In \`${time}\`**\n> Please Make Sure Your Dm Is On.`)
-		  .setColor(`${process.env.ec}`)
-      .setFooter({
-        text: `${client.user.username} - ${process.env.year} ©`, 
-        iconURL: process.env.iconurl
-      })
     await interaction.deferReply({ ephemeral: true});
-		return await interaction.followUp({ embeds: [embed] });
+		return await interaction.followUp({ embeds: [functions.embed] });
 	}
 };
