@@ -23,8 +23,8 @@ module.exports = class Reminder extends Command {
 	}
 	async run(client, interaction){
     
-    let time = interaction.options.getString("time")
-    let reason = interaction.options.getString("reason");
+    let time = await client.functions.getOptions(interaction).string("time")
+    let reason = await client.functions.getOptions(interaction).string("reason");
     let functions = await client.functions.reminder(interaction, time, reason);
 
     await interaction.deferReply({ ephemeral: true});

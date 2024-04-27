@@ -185,6 +185,16 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async report(int, bug, mt){
+    let ext = this;
+    let embed = this.embedBuild().title(`Bug Reported!`).description(`\`\`\`${bug}\`\`\``).ibvfields(`GuildName`, `${int.guild.name}`, `ReportedUser`, `${mt ? int.author.username : int.user.username}`).footer().build();
+
+    return await this.client.channels.cache.get(`${process.env.reportlogschannel_id}`).send({ embeds: [embed] }).then(() => {
+      let embed = ext.embedBuild().title(`Bug Reported! `).description(`> Our Team Will Contact You Soon, It Would Be Helpful If You Turn On Your Dm To Investigate The Issue.`).footer().build();
+      return { embed };
+    })
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async reminder(int, time, reason){

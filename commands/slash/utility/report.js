@@ -1,5 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = class Report extends Command {
 	constructor(client){
@@ -18,23 +18,10 @@ module.exports = class Report extends Command {
 	}
 	async run(client, interaction){
 
-		let report = interaction.options.getString(`bug`);
-
-        const embed = new EmbedBuilder()
-            .setTitle(`Bug Reported!`)
-            .setDescription(`\`\`\`${report}\`\`\``)
-            .addFields(
-                { name: `GuildName:`, value: `> ${interaction.guild.name}`, inline: true },
-                { name: `ReportedUser:`, value: `> ${interaction.user.tag}`, inline: true },
-            )
-            .setColor(`${process.env.ec}`)
-            .setFooter({
-                text: `${client.user.username} - ${process.env.year} ©`,
-                iconURL: process.env.iconurl
-            });
-
-        client.channels.cache.get(`${process.env.reportlogschannel_id}`).send({ embeds: [embed] })
         await interaction.deferReply({ ephemeral: true })
-        await interaction.followUp({ content: "Reported Successfully, Our Team Will Contact You Soon." })
+		let report = await client.functions.getOptions(interaction).string(`bug`);
+        let repostFunction = await client.functions.report(interaction, report)
+
+        return await interaction.followUp({ embeds: [repostFunction.embed] })
 	}
 };
