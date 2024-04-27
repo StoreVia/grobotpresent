@@ -227,7 +227,7 @@ module.exports = class Functions {
 		.then(async (data) => {
 			if(data.type === "disambiguation"){
         try{
-          const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}\n\n> Link For This Topic : [Click Me!](${data.content_urls.desktop.page})`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer().build();
+          const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}\n\n> Link For This Topic : [Click Me!](${data.content_urls.desktop.page})`).thumbnail(`${data.thumbnail.source}`).footer().build();
           return await { embedUpdate }
         } catch(e){
           const embedUpdate = await this.embedBuild().description(`> No Results Found For \`${query}\``).build();
@@ -235,7 +235,7 @@ module.exports = class Functions {
         }
       } else {
         try{
-          const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}`).thumbnail(`${process.env.wikipedia_thumbnail}`).footer().build();
+          const embedUpdate = await this.embedBuild().title(`${data.title}`).url(`${data.content_urls.desktop.page}`).description(`${data.extract}`).thumbnail(`${data.thumbnail.source}`).footer().build();
           return await { embedUpdate }
         } catch(e){
           const embedUpdate = await this.embedBuild().description(`> No Results Found For \`${query}\``).build();
