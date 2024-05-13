@@ -6,6 +6,7 @@ const fs = require('fs');
 const https = require('https');
 https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs_mozilla_bundle/ca_bundle/ca_intermediate_root_bundle.pem');
 const titlecase = require(`titlecase`);
+const translate = require('@iamtraction/google-translate');
 const ms = require(`ms`);
 const roasts = require(`../A_Jsons/roast.json`);
 const { TwoZeroFourEight, Flood, Hangman, RockPaperScissors, Slots, Snake, TicTacToe, Trivia, Wordle } = require('../B_Modules/discord-gamecord');
@@ -183,8 +184,16 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async translate(lang, text){
+  async translate(language, text){
     let ext = this;
+    const languageNames = require(`../A_Jsons/languages.json`)
+    const getLanguageName = (languageCode) => {
+      return languageNames[languageCode] || "---";
+    };  
+    return translate(text, { to: language }).then(async(res) => {
+      let embed = ext.embedBuild().title(`Translated To \`${await getLanguageName(language)}\``).description(`\`\`\`${res.text}\`\`\``).footer().build();
+      return embed;
+    })
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
