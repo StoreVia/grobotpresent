@@ -34,6 +34,26 @@ module.exports = class Functions {
 
   collector(msg){
     const extension = this;
+    function language(buttonRow, userId){
+      const filter = i => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+      collector.on('collect', async i => {
+			  if(i.user.id != userId){
+				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+        } else if(i.customId === "langcodes"){
+				  i.reply({ content: ``, embeds: [await extension.akilangEmbed()], ephemeral: true })
+        } else if(i.customId === "lcstop"){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await i.update({ components: [buttonRow] })
+        }
+      })
+      collector.on('end', async (_, reason) => {
+        if(reason === 'idle' || reason === 'user'){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  return await msg.edit({ components: [buttonRow] });
+        }
+      });
+    }
     function poll(choice1, choice2, embed, buttonRow){
       let Choice1Votes = 0;
 		  let Choice2Votes = 0;
@@ -172,7 +192,7 @@ module.exports = class Functions {
         }
       })
     }
-    return { poll, fact, dice, meme, help };
+    return { poll, fact, dice, meme, help, language };
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

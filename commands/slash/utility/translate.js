@@ -6,14 +6,14 @@ module.exports = class Translate extends Command {
 		super(client, {
 			data: new SlashCommandBuilder()
 				.setName('translate')
-				.setDescription('Translate Some Text From English To Other Language.')
+				.setDescription('Translate Text From One Language To Another.')
                 .addStringOption(option =>
                     option.setName('text')
                         .setDescription(`Text You Want To Translate.`)
                         .setRequired(true))
                 .addStringOption(option =>
                     option.setName('language')
-                        .setDescription('In Which Language You Want To Translate Text.')
+                        .setDescription('Select Target Language For Text Translation.')
                         .setRequired(true)
                         .setAutocomplete(true)),
 			usage: 'translate',
