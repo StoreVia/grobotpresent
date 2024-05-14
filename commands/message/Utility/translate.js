@@ -14,19 +14,20 @@ module.exports = class MessageTranslate extends Command {
 	async run(client, message, args){
 		
 		const langCode = args.shift();
-        const langText = args.join(" ");
+		const langText = args.join(" ");
 		let msgdefer = await client.functions.deferReply().message(message);
-		let embed = await client.functions.translate(langCode, langText);
-		try{
-            if(!langCode) {
-                return await msgdefer.edit({ content: `> Use "$langcodes" To Get Info About All Language Codes.` });
-            } else if(!langText) {
-                return await msgdefer.edit({ content: `> Please Type Some Text To Translate.` });
-            } else {
-                return await msgdefer.edit({ content: ``, embeds: [embed] });
+
+        if(!langCode){
+            await msgdefer.edit({ content: `> Use "$langcodes" To Get Info About All Language Codes.` });
+        } else if(!langText){
+            await msgdefer.edit({ content: `> Please Type Some Text To Translate.` });
+        } else {
+            try{
+                let embed = await client.functions.translate(langCode, langText);
+                await msgdefer.edit({ content: ``, embeds: [embed] });
+            } catch(e){
+                await msgdefer.edit({ content: `> Use "$langcodes" To Get Info About All Language Codes` });
             }
-        } catch(e){
-            return await msgdefer.edit({ content: `> Use "$langcodes" To Get Info About All Language Codes.` });
         }
 		
 	}
