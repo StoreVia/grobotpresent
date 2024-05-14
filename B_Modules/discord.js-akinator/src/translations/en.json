@@ -25,7 +25,7 @@
     "animal": "Animal",
     "object": "Object",
     "defeated": "Did You Defeat Me???",
-    "gameForceEnd": "Your Game Ended Successfullt!",
+    "gameForceEnd": "Your Game Ended Successfully!",
     "startingGame": "Requesting Api...",
     "startingGameDesc": "It May Take Less Than 10 Seconds, Please Wait..."
 }

@@ -10,7 +10,7 @@
  * Contact :- professor.js (Discord)
  * Version :- v0.0
  * BotName :- GroBot
- * Website :- https://www.grobot.netlify.app
+ * Website :- https://grobot.netlify.app
 
 */
 const Client = require('./structures/Client');
