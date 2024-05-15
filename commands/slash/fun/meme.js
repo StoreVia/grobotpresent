@@ -18,7 +18,7 @@ module.exports = class InteractionMeme extends Command {
 
 		await interaction.deferReply();
 		let buttonRow = await client.functions.buttons(`NextMeme`, `meme`, ButtonStyle.Secondary, `Stop`, `mestop`, ButtonStyle.Danger);
-		let meme = await client.functions.genrateMeme();
+		let meme = await client.functions.generateMeme();
 		let embed = await client.functions.embedBuild().title(`${titlecase(meme.title)}`).url(`${meme.url}`).image(meme.memeImage).footer().build();
 		
 		let message = await interaction.followUp({ embeds: [embed], components: [buttonRow] });

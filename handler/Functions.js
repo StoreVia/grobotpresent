@@ -3,6 +3,8 @@ const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
 const akinator = require("../B_Modules/discord.js-akinator");
 const fs = require('fs');
+const truth = require(`../A_Jsons/truth.json`);
+const dare = require(`../A_Jsons/dare.json`);
 const https = require('https');
 https.globalAgent.options.ca = fs.readFileSync('node_modules/node_extra_ca_certs_mozilla_bundle/ca_bundle/ca_intermediate_root_bundle.pem');
 const titlecase = require(`titlecase`);
@@ -34,6 +36,66 @@ module.exports = class Functions {
 
   collector(msg){
     const extension = this;
+    function truth(buttonRow, userId){
+      const filter = i => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+		  collector.on('collect', async i => {
+			  if(i.user.id != userId){
+				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+			  } else if(i.customId === "truth"){
+				  await i.update({ embeds: [await extension.generateTruth()], components: [buttonRow] });
+			  } else if(i.customId === "trstop"){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await i.update({ components: [buttonRow] });
+			  }
+		  })
+		  collector.on('end', async (_, reason) => {
+			  if(reason === 'idle' || reason === 'user'){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await msg.edit({ components: [buttonRow] });
+			  }
+		  });
+    }
+    function dare(buttonRow, userId){
+      const filter = i => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+		  collector.on('collect', async i => {
+			  if(i.user.id != userId){
+				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+			  } else if(i.customId === "dare"){
+				  await i.update({ embeds: [await extension.generateDare()], components: [buttonRow] });
+			  } else if(i.customId === "drstop"){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await i.update({ components: [buttonRow] });
+			  }
+		  })
+		  collector.on('end', async (_, reason) => {
+			  if(reason === 'idle' || reason === 'user'){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await msg.edit({ components: [buttonRow] });
+			  }
+		  });
+    }
+    function truthordare(buttonRow, userId){
+      const filter = i => i.customId;
+		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
+		  collector.on('collect', async i => {
+			  if(i.user.id != userId){
+				  await i.reply({ content: "This Interaction Doesn't Belongs To You.", ephemeral: true });
+			  } else if(i.customId === "tod"){
+				  await i.update({ embeds: [await extension.generateTruthOrDare()], components: [buttonRow] });
+			  } else if(i.customId === "todstop"){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await i.update({ components: [buttonRow] });
+			  }
+		  })
+		  collector.on('end', async (_, reason) => {
+			  if(reason === 'idle' || reason === 'user'){
+				  buttonRow.components.map(component=> component.setDisabled(true));
+				  await msg.edit({ components: [buttonRow] });
+			  }
+		  });
+    }
     function language(buttonRow, userId){
       const filter = i => i.customId;
 		  const collector = msg.createMessageComponentCollector({ filter, idle: 60000 });
@@ -148,7 +210,7 @@ module.exports = class Functions {
 			  if(i.customId === "meme"){
 				  buttonRow.components.map(component=> component.setDisabled(true));
 				  await i.update({ content: `Searching...`, components: [buttonRow] });
-          let meme = await extension.genrateMeme();
+          let meme = await extension.generateMeme();
 				  if(meme){
 					  await buttonRow.components.map(component=> component.setDisabled(false));
 					  i.editReply({ content: ``, embeds: [embed.setTitle(`${titlecase(meme.title)}`).setURL(`${meme.url}`).setImage(meme.memeImage)], components: [buttonRow] });
@@ -159,7 +221,6 @@ module.exports = class Functions {
 				  await i.update({ components: [buttonRow] });
 			  }
 		  })
-
 		  collector.on('end', async (_, reason) => {
 			  if(reason === 'idle' || reason === 'user'){
 				  buttonRow.components.map(component=> component.setDisabled(true));
@@ -192,15 +253,49 @@ module.exports = class Functions {
         }
       })
     }
-    return { poll, fact, dice, meme, help, language };
+    return { poll, fact, dice, meme, help, language, truth, dare, truthordare };
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  async generateTruthOrDare(){
+    function readFileLines(filename){
+      const content = fs.readFileSync(filename, 'utf-8');
+      const lines = content.split('\n').map(line => line.trim().replace(/,+$/, '')).filter(line => line !== '');
+      return lines;
+    }
+    function pickRandomLine(lines){
+      const randomIndex = Math.floor(Math.random() * lines.length);
+      return lines[randomIndex];
+    }
+    const truthFilePath = './A_Jsons/truth.json';
+    const dareFilePath = './A_Jsons/dare.json';
+    const truthLines = readFileLines(truthFilePath);
+    const dareLines = readFileLines(dareFilePath);
+    function pickRandomLineFromFile(filename){
+      const lines = readFileLines(filename);
+      const randomLine = pickRandomLine(lines);
+      return { file: filename, line: randomLine };
+    }
+    const randomLine = Math.random() < 0.5 ? pickRandomLineFromFile(truthFilePath) : pickRandomLineFromFile(dareFilePath);
+    let fileName = null;
+    if(randomLine.file.includes(`dare`)) fileName = "Dare";
+    if(randomLine.file.includes(`truth`)) fileName = "Truth";
+    return this.embedBuild().title(`${fileName}`).description(`${randomLine.line.replace(/"/g, "").trim()}`).footer().build();
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async generateDare(){
+    return this.embedBuild().title(`Dare`).description(`${dare[Math.floor(Math.random() * dare.length)]}`).footer().build();
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async generateTruth(){
+    return this.embedBuild().title(`Truth`).description(`${truth[Math.floor(Math.random() * truth.length)]}`).footer().build();
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -449,10 +544,9 @@ module.exports = class Functions {
 
   async botInfo(api, latency){
     const client = this.client;
-    const thisT = this;
+    const ext = this;
     const buttonRow = this.buttons('Website', `${process.env.website}(url)`, ButtonStyle.Link, 'Invite', `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands(url)`, ButtonStyle.Link,'Top.gg', `https://top.gg/bot/${client.user.id}(url)`, ButtonStyle.Link);
-    const results = await Promise.all([ client.shard.fetchClientValues('guilds.cache.size'), client.shard.broadcastEval((c) => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0))]);
-    let embed = await thisT.embedBuild().title(`🤖 Bot Info - \`${client.user.username}\``).description(`**Please Support Us By Voting On Top.gg**`).thumbnail(`${process.env.iconurl}`).ibfields(`✉️ InviteMe`, `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, `🟢 Api`, `> \`${api} ms\``, `🏓 Latency`, `> \`${latency} ms\``, `🏠 Guilds`, `> ${await results[0].reduce((acc, guildCount) => acc + guildCount, 0)}`, `👥 Users`, `> ${await results[1].reduce((acc, memberCount) => acc + memberCount, 0)}`, `🤖 TotalCommands`, `> ${process.env.commands_count} Cmds`, `🤖 Version`, `\`\`\`> v${version}\`\`\``).footer().build();
+    let embed = await ext.embedBuild().title(`🤖 Bot Info - \`${client.user.username}\``).description(`**Please Support Us By Voting On Top.gg**`).thumbnail(`${process.env.iconurl}`).ibfields(`✉️ InviteMe`, `> [InviteMe](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`, `🟢 Api`, `> \`${api} ms\``, `🏓 Latency`, `> \`${latency} ms\``, `🏠 Guilds`, `> 123`, `👥 Users`, `> 123`, `🤖 TotalCommands`, `> ${process.env.commands_count} Cmds`, `🤖 Version`, `\`\`\`> v${version}\`\`\``).footer().build();
     return await { buttonRow, embed };
   }
 
@@ -628,7 +722,7 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async genrateMeme(){
+  async generateMeme(){
 		try{
 			let sub = [ 'meme', 'me_irl', 'memes', 'dankmeme', 'dankmemes', 'ComedyCemetery', 'terriblefacebookmemes', 'funny']
 			const random = Math.floor(Math.random() * sub.length)
