@@ -118,7 +118,7 @@ module.exports = class InteractionCreate extends Event {
 		}
 		if(interaction.customId === 'myModalDmUserTextEdit'){
 			const text3 = interaction.fields.getTextInputValue('text3');
-			await interaction.reply({ content: `> Done✅. User Dm Text Message Was Now Updated.`, ephemeral: true })
+			await interaction.reply({ content: `> Done✅. Welcome Text Message Was Now Updated In Dm.`, ephemeral: true })
 			.then(async() => {
 				let background = welcomedmconfigurationcheck?.thumbnail || null;
 				let color1 = welcomedmconfigurationcheck?.color || null;

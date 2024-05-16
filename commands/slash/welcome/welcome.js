@@ -227,9 +227,9 @@ module.exports = class Welcome extends Command {
             } else if(set === "off"){
                 if(welcomedmcheck){
                     await welcomedmdb.delete(`${interaction.guild.id}`)
-                    await interaction.followUp({ content: `> Done✅. Welcome Message Through Dm Is Now Deactivated In Your Server.`, ephemeral: true})
+                    await interaction.followUp({ content: `> Done✅. Welcome Message Through Dm Is Now Deactivated In Your Server.`})
                 } else {
-                    await interaction.followUp({ content: `> Welcome Message Through Dm Is Deactivated Already.`, ephemeral: true})
+                    await interaction.followUp({ content: `> Welcome Message Through Dm Is Deactivated Already.`})
                 }
             }
         }
@@ -239,7 +239,7 @@ module.exports = class Welcome extends Command {
         if(subcommand === "edit-text"){
             if(!welcomedmcheck){
                 await interaction.deferReply({ ephemeral: true });
-                return interaction.followUp({ content: `You Have Not Setup Welcome Dm-User System Yet. Use "/welcome dm-user dset" Command To Setup It.` })
+                return interaction.followUp({ content: `> You Have Not Setup Welcome Dm-User System Yet. Use "/welcome dm-user dset" Command To Setup It.` })
             } else {
                 const welcomedmuserold = new ModalBuilder()
 			        .setCustomId('myModalDmUserTextEdit')
@@ -271,7 +271,7 @@ module.exports = class Welcome extends Command {
                         color: color1,
                         thumbnail: background 
                     })
-                    return await interaction.followUp({ content: `> Done✅. Welcome Image Background Was Updated.` })
+                    return await interaction.followUp({ content: `> Done✅. Welcome Image Background Was Updated In Dm.` })
                 } else {
                     return await interaction.followUp({ content: `> Invlaid Url. Url Must Have Image Type Extension At Last.` })
                 }
@@ -293,7 +293,7 @@ module.exports = class Welcome extends Command {
                     color: colorCode,
                     thumbnail: background 
                 })
-                return await interaction.followUp({ content: `> Done✅. Welcome Image Color Was Updated` });
+                return await interaction.followUp({ content: `> Done✅. Welcome Image Color Was Updated In Dm.` });
             }
         }
         
