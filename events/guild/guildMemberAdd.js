@@ -1,5 +1,4 @@
 const Event = require('../../structures/Events/EventClass');
-const db = require(`quick.db`);
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`);
 
 module.exports = class GuildMemberAdd extends Event {

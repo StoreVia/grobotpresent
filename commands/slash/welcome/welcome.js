@@ -1,6 +1,5 @@
 const Command = require('../../../structures/Commands/CommandClass');
-const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
-const db = require(`quick.db`);
+const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField, PermissionFlagsBits, ChannelType, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = class Welcome extends Command {
 	constructor(client){
