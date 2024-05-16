@@ -15,7 +15,7 @@ module.exports = class Leave extends Command {
                         .setDescription(`Set Leave Message Channel.`)
                         .addSubcommand(subcommand =>
                             subcommand.setName('set')
-                                .setDescription('Set Welcome Channel.')
+                                .setDescription('Set Leave Channel.')
                                 .addChannelOption(option =>
                                     option.setName('channel')
                                         .addChannelTypes(ChannelType.GuildText)
@@ -23,7 +23,7 @@ module.exports = class Leave extends Command {
                                         .setRequired(true)))
                         .addSubcommand(subcommand =>
                             subcommand.setName('delete')
-                                .setDescription('Delete Welcome Channel.')))
+                                .setDescription('Delete Leave Channel.')))
                 .addSubcommandGroup(group =>
                     group.setName(`text`)
                         .setDescription(`Edit Leave Message.`)
@@ -40,43 +40,25 @@ module.exports = class Leave extends Command {
 	}
 	async run(client, interaction){
 
-        let subcommand = interaction.options.getSubcommand();
-        
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`})
-        }
+        const leavesetdb = client.db.table(`leave`);
+        const leavesetcheck = await leavesetdb.get(`${interaction.guild.id}`);
+        let subcommand = await client.functions.getOptions(interaction).subcommand();
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === 'set'){
-            const channel = interaction.options.getChannel('channel');
-            const channelcheck = db.fetch(`leave_${interaction.guild.id}`, channel.id)
-            if(!channelcheck){
-                const leavenew = new ModalBuilder()
-                    .setCustomId('myModalLeaveNew')
-                    .setTitle('Leaving Message Configuration.');
-                const leavenew1 = new TextInputBuilder()
-                    .setCustomId('text')
-                    .setLabel("Send's This Text When Some One Leave Server.")
-                    .setStyle(TextInputStyle.Paragraph);
-                const leavenew0 = new ActionRowBuilder().addComponents(leavenew1);
-                leavenew.addComponents(leavenew0);
-
-                db.set(`leave_${interaction.guild.id}`, channel.id);
-                await interaction.showModal(leavenew);
-            } else if(channelcheck){
-                const leaveold = new ModalBuilder()
-                    .setCustomId('myModalLeaveOld')
-                    .setTitle('Welcome System Configuration.');
-                const leaveold1 = new TextInputBuilder()
-                    .setCustomId('text')
-                    .setLabel("Send's This Text When Some One Leave Server.")
-                    .setStyle(TextInputStyle.Paragraph);
-                const leaveold0 = new ActionRowBuilder().addComponents(leaveold1);
-                leaveold.addComponents(leaveold0);
-                await interaction.showModal(leaveold);
+            const channel1 = await client.functions.getOptions(interaction).channel('channel');
+            if(!leavesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                await leavesetdb.set(`${interaction.guild.id}`, channel1.id);
+                return await interaction.followUp({ content: `> Leave System Was Now Bounded To ${channel1}.`})
+            } else if(channel1.id === leavesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Leave System Was Already Linked To ${channel1}.`})
+            } else if(channel1.id != leavesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                await leavesetdb.set(`${interaction.guild.id}`, channel1.id);
+                return await interaction.followUp({ content: `> Leave System Was Now Updated To ${channel1}.`})
             }
         }
 
@@ -98,14 +80,13 @@ module.exports = class Leave extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "delete"){
-            let leavecheck = db.fetch(`leave_${interaction.guild.id}`)
-            if(!leavecheck){
-                await interaction.deferReply({ ephemeral: true })
-                await interaction.followUp({ content: `> Leaving Message System Was Not Linked In This Server To Delete.`, ephemeral: true})
-            } else if(leavecheck){
-                db.delete(`leave_${interaction.guild.id}`);
-                await interaction.deferReply({ ephemeral: true })
-                await interaction.followUp({ content: `> Leaving Message System Was Now Deleted In This Server.`, ephemeral: true})
+            if(!leavesetcheck){
+                await interaction.deferReply({ ephemeral: true });
+                return await interaction.followUp({ content: `> Leave System Was Not Bounded To Any Channel.`})
+            } else {
+                await interaction.deferReply({ ephemeral: true });
+                await leavesetdb.delete(`${interaction.guild.id}`);
+                return await interaction.followUp({ content: `> Leave System Was Now Deleted In <#${leavesetcheck}>.`})
             }
         }
 
@@ -125,33 +106,7 @@ module.exports = class Leave extends Command {
             await interaction.followUp({ embeds: [embed] })
         }
 
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        function string(text){
-            let stringInput = interaction.options.getString(text);
-            return stringInput;
-        }
-        function user(usr){
-            let usrInput = interaction.options.getUser(usr);
-            return usrInput;
-        }
-        function channel(chl){
-            let chlInput = interaction.options.getChannel(chl);
-            return chlInput;
-        }
-        function integer(int){
-            let intInput = interaction.options.getInteger(int);
-            return intInput;
-        }
-        function number(num){
-            let numInput = interaction.options.getNumber(num);
-            return numInput;
-        }
-        function role(rle){
-            let rleInput = interaction.options.getRole(rle);
-            return rleInput;
-        }
-
-//////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 	}
 };

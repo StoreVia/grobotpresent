@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder, ModalBuilder, TextInputBuilder, StringSelectMenuBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection, PermissionsBitField, AttachmentBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js");
 const flip = require("flip-text");
 const giphy = require("giphy-api")("W8g6R14C0hpH6ZMon9HV9FTqKs4o4rCk");
 const akinator = require("../B_Modules/discord.js-akinator");
@@ -926,32 +926,33 @@ module.exports = class Functions {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  modal(){
-    function builder(label, id){
-      const modalBuild = new ModalBuilder()
-			  .setCustomId(id)
-			  .setTitle(label);
-      return modalBuild;
-    }
-    function text(label, id, style){
-      const textBuild = new TextInputBuilder()
-			  .setCustomId(id)
-			  .setLabel(label)
-			  .setStyle(style);
-      return textBuild;
-    }
-    function action(comp){
-      const actionBuild = new ActionRowBuilder().addComponents(comp);
-      return actionBuild;
-    }
-    return { builder, text, action }
+  async listSelector(placeHolder, Id, Disabled, MaxValue, Description, ...values){
+    const stringSelectMenuBuilder = new StringSelectMenuBuilder().setPlaceholder(placeHolder).setCustomId(Id).setDisabled(Disabled).setMaxValues(MaxValue);
+    for(let i = 0; i < values.length; i += 3){
+      if(Description === 1){
+        const [label, customId, emoji] = values.slice(i, i + 3);
+        const menu = new StringSelectMenuOptionBuilder()
+          .setLabel(label)
+          .setEmoji(emoji)
+          .setValue(customId);
+        stringSelectMenuBuilder.addOptions(menu)
+      } else if(description === 2){
+        const [label, customId, description] = values.slice(i, i + 3);
+        const menu = new StringSelectMenuOptionBuilder()
+          .setLabel(label)
+          .setDescription(description)
+          .setValue(customId);
+        stringSelectMenuBuilder.addOptions(menu)
+      }
+    };
+    return new ActionRowBuilder().addComponents(stringSelectMenuBuilder); 
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   buttons(...values){
     const buttonRow = new ActionRowBuilder();
-    for (let i = 0; i < values.length; i += 3){
+    for(let i = 0; i < values.length; i += 3){
       const [label, customId, style] = values.slice(i, i + 3);
       if(customId.includes(`url`)){
         const button = new ButtonBuilder()
@@ -1598,6 +1599,17 @@ module.exports = class Functions {
       `While performing colonoscopy on an elephant, ${target} gets their head stuck in the elephants rectum and chokes.`,
     ];
     return `${titlecase(kills[Math.floor(Math.random() * kills.length)])}`
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  isValidImgUrl(url){
+    var imageExtensions = /\.(jpg|jpeg|png|gif)$/i;
+    if (url.match(imageExtensions)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -38,11 +38,11 @@ module.exports = class Update extends Command {
         if(subcommand === "create"){
             let key = rand.generate(30)
             if(!keyscheck){
-                await keys.push(`premium`, `${key}` )
+                await keys.push(`premium`, `${key}`)
                 await interaction.deferReply()
                 interaction.followUp({ content: `> Premium Table Create With Starting Key: **${key}**` })
             } else {
-                await keys.push(`premium`, `${key}` )
+                await keys.push(`premium`, `${key}`)
                 await interaction.deferReply()
                 interaction.followUp({ content: `> Added New Premium Key To Table: **${key}**` })
             }

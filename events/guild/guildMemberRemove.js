@@ -14,14 +14,16 @@ module.exports = class GuildMemberAdd extends Event {
 
         const client = this.client;
 
-        let server = db.fetch(`leave_${member.guild.id}`)
-        let guildCh = client.channels.cache.get(server)
+        const leavesetdb = client.db.table(`leave`);
+        const leavesetcheck = await leavesetdb.get(`${member.guild.id}`); 
+        const leaveconfigurationdb = client.db.table(`leaveconfiguration`);
+        const leaveconfigurationdbcheck = await leaveconfigurationdb.get(`${member.guild.id}`);
 
-        if(!server){
+        if(!leavesetcheck){
             return;
         }
-        if(server){
-            let text = db.fetch(`leavetext_${member.guild.id}`) || "<MemberMention>, Just Left The Server."
+        if(leavesetcheck){
+            let text = leaveconfigurationdbcheck || "<MemberMention>, Just Left The Server."
             const text1 = text.replace('<MemberMention>', `${member}`)
                 .replace('<MemberCount>', `${member.guild.memberCount}`)
                 .replace('<UserName>', `${member.user.username}`)
@@ -29,8 +31,7 @@ module.exports = class GuildMemberAdd extends Event {
                 .replace('<UserTag>', `${member.user.discriminator}`)
                 .replace('<ServerName>', `${member.guild.name}`)
                 .replace('<ServerId>', `${member.guild.id}`);
-
-            guildCh.send({ content: `${text1}`})
+            client.channels.cache.get(leavesetcheck).send({ content: `${text1}`})
         }
 	}
 };

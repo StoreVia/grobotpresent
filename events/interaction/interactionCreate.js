@@ -2,7 +2,6 @@ const Event = require('../../structures/Events/EventClass');
 const { InteractionType, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const Discord = require(`discord.js`)
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');
-const ms = require("parse-ms-2");
 var rand = require("random-key");
 
 module.exports = class InteractionCreate extends Event {
@@ -99,61 +98,49 @@ module.exports = class InteractionCreate extends Event {
 //commandruneventend
 
 //welcomestart
-		const welcomedb = client.db.table(`welcome`);
-		const welcomecheck = await welcomedb.get(`${interaction.guild.id}`);
+		const welcomeconfigurationdb = client.db.table(`welcomeconfiguration`);
+		const welcomedmconfigurationdb = client.db.table(`welcomedmconfiguration`);
+		const welcomeconfigurationcheck = await welcomeconfigurationdb.get(`${interaction.guild.id}`);
+		const welcomedmconfigurationcheck = await welcomedmconfigurationdb.get(`${interaction.guild.id}`);
 
-		if(interaction.customId === 'WelcomeTextSet'){
-    		await interaction.reply({ content: `> Done✅. Welcome Channel Was Now Set And Text Updated.`, ephemeral: true })
-    		.then(() => {
-      			const text = interaction.fields.getTextInputValue('text');
-      			welcomedb.set(`${interaction.guild.id}`, {
-					
-				})
-    		})
-  		}
 		if(interaction.customId === 'myModalWelcomeTextEdit'){
+			const text1 = interaction.fields.getTextInputValue('text1');
 			await interaction.reply({ content: `> Done✅. Welcome Channel Text Now Updated.`, ephemeral: true })
-			.then(() => {
-				const text1 = interaction.fields.getTextInputValue('text1');
-				db.set(`welcometext_${interaction.guild.id}`, text1)
-			})
-		}
-		if(interaction.customId === 'myModalDmUserNew'){
-			await interaction.reply({ content: `> Done✅. Welcome User Dm Was Now Set.`, ephemeral: true })
-			.then(() => {
-				const text2 = interaction.fields.getTextInputValue('text2');
-				db.set(`welcomedmtext_${interaction.guild.id}`, text2)
+			.then(async() => {
+				let background = welcomeconfigurationcheck?.thumbnail || null;
+				let color1 = welcomeconfigurationcheck?.color || null;
+                await welcomeconfigurationdb.set(`${interaction.guild.id}`, {
+                    text: text1,
+                    color: color1,
+                    thumbnail: background 
+                })
 			})
 		}
 		if(interaction.customId === 'myModalDmUserTextEdit'){
+			const text3 = interaction.fields.getTextInputValue('text3');
 			await interaction.reply({ content: `> Done✅. User Dm Text Message Was Now Updated.`, ephemeral: true })
-			.then(() => {
-				const text3 = interaction.fields.getTextInputValue('text3');
-				db.set(`welcomedmtext_${interaction.guild.id}`, text3)
-			})
-		}
-		if(interaction.customId === "myModalLeaveNew"){
-			await interaction.reply({ content: `> Done✅. Leave Channel Was Now Set.`, ephemeral: true })
-    		.then(() => {
-      			const text = interaction.fields.getTextInputValue('text');
-      			db.set(`leavetext_${interaction.guild.id}`, text)
-    		})
-		}
-		if(interaction.customId === "myModalLeaveOld"){
-			await interaction.reply({ content: `> Done✅. Leave Channel Was Now Updated.`, ephemeral: true })
-			.then(() => {
-				const text = interaction.fields.getTextInputValue('text');
-				db.set(`leavetext_${interaction.guild.id}`, text)
-			})
-		}
-		if(interaction.customId === "myModalLeaveEditText"){
-			await interaction.reply({ content: `> Done✅. User Leave Text Was Now Updated.`, ephemeral: true })
-			.then(() => {
-				const text1 = interaction.fields.getTextInputValue('text1');
-				db.set(`leavetext_${interaction.guild.id}`, text1)
+			.then(async() => {
+				let background = welcomedmconfigurationcheck?.thumbnail || null;
+				let color1 = welcomedmconfigurationcheck?.color || null;
+                await welcomedmconfigurationdb.set(`${interaction.guild.id}`, {
+                    text: text3,
+                    color: color1,
+                    thumbnail: background 
+                })
 			})
 		}
 //welcomeend
+
+//leavestart
+		const leaveconfigurationdb = client.db.table(`leaveconfiguration`);
+		if(interaction.customId === "myModalLeaveEditText"){
+			const text1 = interaction.fields.getTextInputValue('text1');
+			await interaction.reply({ content: `> Done✅. User Leave Text Was Now Updated.`, ephemeral: true })
+			.then(() => {
+				leaveconfigurationdb.set(`${interaction.guild.id}`, text1)
+			})
+		}
+//leaveend
 
 //privateslashstart
 		if(interaction.customId === "myUpdate"){
@@ -367,5 +354,6 @@ module.exports = class InteractionCreate extends Event {
 		}
 
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
+
 	}
 };
