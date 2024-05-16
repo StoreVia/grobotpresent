@@ -23,8 +23,9 @@ module.exports = class GuildMemberAdd extends Event {
 		const welcomedmconfigurationcheck = await welcomedmconfigurationdb.get(`${member.guild.id}`);
 
         if(welcomedmcheck){
-            let color = welcomedmconfigurationcheck.color === null ? "FFFFFF" : welcomedmconfigurationcheck.color;
-            let backgroundurl = welcomedmconfigurationcheck.thumbnail === null ? "https://i.pinimg.com/originals/fa/ab/f0/faabf039c3c9d50462c2e2dd660edd04.jpg" : welcomedmconfigurationcheck.thumbnail;
+            let dmtext = (welcomedmconfigurationcheck && welcomedmconfigurationcheck.text) ? welcomedmconfigurationcheck.text : "<MemberMention>, Welcome To <ServerName>.";
+            let color = (welcomedmconfigurationcheck && welcomedmconfigurationcheck.color) ? welcomedmconfigurationcheck.color : "FFFFFF";
+            let backgroundurl = (welcomedmconfigurationcheck && welcomedmconfigurationcheck.thumbnail) ? welcomedmconfigurationcheck.thumbnail : "https://i.pinimg.com/originals/fa/ab/f0/faabf039c3c9d50462c2e2dd660edd04.jpg";
             const row = new ActionRowBuilder()
 			    .addComponents(
 				    new ButtonBuilder()
@@ -33,7 +34,6 @@ module.exports = class GuildMemberAdd extends Event {
                         .setDisabled(true)
 					    .setStyle(ButtonStyle.Secondary),
 			    );
-            let dmtext = welcomedmconfigurationcheck.text || "<MemberMention>, Welcome To <ServerName>."
             const text1 = dmtext.replace('<MemberMention>', `${member}`)
                 .replace('<MemberCount>', `${member.guild.memberCount}`)
                 .replace('<UserName>', `${member.user.username}`)
@@ -46,10 +46,10 @@ module.exports = class GuildMemberAdd extends Event {
         }
 
         if(welcomesetcheck){
-            let color = welcomeconfigurationcheck.color === null ? "FFFFFF" : welcomeconfigurationcheck.color;
-            let backgroundurl = welcomeconfigurationcheck.thumbnail === null ? "https://i.pinimg.com/originals/fa/ab/f0/faabf039c3c9d50462c2e2dd660edd04.jpg" : welcomeconfigurationcheck.thumbnail;
-            let text = welcomeconfigurationcheck.text || "<MemberMention>, Welcome To <ServerName>."
-            const text1 = text.replace('<MemberMention>', `${member}`)
+            let text2 = (welcomeconfigurationcheck && welcomeconfigurationcheck.text) ? welcomeconfigurationcheck.text : "<MemberMention>, Welcome To <ServerName>.";
+            let color = (welcomeconfigurationcheck && welcomeconfigurationcheck.color) ? welcomeconfigurationcheck.color : "FFFFFF";
+            let backgroundurl = (welcomeconfigurationcheck && welcomeconfigurationcheck.thumbnail) ? welcomeconfigurationcheck.thumbnail : "https://i.pinimg.com/originals/fa/ab/f0/faabf039c3c9d50462c2e2dd660edd04.jpg";
+            const text1 = text2.replace('<MemberMention>', `${member}`)
                 .replace('<MemberCount>', `${member.guild.memberCount}`)
                 .replace('<UserName>', `${member.user.username}`)
                 .replace('<UserId>', `${member.user.id}`)
