@@ -24,7 +24,7 @@ module.exports = class MessageWelcomeEditText extends Command {
             return msgdefer.edit({ content: `> You Need "Manage Guild" Permission To Use This Command.`})
         } else {
             if(!text1){
-                return msgdefer.edit({ content: `Enter Text That Should Be Displayed When A Use Joined Server.` });
+                return msgdefer.edit({ content: `> Enter Text That Should Be Displayed When A Use Joined Server.` });
             } else {
 				if(!welcomesetcheck){
 					return await msgdefer.edit({ content: `> You Have Not Setup Welcome System Yet. Use "${process.env.prefix}welcomeset <channelMention>" Command To Setup Welcome System.` })
