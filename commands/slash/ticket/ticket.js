@@ -125,13 +125,6 @@ module.exports = class Ticker extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            await interaction.deferReply({ ephemeral: true })
-            await interaction.followUp({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
-        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         if(subcommand === "setup"){
             await interaction.deferReply({ ephemeral: true })
             const channel1 =  channel(`channel`);
@@ -140,7 +133,7 @@ module.exports = class Ticker extends Command {
             const supportrole = role(`support_role`);
 
             if(!ticketcheck){
-                return await interaction.followUp({ content: `> Done✅. Use "/ticket send pannel" Command To Activate/Send Ticket.` }).then(() => {
+                return await interaction.followUp({ content: `> Done✅. Use "/ticket send panel" Command To Activate/Send Ticket.` }).then(() => {
                     ticketdb.set(interaction.guild.id, {
                         channel: channel1.id,
                         category: category.id,
