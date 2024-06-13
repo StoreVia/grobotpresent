@@ -31,7 +31,7 @@ module.exports = class InteractionCreate extends Event {
 			}
 			try {
 				const activatedkey = client.db.table(`premiumactivated`)
-				let userpremiumcheck = await activatedkey.get(`${interaction.user.id}`)
+				let userpremiumcheck = await activatedkey.get(`${interaction.user.id}`);
 				if(command.description.includes(`premium`)){
 					if(userpremiumcheck){
 						let [key, time] = userpremiumcheck.keyandtime.split(',');
