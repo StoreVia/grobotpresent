@@ -155,7 +155,7 @@ module.exports = class Ticker extends Command {
             } else if(ticketcheck){
                 let channel = await client.functions.ticketPanelSend(interaction, ticketcheck, ticketembedcheck);
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` });
+                return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In ${channel}.` });
             }
         }
 
@@ -186,12 +186,10 @@ module.exports = class Ticker extends Command {
                     await interaction.followUp({ content: `> You Should Provide New Role Inorder To Change Old Role.` })
                 } else {
                     ticketdb.set(interaction.guild.id, {
-                        details: {
-                            channel: channel,
-                            category: category,
-                            ticketLogs: logs,
-                            supportRole: role1.id
-                        }
+                        channel: channel,
+                        category: category,
+                        ticketLogs: logs,
+                        supportRole: role1.id
                     });
                     const embed = new EmbedBuilder()
                         .setTitle(`Ticket Role Edited`)

@@ -188,7 +188,7 @@ module.exports = class InteractionCreate extends Event {
 			}
 		}
 		if(interaction.customId === "closeticket"){
-			const role = ticketcheck.details.supportRole;
+			const role = ticketcheck.supportRole;
 			const row = new Discord.ActionRowBuilder()
 				.addComponents(
 		 			new Discord.ButtonBuilder()
@@ -205,8 +205,8 @@ module.exports = class InteractionCreate extends Event {
 			await interaction.followUp({ content: `<@&${role}>, ${interaction.user} Has Requested For Closing Ticket Please Confirm Before Deleting.`, components: [row]})
   		}
 		if(interaction.customId === "ticontinue"){
-			const role = ticketcheck.details.supportRole;
-			const logs = ticketcheck.details.ticketLogs;
+			const role = ticketcheck.supportRole;
+			const logs = ticketcheck.ticketLogs;
 			const guild = client.guilds.cache.get(interaction.guild.id);
 			const logschannel = guild.channels.cache.get(logs);
 			if(!interaction.member.roles.cache.has(`${role}`)){
@@ -250,9 +250,10 @@ module.exports = class InteractionCreate extends Event {
 							interaction.channel.delete()
 						})
 					}).catch(async(e) => {
+						console.log(e)
 						const embed = new EmbedBuilder()
 							.setTitle('Ticket Logs')
-							.setDescription(`Error In Creating Logs.**Please Try Later/Report By Using "/report" If You Think This Is A Bug.**`)
+							.setDescription(`Error In Creating Logs, Please Try Later. **If You Think This Is A Bug PleaseReport By Using "/report" Command.**`)
 							.addFields(
 								{ name: `**CreatedBy: **`, value: `<@!${interaction.channel.topic}>`, inline: true },
 								{ name: `**ClosedBy: **`, value: `<@!${interaction.user.id}>`, inline: true }
@@ -300,14 +301,16 @@ module.exports = class InteractionCreate extends Event {
 //////////////////////////////////////////////////{Functions}//////////////////////////////////////////////////
 
 		async function ticketOpen(){
-			const role = ticketcheck.details.supportRole;
-			const category1 = ticketcheck.details.category;
+			const role = ticketcheck.supportRole;
+			const category1 = ticketcheck.category;
 			const category = client.channels.cache.get(category1)
 			const channelcheck = interaction.member.guild.channels.cache.find(channel => channel.name === `${interaction.user.username.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '')}_${interaction.user.id}`);
-			if(channelcheck){
-				await interaction.followUp({ content: `> You Have Already An Open Ticket.` })
+			if(!ticketcheck){
+				await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
+			} else if(channelcheck){
+				await interaction.followUp({ content: `> You Have Already An Open Ticket.` });
 			} else {
-				const channel1 = await interaction.guild.channels.create({
+				await interaction.guild.channels.create({
 					name: `${interaction.user.username}_${interaction.user.id}`,
 					type: Discord.ChannelType.GuildText,
 					parent: category,
