@@ -257,6 +257,31 @@ module.exports = class Functions {
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async ticketPanelSend(interaction, ticketcheck, ticketembedcheck){
+    const ext = this;
+    const buttonRow = await this.buttons(`📩 Open`, `ticketopen`, ButtonStyle.Success);
+    let channel1 = interaction.guild.channels.cache.get(ticketcheck.channel);
+    if(!ticketembedcheck){
+      const embed = await ext.embedBuild().title(`Ticket`).thumbnail(`${process.env.panel_thumbnail}`).description(`> Open Ticket By Clicking Below Button.`).footer().build();
+      await channel1.send({ embeds: [embed], components: [buttonRow] })
+      return channel;
+    } else if(ticketembedcheck){
+      let [title, thumbnail, description] = [ticketembedcheck.title, ticketembedcheck.thumbnail, ticketembedcheck.description];
+      try{
+        if(title === null) title = "Ticket";
+        if(thumbnail === null) thumbnail = `${process.env.panel_thumbnail}`;
+        if(description === null) description = "> Open Ticket By Clicking Below Button.";
+        const embed = await ext.embedBuild().title(`${title}`).thumbnail(`${thumbnail}`).description(`${description}`).footer().build();
+        await channel1.send({ embeds: [embed], components: [buttonRow] });
+        return channel;
+      } catch (e){
+        const embed = await ext.embedBuild().title(`${title}`).thumbnail(`${process.env.panel_thumbnail}`).description(`${description}`).footer().build();
+        await channel1.send({ embeds: [embed], components: [buttonRow] });
+        return channel;
+      }
+    }
+  }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   async generateTruthOrDare(){
@@ -683,7 +708,7 @@ module.exports = class Functions {
   async vaporText(args){
     let msg = "";
     for(let i = 0; i < args.length; i++){
-        msg += args[i].toUpperCase().split("").join(" ") + " ";
+      msg += args[i].toUpperCase().split("").join(" ") + " ";
     }
     return await msg;
   }

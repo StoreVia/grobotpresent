@@ -149,66 +149,13 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
-            const buttonRow = new ActionRowBuilder()
-			    .addComponents(
-                    new ButtonBuilder()
-                        .setLabel('Open')
-                        .setEmoji(`📩`)
-                        .setCustomId('ticketopen')
-                        .setStyle(ButtonStyle.Success),
-                )
             if(!ticketcheck){
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
-                let [channel, category, logs, role] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
-                let channel1 = interaction.guild.channels.cache.get(channel)
-                if(!ticketembedcheck){
-                    const embed = new EmbedBuilder()
-				        .setTitle(`Ticket`)
-				        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
-				        .setDescription(`> Open Ticket By Clicking Below Button.`)
-				        .setColor(`${process.env.ec}`)
-				        .setFooter({
-                            text: `${client.user.username} - ${process.env.year} ©`,
-                            iconURL: process.env.iconurl
-				        });
-                    await channel1.send({ embeds: [embed], components: [buttonRow] })
-                    await interaction.deferReply({ ephemeral: true })
-				    return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
-                } else if(ticketembedcheck){
-                    let [title, thumbnail, description] = [ticketembedcheck.title, ticketembedcheck.thumbnail, ticketembedcheck.description];
-                    try{
-                        if(title === null) title = "Ticket";
-                        if(thumbnail === null) thumbnail = "https://i.imgur.com/RTaQlqV.png";
-                        if(description === null) description = "> Open Ticket By Clicking Below Button.";
-                        const embed = new EmbedBuilder()
-				            .setTitle(`${title}`)
-				            .setThumbnail(`${thumbnail}`)
-				            .setDescription(`${description}`)
-				            .setColor(`${process.env.ec}`)
-				            .setFooter({
-                                text: `${client.user.username} - ${process.env.year} ©`,
-                                iconURL: process.env.iconurl
-				            });
-                        await channel1.send({ embeds: [embed], components: [buttonRow] })
-				        await interaction.deferReply({ ephemeral: true })
-				        return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
-                    } catch (e){
-                        const embed = new EmbedBuilder()
-				            .setTitle(`${title}`)
-				            .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
-				            .setDescription(`${description}`)
-				            .setColor(`${process.env.ec}`)
-				            .setFooter({
-                                text: `${client.user.username} - ${process.env.year} ©`,
-                                iconURL: process.env.iconurl
-				            });
-                        await channel1.send({ embeds: [embed], components: [buttonRow] })
-                        await interaction.deferReply({ ephemeral: true })
-				        return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` })
-                    }
-                }
+                let channel = await client.functions.ticketPanelSend(interaction, ticketcheck, ticketembedcheck);
+                await interaction.deferReply({ ephemeral: true })
+                return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In <#${channel}>.` });
             }
         }
 
@@ -277,12 +224,10 @@ module.exports = class Ticker extends Command {
                     await interaction.followUp({ content: `> You Should Provide New Channel Inorder To Change Old Channel.` })
                 } else {
                     ticketdb.set(interaction.guild.id, {
-                        details: {
-                            channel: channel1.id,
-                            category: category,
-                            ticketLogs: logs,
-                            supportRole: role
-                        }
+                        channel: channel1.id,
+                        category: category,
+                        ticketLogs: logs,
+                        supportRole: role
                     });
                     const embed = new EmbedBuilder()
                         .setTitle(`Ticket Channel Edited`)
@@ -315,12 +260,10 @@ module.exports = class Ticker extends Command {
                     await interaction.followUp({ content: `> You Should Provide New Category Inorder To Change Old Category.` })
                 } else {
                     ticketdb.set(interaction.guild.id, {
-                        details: {
-                            channel: channel2,
-                            category: channel1.id,
-                            ticketLogs: logs,
-                            supportRole: role
-                        }
+                        channel: channel2,
+                        category: channel1.id,
+                        ticketLogs: logs,
+                        supportRole: role
                     });
                     const embed = new EmbedBuilder()
                         .setTitle(`Ticket Category Edited`)
@@ -353,12 +296,10 @@ module.exports = class Ticker extends Command {
                     await interaction.followUp({ content: `> You Should Provide New Logs Channel Inorder To Change Old Logs Channel.` })
                 } else {
                     ticketdb.set(interaction.guild.id, {
-                        details: {
-                            channel: channel2,
-                            category: category,
-                            ticketLogs: channel1.id,
-                            supportRole: role
-                        }
+                        channel: channel2,
+                        category: category,
+                        ticketLogs: channel1.id,
+                        supportRole: role
                     });
                     const embed = new EmbedBuilder()
                         .setTitle(`Ticket Logs Edited`)
@@ -438,11 +379,7 @@ module.exports = class Ticker extends Command {
             if(title.length > 256){
                 await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Embed Title Can't Be More Than 256 Characters.` })
-            } else if(!ticketembedcheck){
-                ticketembeddb.set(`${interaction.guild.id}`, { title: title })
-                await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Set, Use "/ticket send panel" Command To Send Updated Embed.` })
-            } else if(ticketembedcheck){
+            } else {
                 let thumbnail1 = ticketembedcheck?.thumbnail || null;
 				let description1 = ticketembedcheck?.description || null;
                 ticketembeddb.set(`${interaction.guild.id}`, {
@@ -451,7 +388,7 @@ module.exports = class Ticker extends Command {
                     thumbnail: thumbnail1 
                 })
                 await interaction.deferReply({ ephemeral: true })
-                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
+                return await interaction.followUp({ content: `> Done✅. Ticket Panel Embed Title Was Now Updated, Use "/ticket send panel" Command To Send Updated Embed.` })
             }
         }
 
