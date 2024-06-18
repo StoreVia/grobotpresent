@@ -114,7 +114,6 @@ module.exports = class Ticker extends Command {
 		});
 	}
 	async run(client, interaction){
-
         
         const ticketdb = client.db.table(`ticket`)
         const ticketembeddb = client.db.table(`ticketembed`)
