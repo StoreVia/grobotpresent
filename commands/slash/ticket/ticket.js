@@ -133,7 +133,7 @@ module.exports = class Ticker extends Command {
             const supportrole = role(`support_role`);
 
             if(!ticketcheck){
-                return await interaction.followUp({ content: `> Done✅. Use "/ticket send panel" Command To Activate/Send Ticket.` }).then(() => {
+                return await interaction.followUp({ content: `> Done✅. Use "/ticket send panel" Command To Activate/Send Ticket Panel.` }).then(() => {
                     ticketdb.set(interaction.guild.id, {
                         channel: channel1.id,
                         category: category.id,
