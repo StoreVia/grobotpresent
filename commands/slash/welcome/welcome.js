@@ -114,12 +114,6 @@ module.exports = class Welcome extends Command {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)){
-            await interaction.reply({ content: `> You Need "Manage Guild" Permission To Use This Command`, ephemeral: true})
-        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         if(subcommand === 'set'){
             const channel1 = await client.functions.getOptions(interaction).channel('channel');
             if(!welcomesetcheck){

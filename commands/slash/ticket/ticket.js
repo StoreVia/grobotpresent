@@ -126,10 +126,10 @@ module.exports = class Ticker extends Command {
 
         if(subcommand === "setup"){
             await interaction.deferReply({ ephemeral: true })
-            const channel1 =  channel(`channel`);
-            const category = channel(`category`);
-            const ticketlogs = channel(`ticket_logs`);
-            const supportrole = role(`support_role`);
+            const channel1 =  await client.functions.getOptions(interaction).channel(`channel`);
+            const category = await client.functions.getOptions(interaction).channel(`category`);
+            const ticketlogs = await client.functions.getOptions(interaction).channel(`ticket_logs`);
+            const supportrole = await client.functions.getOptions(interaction).role(`support_role`);
 
             if(!ticketcheck){
                 return await interaction.followUp({ content: `> Done✅. Use "/ticket send panel" Command To Activate/Send Ticket Panel.` }).then(() => {
@@ -148,12 +148,11 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         if(subcommand === "panel"){
+            await interaction.deferReply({ ephemeral: true });
             if(!ticketcheck){
-                await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
                 let channel = await client.functions.ticketPanelSend(interaction, ticketcheck, ticketembedcheck);
-                await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> Done✅. Activated/Sent Ticket Panel In ${channel}.` });
             }
         }
@@ -161,11 +160,10 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "delete"){
+            await interaction.deferReply({ ephemeral: true });
             if(!ticketcheck){
-                await interaction.deferReply({ ephemeral: true });
                 return await interaction.followUp({ content: `> Ticket System Was Not Setup In Your Guild.`})
             } else if(ticketcheck){
-                await interaction.deferReply({ ephemeral: true });
                 await ticketdb.delete(`${interaction.guild.id}`);
                 return await interaction.followUp({ content: `> Ticket System Was Not Deleted In Your Guild.`})
             }
@@ -174,15 +172,15 @@ module.exports = class Ticker extends Command {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(subcommand === "role"){
+            await interaction.deferReply({ ephemeral: true });
             if(!ticketcheck){
-                await interaction.deferReply({ ephemeral: true })
                 return await interaction.followUp({ content: `> You Have Not Setup Ticket System Yet. Use "/ticket setup" Command To Setup Ticket System.` })
             } else if(ticketcheck){
-                await interaction.deferReply({ ephemeral: true })
+                let role1 = await client.functions.getOptions(interaction).role(`support_role`);
+                let embed = await client.functions.ticketEditRole(interaction, ticketcheck, role1);
                 let [channel, category, logs, role2] = [ticketcheck.channel, ticketcheck.category, ticketcheck.ticketLogs, ticketcheck.supportRole];
-                let role1 = role(`support_role`);
                 if(role1.id === role2){
-                    await interaction.followUp({ content: `> You Should Provide New Role Inorder To Change Old Role.` })
+                    await interaction.followUp({ content: `> You Should Provide New Role Inorder To Change Old Role.` });
                 } else {
                     ticketdb.set(interaction.guild.id, {
                         channel: channel,
@@ -190,18 +188,7 @@ module.exports = class Ticker extends Command {
                         ticketLogs: logs,
                         supportRole: role1.id
                     });
-                    const embed = new EmbedBuilder()
-                        .setTitle(`Ticket Role Edited`)
-                        .setThumbnail(`https://i.imgur.com/RTaQlqV.png`)
-                        .addFields(
-                            { name: `**OldRole: **`, value: `<@&${role2}>`, inline: true },
-                            { name: `**NewRole: **`, value: `${role1}`, inline: true },
-                        )
-                        .setColor(`${process.env.ec}`)
-                        .setFooter({
-                            text: `${client.user.username} - ${process.env.year} ©`,
-                            iconURL: process.env.iconurl
-                        });
+                    const embed = await client.functions.embedBuild().tittle(`Ticket Role Edited`).thumbnail(`${process.env.ticket_role_thumbnail}`).ibfields(`OldRole`, `<@&${role2}>`, `NewRole`, `${role1}`).footer().build();
                     await interaction.followUp({ embeds: [embed] })
                 }
             }

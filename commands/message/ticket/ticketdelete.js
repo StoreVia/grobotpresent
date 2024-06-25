@@ -1,6 +1,6 @@
 const Command = require('../../../structures/Commands/MessageCommandClass');
 
-module.exports = class MessageTicketSendPanel extends Command {
+module.exports = class MessageTicketDelete extends Command {
 	constructor(client){
 		super(client, {
 			name: "ticketdelete",
@@ -16,6 +16,7 @@ module.exports = class MessageTicketSendPanel extends Command {
 		const ticketdb = client.db.table(`ticket`);
         let ticketcheck = await ticketdb.get(`${message.guild.id}`);
 		let msgdefer = await client.functions.deferReply().message(message);
+		let role = await message.mentions.roles.first();
 
 		if(!await client.functions.permsCheck(`manageGuild`).message(message)){
             return msgdefer.edit({ content: `> You Need "Manage Guild" Permission To Use This Command.`});
