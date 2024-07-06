@@ -188,7 +188,7 @@ module.exports = class Ticker extends Command {
                         ticketLogs: logs,
                         supportRole: role1.id
                     });
-                    const embed = await client.functions.embedBuild().tittle(`Ticket Role Edited`).thumbnail(`${process.env.ticket_role_thumbnail}`).ibfields(`OldRole`, `<@&${role2}>`, `NewRole`, `${role1}`).footer().build();
+                    const embed = await client.functions.embedBuild().title(`Ticket Role Edited`).thumbnail(`${process.env.ticket_role_thumbnail}`).ibfields(`OldRole`, `<@&${role2}>`, `NewRole`, `${role1}`).footer().build();
                     await interaction.followUp({ embeds: [embed] })
                 }
             }

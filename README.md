@@ -57,7 +57,7 @@ music_iconurl="https://cdn.discordapp.com/attachments/1097119944904290359/109719
 botname="Bot_Name"
 ```
 
-Step_3: `Use Following Command In Terminal.`
+Step_4: `Use Following Command In Terminal.`
 
 ```sh
 node .

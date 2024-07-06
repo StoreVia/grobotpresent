@@ -609,23 +609,23 @@ module.exports = class Functions {
     }
     async function invert(){
       let image = await canvacord.Canvas.invert(usr.displayAvatarURL({ extension: 'png' }));
-      return await new AttachmentBuilder(image, { name: "greyscale.png"});
+      return await new AttachmentBuilder(image, { name: "invert.png"});
     }
     async function jail(){
       let image = await canvacord.Canvas.jail(usr.displayAvatarURL({ extension: 'png' }));
-      return await new AttachmentBuilder(image, { name: "greyscale.png"});
+      return await new AttachmentBuilder(image, { name: "jail.png"});
     }
     async function sepia(){
       let image = await canvacord.Canvas.sepia(usr.displayAvatarURL({ extension: 'png' }));
-      return await new AttachmentBuilder(image, { name: "greyscale.png"});
+      return await new AttachmentBuilder(image, { name: "sepia.png"});
     }
     async function trigger(){
       let image = await canvacord.Canvas.trigger(usr.displayAvatarURL({ extension: 'png' }));
-      return await new AttachmentBuilder(image, { name: "greyscale.png"});
+      return await new AttachmentBuilder(image, { name: "trigger.png"});
     }
     async function wasted(){
       let image = await canvacord.Canvas.wasted(usr.displayAvatarURL({ extension: 'png' }));
-      return await new AttachmentBuilder(image, { name: "greyscale.png"});
+      return await new AttachmentBuilder(image, { name: "wasted.png"});
     }
     async function youTube(avatar, userName, comment){
       return await new AttachmentBuilder(`${process.env.srapi}/canvas/youtube-comment?avatar=${avatar}&username=${userName}&comment=${comment}`, { name: "youtube.png" })

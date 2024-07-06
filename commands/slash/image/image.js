@@ -47,38 +47,32 @@ module.exports = class Image extends Command {
         const subcommand = await client.functions.getOptions(interaction).subcommand();
         const UserOption = await client.functions.getOptions(interaction).user('user') || interaction.user;
         const StringOption = await client.functions.getOptions(interaction).string("category");
+        const imageFetch = await client.functions.image(UserOption);
 
         if(subcommand === "filter"){
             if(StringOption == "img_blur"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).blur()] });
+                return await interaction.followUp({ files : [await imageFetch.blur()] });
             }
-
             if(StringOption == "img_gay"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).gay()] });
+                return await interaction.followUp({ files : [await imageFetch.gay()] });
             }
-
             if(StringOption == "img_greyscale"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).greyScale()] });
+                return await interaction.followUp({ files : [await imageFetch.greyScale()] });
             }
-
             if(StringOption == "img_invert"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).invert()] });
+                return await interaction.followUp({ files : [await imageFetch.invert()] });
             }
-
             if(StringOption == "img_jail"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).jail()] });
+                return await interaction.followUp({ files : [await imageFetch.jail()] });
             }
-
             if(StringOption == "img_sepia"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).sepia()] });
+                return await interaction.followUp({ files : [await imageFetch.sepia()] });
             }
-
             if(StringOption == "img_trigger"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).trigger()] });
+                return await interaction.followUp({ files : [await imageFetch.trigger()] });
             }
-
             if(StringOption == "img_wasted"){
-                return await interaction.followUp({ files : [await client.functions.image(UserOption).wasted()] });
+                return await interaction.followUp({ files : [await imageFetch.wasted()] });
             }
         }
 
