@@ -3,7 +3,7 @@ const colors = require(`colors`)
 const { SpotifyExtractor, SoundCloudExtractor, AppleMusicExtractor } = require('@discord-player/extractor');
 const fetch = require('node-fetch');
 const { EmbedBuilder } = require('discord.js');
-const titlecase = require(`titlecase`);
+const titlecase = require(`titlecase`);   
 
 module.exports = class ReadyEvent extends Event {
 	constructor(client){
