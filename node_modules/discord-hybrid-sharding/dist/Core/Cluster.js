@@ -108,7 +108,7 @@ class Cluster extends events_1.default {
      * @param spawnTimeout The amount in milliseconds to wait until the {@link Client} has become ready
      * before resolving. (-1 or Infinity for no wait)
      */
-    async spawn(spawnTimeout = 30000) {
+    async spawn(spawnTimeout = -1) {
         if (this.thread)
             throw new Error('CLUSTER ALREADY SPAWNED | ClusterId: ' + this.id);
         this.thread = new this.THREAD(path_1.default.resolve(this.manager.file), {
@@ -131,13 +131,15 @@ class Cluster extends events_1.default {
          * @param {Child|Worker} process Child process/worker that was created
          */
         this.emit('spawn', this.thread.process);
-        if (spawnTimeout === -1 || spawnTimeout === Infinity)
-            return this.thread.process;
         await new Promise((resolve, reject) => {
-            const cleanup = () => {
+            let spawnTimeoutTimer = undefined;
+            const cleanup = (death = false) => {
                 clearTimeout(spawnTimeoutTimer);
-                this.off('ready', onReady);
-                this.off('death', onDeath);
+                // Remove listeners if cluster died to prevent event emitter leaks
+                if (death) {
+                    this.off('ready', onReady);
+                    this.off('death', onDeath);
+                }
             };
             const onReady = () => {
                 this.manager.emit('clusterReady', this);
@@ -147,14 +149,21 @@ class Cluster extends events_1.default {
                 resolve('Cluster is ready');
             };
             const onDeath = () => {
-                cleanup();
+                cleanup(true);
                 reject(new Error('CLUSTERING_READY_DIED | ClusterId: ' + this.id));
             };
             const onTimeout = () => {
                 cleanup();
                 reject(new Error('CLUSTERING_READY_TIMEOUT | ClusterId: ' + this.id));
             };
-            const spawnTimeoutTimer = setTimeout(onTimeout, spawnTimeout);
+            // If there is a spawn timeout wait and error if cluster does not get ready
+            if (spawnTimeout !== -1 && spawnTimeout !== Infinity) {
+                spawnTimeoutTimer = setTimeout(onTimeout, spawnTimeout);
+            }
+            else {
+                // No timeout, next cluster will be spawned, without waiting for ready
+                resolve('Skipping ready check');
+            }
             this.once('ready', onReady);
             this.once('death', onDeath);
         });
@@ -178,7 +187,7 @@ class Cluster extends events_1.default {
      * Kills and restarts the cluster's process/worker.
      * @param options Options for respawning the cluster
      */
-    async respawn({ delay = 500, timeout = 30000 } = this.manager.spawnOptions) {
+    async respawn({ delay = 5500, timeout = -1 } = this.manager.spawnOptions) {
         if (this.thread)
             this.kill({ force: true });
         if (delay > 0)

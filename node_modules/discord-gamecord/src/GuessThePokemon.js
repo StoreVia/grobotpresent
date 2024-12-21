@@ -48,7 +48,7 @@ module.exports = class GuessThePokemon extends events {
       this.options.isSlashGame = true;
     }
 
-    const result = await fetch('https://api.aniket091.xyz/pokemon').then(res => res.json()).catch(e => { return {} });
+    const result = await fetch('https://api.gamecord.xyz/pokemon').then(res => res.json()).catch(e => { return {} });
     if (!result.data) return this.sendMessage({ content: this.options.errMessage });
     this.pokemon = result.data;
 

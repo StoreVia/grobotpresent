@@ -17,6 +17,7 @@ const Util_1 = require("../Util/Util");
 class ClusterClient extends events_1.default {
     client;
     mode;
+    shardList;
     queue;
     maintenance;
     ready;
@@ -34,6 +35,10 @@ class ClusterClient extends events_1.default {
          */
         this.mode = this.info.CLUSTER_MANAGER_MODE;
         const mode = this.mode;
+        /**
+         * Shard list with a number of shard ids
+         */
+        this.shardList = this.info.SHARD_LIST;
         /**
          * If the Cluster is spawned automatically or with an own controller
          */
@@ -72,13 +77,24 @@ class ClusterClient extends events_1.default {
     }
     /**
      * Array of shard IDs of this client
+     * @deprecated use client.cluster.shards for getting a collecton of ws shards or client.cluster.shardList for an array of ids
      */
     get ids() {
-        // @ts-ignore
-        if (!this.client.ws)
+        const client = this.client;
+        // Not djs client
+        if (!client.ws)
             return this.info.SHARD_LIST;
-        // @ts-ignore
-        return this.client.ws.shards;
+        return client.ws.shards;
+    }
+    /**
+     *
+     */
+    get shards() {
+        const client = this.client;
+        if (!client.ws?.shards) {
+            throw new TypeError('Websocket shards property is missing on your Discord Client.');
+        }
+        return client.ws.shards;
     }
     /**
      * Total number of clusters

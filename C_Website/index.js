@@ -20,25 +20,25 @@ function redirect(req, res, next){
 }
 //redirectFunctionEnd
 
-//RouterStart
-const router = express.Router();
-router.use(redirect);
-router.get("/", (req, res) => {
+//routStart
+const rout = express.Router();
+rout.use(redirect);
+rout.get("/", (req, res) => {
   res.sendFile(join(__dirname, "..", "html", "index.html"));
 });
-router.get("/dashboard", (req, res) => {
+rout.get("/dashboard", (req, res) => {
   res.sendFile(join(__dirname, "..", "html", "others", "dashboard.html"));
 });
-router.get("/mobile", (req, res) => {
+rout.get("/mobile", (req, res) => {
   res.sendFile(join(__dirname, "..", "html", "others", "mobile.html"));
 });
-router.get("/privacypolicy", (req, res) => {
+rout.get("/privacypolicy", (req, res) => {
   res.sendFile(join(__dirname, "..", "html", "others", "privacypolicy.html"));
 });
-router.get("/termsofservice", (req, res) => {
+rout.get("/termsofservice", (req, res) => {
   res.sendFile(join(__dirname, "..", "html", "others", "termsofservice.html"));
 });
-api.use(router);
-//RouterEnd
+api.use(rout);
+//routEnd
 
 module.exports = api;
