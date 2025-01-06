@@ -11,7 +11,6 @@
  * Version :- v0.0
  * BotName :- GroBot
  * Website :- https://grobot.netlify.app
-hello xx
 */
 const Client = require('./structures/Client');
 const client = new Client();
