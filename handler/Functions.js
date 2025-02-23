@@ -758,19 +758,34 @@ module.exports = class Functions {
 		try{
 			let sub = [ 'meme', 'me_irl', 'memes', 'dankmeme', 'dankmemes', 'ComedyCemetery', 'terriblefacebookmemes', 'funny']
 			const random = Math.floor(Math.random() * sub.length)
-			const response = await fetch(`https://www.reddit.com/r/${sub[random]}/random/.json`);
+      const requestUrl = `https://www.reddit.com/r/${sub[random]}/hot/.json`;
+
+      const response = await fetch(requestUrl, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'MrPan'
+        }
+      });
+      
+      if (!response.ok) {
+        console.error(`Error fetching from Reddit: ${response.statusText} (${response.status})`);
+        return null;  // Or handle the error as appropriate
+      }
 			const data = await response.json();
-			const children = data[0].data.children;
+      console.log(data)
+			const children = data.data.children;
+      console.log(children)
 			const post = children[0].data;
 			const perma = post.permalink;
 			const url = `https://reddit.com${perma}`;
 			const memeImage = post.url || post.url_overridden_by_dest;
 			const title = post.title;
-	    if(!data || !data[0].data){
-				return null;
-			} else if(children.length === 0 || children[0].data.over_18){
+	    if (!data || !data.data || !children || children.length === 0) {
+        return null;
+      } else if(children.length === 0 || children[0].data.over_18){
 				return null;
 			} else {
+        console.log(url, memeImage, title);
 				return { url, memeImage, title };
 			}
 		} catch(e){
